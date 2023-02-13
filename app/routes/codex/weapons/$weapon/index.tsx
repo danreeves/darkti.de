@@ -1,17 +1,20 @@
 import type { LoaderArgs } from "@remix-run/node"
 import { json } from "@remix-run/node"
 import { useLoaderData } from "@remix-run/react"
-import { getLocalization } from "~/data/localization.server"
-import { getWeapon } from "~/data/weapons.server"
+import { getItem } from "~/data/items.server"
 
 export const loader = async ({ params }: LoaderArgs) => {
-	let weapon = await getWeapon(params.weapon)
-	let localizationData = getLocalization()
-	return json({ title: localizationData[weapon.display_name], weapon })
+  let weapon = await getItem(params.weapon || "NO WEAPON PARAM?")
+  if (!weapon) {
+    throw new Response("Not Found", {
+      status: 404,
+    })
+  }
+  return json({ title: weapon.display_name, weapon })
 }
 
 export default function Weapon() {
-	const { weapon } = useLoaderData<typeof loader>()
+  const { weapon } = useLoaderData<typeof loader>()
 
-	return <pre>{JSON.stringify(weapon, null, 4)}</pre>
+  return <pre>{JSON.stringify(weapon, null, 4)}</pre>
 }

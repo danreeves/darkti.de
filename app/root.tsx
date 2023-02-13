@@ -1,53 +1,47 @@
-import type { LinksFunction, MetaFunction } from "@remix-run/node";
-import { json } from "@remix-run/node";
+import type { LinksFunction, MetaFunction } from "@remix-run/node"
+import { json } from "@remix-run/node"
 import {
-	Links,
-	LiveReload,
-	Meta,
-	Scripts,
-	ScrollRestoration,
-} from "@remix-run/react";
-import { getLocalization } from "./data/localization.server";
-import Layout from "./layout";
+  Links,
+  LiveReload,
+  Meta,
+  Scripts,
+  ScrollRestoration,
+} from "@remix-run/react"
+import Layout from "./layout"
 
-import tailwind from "./tailwind.css";
+import tailwind from "./tailwind.css"
 
 export const links: LinksFunction = () => [
-	{ rel: "stylesheet", href: tailwind },
-	{
-		rel: "preconnect",
-		href: "https://fonts.bunny.net",
-	},
-	{
-		rel: "stylesheet",
-		href: "https://fonts.bunny.net/css?family=archivo:900",
-	},
-];
+  { rel: "stylesheet", href: tailwind },
+  {
+    rel: "preconnect",
+    href: "https://fonts.bunny.net",
+  },
+  {
+    rel: "stylesheet",
+    href: "https://fonts.bunny.net/css?family=archivo:900",
+  },
+]
 
 export const meta: MetaFunction = () => ({
-	charset: "utf-8",
-	title: "Darktide Community",
-	viewport: "width=device-width,initial-scale=1",
-});
-
-export async function loader() {
-	const localizationData = getLocalization();
-	return json({ localizationData });
-}
+  charset: "utf-8",
+  title: "Darktide Community",
+  viewport: "width=device-width,initial-scale=1",
+})
 
 export default function App() {
-	return (
-		<html lang="en" className="h-full bg-gray-100">
-			<head>
-				<Meta />
-				<Links />
-			</head>
-			<body className="h-full">
-				<Layout />
-				<ScrollRestoration />
-				<Scripts />
-				<LiveReload />
-			</body>
-		</html>
-	);
+  return (
+    <html lang="en" className="h-full bg-gray-100">
+      <head>
+        <Meta />
+        <Links />
+      </head>
+      <body className="h-full">
+        <Layout />
+        <ScrollRestoration />
+        <Scripts />
+        <LiveReload />
+      </body>
+    </html>
+  )
 }
