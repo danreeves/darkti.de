@@ -23,7 +23,7 @@ export default function Weapons() {
                 {weapon.display_name}
               </div>
               <TagList tags={weapon.tags} />
-              <TagList tags={weapon.archetypes} />
+              <TagList tags={weapon.archetypes ?? []} />
             </Link>
             <div className="pointer-events-none absolute top-0 right-0 aspect-video h-full overflow-hidden ">
               <img
@@ -45,7 +45,7 @@ function TagList({ tags }: { tags: string[] }) {
       {tags.map((tag) => (
         <div
           key={tag}
-          className="inline-block rounded bg-neutral-300 p-1.5 text-xs font-bold uppercase text-neutral-600"
+          className="small-caps inline-block rounded bg-neutral-200 p-1.5 text-xs font-bold uppercase text-neutral-500"
         >
           {tag}
         </div>
