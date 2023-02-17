@@ -1,5 +1,4 @@
 import type { LinksFunction, MetaFunction } from "@remix-run/node"
-import { json } from "@remix-run/node"
 import {
 	Links,
 	LiveReload,
@@ -42,7 +41,6 @@ export default function App() {
 				<ScrollRestoration />
 				<Scripts />
 				<LiveReload />
-				<script defer data-domain="darkti.de" src="https://plausible.io/js/script.js"></script>
 			</body>
 		</html>
 	)
