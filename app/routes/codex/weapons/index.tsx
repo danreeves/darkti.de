@@ -161,7 +161,8 @@ export default function Weapons() {
 									{weapon.display_name}
 								</div>
 								<TagList tags={weapon.tags} />
-								<TagList tags={weapon.archetypes} />
+								{/* TODO: Different schema for weapons and curios so this is not optional */}
+								<TagList tags={weapon.archetypes ?? []} />
 							</Link>
 						</li>
 					)

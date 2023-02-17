@@ -11,17 +11,21 @@ const WeaponSchema = z
 				z.literal("slot_secondary"),
 				z.literal("slot_primary"),
 				// z.literal("slot_weapon_skin"),
-				// z.literal("slot_attachment_1"),
-				// z.literal("slot_attachment_2"),
-				// z.literal("slot_attachment_3"),
+				z.literal("slot_attachment_1"),
+				z.literal("slot_attachment_2"),
+				z.literal("slot_attachment_3"),
 			])
 		),
-		item_type: z.union([z.literal("WEAPON_RANGED"), z.literal("WEAPON_MELEE")]),
-		hud_icon: z.string(),
+		item_type: z.union([
+			z.literal("WEAPON_RANGED"),
+			z.literal("WEAPON_MELEE"),
+			z.literal("GADGET"),
+		]),
+		hud_icon: z.string().optional(),
 		preview_image: z.string(),
-		weapon_template: z.string(),
+		weapon_template: z.string().optional(),
 		feature_flags: z.array(z.string()),
-		wieldable_slot_scripts: z.union([z.any(), z.array(z.string())]),
+		wieldable_slot_scripts: z.union([z.any(), z.array(z.string())]).optional(),
 		id: z.string(),
 		archetypes: z.array(
 			z.union([
@@ -30,11 +34,11 @@ const WeaponSchema = z
 				z.literal("psyker"),
 				z.literal("ogryn"),
 			])
-		),
-		breeds: z.array(z.union([z.literal("human"), z.literal("ogryn")])),
+		).optional(),
+		breeds: z.array(z.union([z.literal("human"), z.literal("ogryn")])).optional(),
 		display_name: z.string(),
 		workflow_state: z.string(),
-		description: z.string(),
+		description: z.string().optional(),
 	})
 	.transform((item) => {
 		let baseName = item.id.split("/").at(-1)!
@@ -45,7 +49,7 @@ const WeaponSchema = z
 				? item.slots.map((slot) => slot.replace("slot_", "").toLowerCase())
 				: []
 		let display_name = t(item.display_name)
-		let description = t(item.description)
+		let description = item.description ? t(item.description) : undefined
 		let tags: string[] = [item_type, ...slots]
 		return {
 			...item,
@@ -75,7 +79,7 @@ export async function getItems({
 			!item_type || (item_type && item_type.includes(item.item_type))
 		const keepArchetype =
 			!archetypes ||
-			(archetypes && item.archetypes.some((arch) => archetypes.includes(arch)))
+			(archetypes && item.archetypes?.some((arch) => archetypes.includes(arch)))
 		const keepName =
 			!name ||
 			(name && item.display_name.toLowerCase().includes(name.toLowerCase()))
