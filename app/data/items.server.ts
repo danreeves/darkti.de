@@ -1,53 +1,88 @@
 import { sortBy } from "lodash"
-import items from "./exported/item_master_list.json"
-import type { Lang } from "./localization.server"
+import ITEM_DATA from "./exported/item_master_list.json"
 import { t } from "./localization.server"
+import z from "zod"
+import { filterBySchema } from "./utils.server"
 
-const MASSAGED_DATA = sortBy(
-  items
-    .filter((item) => item.display_name)
-    .map((item) => {
-      let baseName = item.id.split("/").at(-1)!
-      let slug = baseName?.replaceAll("_", "-")!
-      let item_type = item.item_type.replace("WEAPON_", "").toLowerCase()
-      let slots =
-        Array.isArray(item.slots) && item.slots.length
-          ? item.slots.map((slot) => slot.replace("slot_", "").toLowerCase())
-          : []
-      return {
-        ...item,
-        item_type,
-        slug,
-        baseName,
-        slots,
-      }
-    })
-    .filter((item) => item.slug && item.baseName && item.slots.length),
-  "baseName"
-)
+const WeaponSchema = z
+	.object({
+		slots: z.array(
+			z.union([
+				z.literal("slot_secondary"),
+				z.literal("slot_primary"),
+				// z.literal("slot_weapon_skin"),
+				// z.literal("slot_attachment_1"),
+				// z.literal("slot_attachment_2"),
+				// z.literal("slot_attachment_3"),
+			])
+		),
+		item_type: z.union([z.literal("WEAPON_RANGED"), z.literal("WEAPON_MELEE")]),
+		hud_icon: z.string(),
+		preview_image: z.string(),
+		weapon_template: z.string(),
+		feature_flags: z.array(z.string()),
+		wieldable_slot_scripts: z.union([z.any(), z.array(z.string())]),
+		id: z.string(),
+		archetypes: z.array(
+			z.union([
+				z.literal("veteran"),
+				z.literal("zealot"),
+				z.literal("psyker"),
+				z.literal("ogryn"),
+			])
+		),
+		breeds: z.array(z.union([z.literal("human"), z.literal("ogryn")])),
+		display_name: z.string(),
+		workflow_state: z.string(),
+		description: z.string(),
+	})
+	.transform((item) => {
+		let baseName = item.id.split("/").at(-1)!
+		let slug = baseName?.replaceAll("_", "-")!
+		let item_type = item.item_type.replace("WEAPON_", "").toLowerCase()
+		let slots =
+			Array.isArray(item.slots) && item.slots.length
+				? item.slots.map((slot) => slot.replace("slot_", "").toLowerCase())
+				: []
+		let display_name = t(item.display_name)
+		let description = t(item.description)
+		let tags: string[] = [item_type, ...slots]
+		return {
+			...item,
+			display_name,
+			description,
+			item_type,
+			slug,
+			baseName,
+			slots,
+			tags,
+		}
+	})
 
-function localize(item: (typeof MASSAGED_DATA)[number], lang: Lang = "en") {
-  let description = item.description
-    ? t(item.description ?? "", lang)
-    : undefined
-  let tags: string[] = [item.item_type].concat(item.slots)
-  return {
-    ...item,
-    display_name: t(item.display_name),
-    description,
-    tags,
-  }
-}
+const items = sortBy(filterBySchema(ITEM_DATA, WeaponSchema), "baseName")
 
-export async function getItems({ item_type }: { item_type?: string[] }) {
-  return MASSAGED_DATA.filter((item) => {
-    return !item_type || (item_type && item_type.includes(item.item_type))
-  }).map((item) => localize(item))
+export async function getItems({
+	item_type,
+	archetypes,
+	name,
+}: {
+	item_type?: string[]
+	archetypes?: string[]
+	name?: string
+}) {
+	return items.filter((item) => {
+		const keepItemType =
+			!item_type || (item_type && item_type.includes(item.item_type))
+		const keepArchetype =
+			!archetypes ||
+			(archetypes && item.archetypes.some((arch) => archetypes.includes(arch)))
+		const keepName =
+			!name ||
+			(name && item.display_name.toLowerCase().includes(name.toLowerCase()))
+		return keepItemType && keepArchetype && keepName
+	})
 }
 
 export async function getItem(slug: string) {
-  let item = MASSAGED_DATA.find((item) => item.slug === slug)
-  if (item) {
-    return localize(item)
-  }
+	return items.find((item) => item.slug === slug)
 }
