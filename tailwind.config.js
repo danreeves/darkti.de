@@ -5,6 +5,11 @@ module.exports = {
 		fontFamily: {
 			heading: ["Archivo", "sans-serif"],
 		},
+		listStyleType: {
+			none: "none",
+			square: "square",
+			roman: "upper-roman",
+		},
 	},
 	plugins: [require("@tailwindcss/forms")],
 }

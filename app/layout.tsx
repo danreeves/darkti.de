@@ -17,6 +17,7 @@ const user = {
 const navigation = [
 	{ name: "Home", href: "/" },
 	{ name: "Codex", href: "/codex" },
+	{ name: "Extension", href: "/extension" },
 ]
 const userNavigation = [
 	{ name: "Your Profile", href: "/" },
@@ -231,7 +232,15 @@ export default function Layout() {
 						<Outlet />
 					</div>
 				</main>
-			</div>
+				<footer
+					className="mx-auto max-w-7xl px-4 pt-6 pb-4 sm:px-8 lg:px-10"
+				>
+					<div className="bg-gray-200 rounded p-4 shadow-inner text-gray-600 flex justify-center items-center gap-4 ">
+						<a href="https://github.com/danreeves/darkti.de">Source Code</a>
+						<a href="https://plausible.io/darkti.de">Site Analytics</a>
+					</div>
+				</footer>
+			</div >
 		</>
 	)
 }

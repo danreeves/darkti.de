@@ -8,7 +8,7 @@ import {
 } from "@remix-run/react"
 import Layout from "./layout"
 
-import tailwind from "./tailwind.css"
+import tailwind from "~/tailwind.css"
 
 export const links: LinksFunction = () => [
 	{ rel: "stylesheet", href: tailwind },

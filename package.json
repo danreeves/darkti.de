@@ -3,24 +3,19 @@
   "private": true,
   "sideEffects": false,
   "scripts": {
-    "build": "run-s \"build:*\"",
-    "build:css": "npm run generate:css -- --minify",
-    "build:remix": "remix build",
-    "dev": "run-p \"dev:*\"",
-    "dev:css": "npm run generate:css -- --watch",
-    "dev:remix": "remix dev",
-    "generate:css": "npx tailwindcss -o ./app/tailwind.css",
+    "build": "remix build",
+    "dev": "remix dev",
     "start": "remix-serve build",
     "typecheck": "tsc"
   },
   "dependencies": {
-    "@headlessui/react": "^1.7.10",
-    "@heroicons/react": "^2.0.15",
-    "@remix-run/node": "^1.12.0",
-    "@remix-run/react": "^1.12.0",
-    "@remix-run/serve": "^1.12.0",
+    "@headlessui/react": "^1.7.11",
+    "@heroicons/react": "^2.0.16",
+    "@remix-run/node": "^1.13.0",
+    "@remix-run/react": "^1.13.0",
+    "@remix-run/serve": "^1.13.0",
     "@types/lodash": "^4.14.191",
-    "isbot": "^3.6.5",
+    "isbot": "^3.6.6",
     "lodash": "^4.17.21",
     "plausible-tracker": "^0.3.8",
     "prettier": "^2.8.4",
@@ -30,16 +25,16 @@
     "zod": "^3.20.6"
   },
   "devDependencies": {
-    "@remix-run/dev": "^1.12.0",
-    "@remix-run/eslint-config": "^1.12.0",
+    "@remix-run/dev": "^1.13.0",
+    "@remix-run/eslint-config": "^1.13.0",
     "@tailwindcss/forms": "^0.5.3",
-    "@types/react": "^18.0.25",
-    "@types/react-dom": "^18.0.8",
-    "eslint": "^8.27.0",
+    "@types/react": "^18.0.28",
+    "@types/react-dom": "^18.0.11",
+    "eslint": "^8.34.0",
     "npm-run-all": "^4.1.5",
-    "prettier-plugin-tailwindcss": "^0.1.8",
-    "tailwindcss": "^3.1.0",
-    "typescript": "^4.8.4"
+    "prettier-plugin-tailwindcss": "^0.2.3",
+    "tailwindcss": "^3.2.7",
+    "typescript": "^4.9.5"
   },
   "engines": {
     "node": ">=14"
