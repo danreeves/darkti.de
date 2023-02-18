@@ -9,10 +9,10 @@ export default function Codex() {
 	return (
 		<div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
 			<LinkBox to="weapons" label="Weapons" />
-			<LinkBox to="classes" label="Classes" />
-			<LinkBox to="traits" label="Traits" />
-			<LinkBox to="perks" label="Perks" />
-			<LinkBox to="skins" label="Skins" />
+			{/* <LinkBox to="classes" label="Classes" /> */}
+			{/* <LinkBox to="traits" label="Traits" /> */}
+			{/* <LinkBox to="perks" label="Perks" /> */}
+			{/* <LinkBox to="skins" label="Skins" /> */}
 			<LinkBox to="curios" label="Curios" />
 		</div>
 	)
