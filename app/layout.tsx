@@ -89,11 +89,11 @@ export default function Layout() {
 												<div>
 													<Menu.Button className="flex max-w-xs items-center rounded-full bg-neutral-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-neutral-800">
 														<span className="sr-only">Open user menu</span>
-														<img
-															className="h-8 w-8 rounded-full"
-															src={user.imageUrl}
-															alt=""
-														/>
+														{/* <img */}
+														{/* 	className="h-8 w-8 rounded-full" */}
+														{/* 	src={user.imageUrl} */}
+														{/* 	alt="" */}
+														{/* /> */}
 													</Menu.Button>
 												</div>
 												<Transition
@@ -165,50 +165,50 @@ export default function Layout() {
 										</NavLink>
 									))}
 								</div>
-								<div className="border-t border-neutral-700 pt-4 pb-3">
-									<div className="flex items-center px-5">
-										<div className="flex-shrink-0">
-											<img
-												className="h-10 w-10 rounded-full"
-												src={user.imageUrl}
-												alt=""
-											/>
-										</div>
-										<div className="ml-3">
-											<div className="text-base font-medium leading-none text-white">
-												{user.name}
-											</div>
-											<div className="text-sm font-medium leading-none text-neutral-400">
-												{user.email}
-											</div>
-										</div>
-										{/* 	<button */}
-										{/* 		type="button" */}
-										{/* 		className="ml-auto flex-shrink-0 rounded-full bg-neutral-800 p-1 text-neutral-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-neutral-800" */}
-										{/* 	> */}
-										{/* 		<span className="sr-only">View notifications</span> */}
-										{/* 		<BellIcon className="h-6 w-6" aria-hidden="true" /> */}
-										{/* 	</button> */}
-									</div>
-									<div className="mt-3 space-y-1 px-2">
-										{userNavigation.map((item) => (
-											<NavLink
-												key={item.name}
-												to={item.href}
-												className={({ isActive }) =>
-													classNames(
-														isActive
-															? "bg-neutral-900 text-white"
-															: "text-neutral-300 hover:bg-neutral-700 hover:text-white",
-														"block rounded-md px-3 py-2 text-base font-medium"
-													)
-												}
-											>
-												{item.name}
-											</NavLink>
-										))}
-									</div>
-								</div>
+								{/* <div className="border-t border-neutral-700 pt-4 pb-3"> */}
+								{/* 	<div className="flex items-center px-5"> */}
+								{/* <div className="flex-shrink-0"> */}
+								{/* 	<img */}
+								{/* 		className="h-10 w-10 rounded-full" */}
+								{/* 		src={user.imageUrl} */}
+								{/* 		alt="" */}
+								{/* 	/> */}
+								{/* </div> */}
+								{/* <div className="ml-3"> */}
+								{/* 	<div className="text-base font-medium leading-none text-white"> */}
+								{/* 		{user.name} */}
+								{/* 	</div> */}
+								{/* 	<div className="text-sm font-medium leading-none text-neutral-400"> */}
+								{/* 		{user.email} */}
+								{/* 	</div> */}
+								{/* </div> */}
+								{/* 	<button */}
+								{/* 		type="button" */}
+								{/* 		className="ml-auto flex-shrink-0 rounded-full bg-neutral-800 p-1 text-neutral-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-neutral-800" */}
+								{/* 	> */}
+								{/* 		<span className="sr-only">View notifications</span> */}
+								{/* 		<BellIcon className="h-6 w-6" aria-hidden="true" /> */}
+								{/* 	</button> */}
+								{/* </div> */}
+								{/* <div className="mt-3 space-y-1 px-2"> */}
+								{/* 	{userNavigation.map((item) => ( */}
+								{/* 		<NavLink */}
+								{/* 			key={item.name} */}
+								{/* 			to={item.href} */}
+								{/* 			className={({ isActive }) => */}
+								{/* 				classNames( */}
+								{/* 					isActive */}
+								{/* 						? "bg-neutral-900 text-white" */}
+								{/* 						: "text-neutral-300 hover:bg-neutral-700 hover:text-white", */}
+								{/* 					"block rounded-md px-3 py-2 text-base font-medium" */}
+								{/* 				) */}
+								{/* 			} */}
+								{/* 		> */}
+								{/* 			{item.name} */}
+								{/* 		</NavLink> */}
+								{/* 	))} */}
+								{/* </div> */}
+								{/* </div> */}
 							</Disclosure.Panel>
 						</>
 					)}

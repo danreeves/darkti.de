@@ -1,17 +1,30 @@
-import { Link } from "@remix-run/react";
-import { json } from "@remix-run/node";
+import { Link } from "@remix-run/react"
+import { json } from "@remix-run/node"
 
 export const loader = async () => {
-	return json({ title: "Codex" });
-};
+	return json({ title: "Codex" })
+}
 
 export default function Codex() {
 	return (
-		<div className="px-4 py-6 sm:px-0">
-			<div className="h-96 rounded-lg border-4 border-dashed border-gray-200">
-				<Link to="weapons">Weapons</Link>
-				<Link to="curios">Curios</Link>
-			</div>
+		<div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+			<LinkBox to="weapons" label="Weapons" />
+			<LinkBox to="classes" label="Classes" />
+			<LinkBox to="traits" label="Traits" />
+			<LinkBox to="perks" label="Perks" />
+			<LinkBox to="skins" label="Skins" />
+			<LinkBox to="curios" label="Curios" />
 		</div>
-	);
+	)
+}
+
+function LinkBox({ to, label }: { to: string; label: string }) {
+	return (
+		<Link
+			to={to}
+			className="rounded bg-white p-4 font-heading font-black shadow hover:shadow-lg"
+		>
+			{label}
+		</Link>
+	)
 }
