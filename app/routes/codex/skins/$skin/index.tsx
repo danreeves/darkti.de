@@ -5,24 +5,29 @@ import { getItem } from "~/data/items.server"
 import { SkinSchema } from "~/data/schemas.server"
 
 export const loader = async ({ params }: LoaderArgs) => {
-  let item = await getItem(SkinSchema, params.skin || "NO PARAM?")
-  if (!item) {
-    throw new Response("Not Found", {
-      status: 404,
-    })
-  }
-  return json({ title: item.display_name, item })
+	let item = await getItem(SkinSchema, params.skin || "NO PARAM?")
+	if (!item) {
+		throw new Response("Not Found", {
+			status: 404,
+		})
+	}
+	return json({ title: item.display_name, item })
 }
 
 export default function Skin() {
-  const { item } = useLoaderData<typeof loader>()
+	const { item } = useLoaderData<typeof loader>()
 
-  return (
-    <div className="rounded bg-white shadow">
-      <img
-        src={`https://img.darkti.de/pngs/${item.preview_image}.png`}
-        alt={item.display_name}
-      />
-    </div>
-  )
+	return (
+		<div className="flex flex-col items-center">
+			<div className="sm:rounded bg-white shadow">
+				<img
+					src={`https://img.darkti.de/pngs/${item.preview_image}.png`}
+					alt={item.display_name}
+				/>
+			</div>
+			<p className="m-4 mb-0 md:w-1/2 rounded bg-white p-4 shadow">
+				{item.description}
+			</p>
+		</div>
+	)
 }

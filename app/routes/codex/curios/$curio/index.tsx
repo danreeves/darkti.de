@@ -17,7 +17,12 @@ export const loader = async ({ params }: LoaderArgs) => {
 export default function Curio() {
 	const { item } = useLoaderData<typeof loader>()
 
-	return <div className="bg-white rounded shadow">
-		<img src={`https://img.darkti.de/pngs/${item.preview_image}.png`} alt={item.display_name} />
-	</div>
+	return (
+		<div className="rounded bg-white shadow">
+			<img
+				src={`https://img.darkti.de/pngs/${item.preview_image}.png`}
+				alt={item.display_name}
+			/>
+		</div>
+	)
 }

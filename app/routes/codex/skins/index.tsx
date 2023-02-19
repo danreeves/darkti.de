@@ -1,23 +1,25 @@
 import { json } from "@remix-run/node"
 import type { LoaderArgs } from "@remix-run/node"
 import { Link, useLoaderData } from "@remix-run/react"
-import { Form, TextInput } from "~/components/Form"
+import { Checkbox, Form, TextInput } from "~/components/Form"
 import { getItems } from "~/data/items.server"
 import { SkinSchema } from "~/data/schemas.server"
 
 export const loader = async ({ request }: LoaderArgs) => {
   const url = new URL(request.url)
   const name = url.searchParams.get("name") ?? undefined
+  const showDescriptions = url.searchParams.has("descriptions")
   const items = await getItems(SkinSchema, { name })
-  return json({ title: "Skins", items })
+  return json({ title: "Skins", items, showDescriptions })
 }
 
 export default function Skins() {
-  const { items } = useLoaderData<typeof loader>()
+  const { items, showDescriptions } = useLoaderData<typeof loader>()
 
   return (
     <>
       <Form>
+        <Checkbox label="Show descriptions" name="descriptions" />
         <TextInput label="Search" name="name" className="ml-auto items-end" />
       </Form>
       <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
@@ -37,6 +39,9 @@ export default function Skins() {
                   />
                 </div>
                 <div className="p-4 text-lg font-bold">{item.display_name}</div>
+                {showDescriptions ? (
+                  <p className="px-4 pb-4 text-gray-800">{item.description}</p>
+                ) : null}
               </Link>
             </li>
           )

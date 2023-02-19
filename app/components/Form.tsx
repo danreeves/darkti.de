@@ -3,7 +3,7 @@ import type { ReactNode } from "react"
 import { Form as RemixForm } from "@remix-run/react"
 
 type CheckboxProps = {
-	value: string
+	value?: string
 	name: string
 	label: string
 }
@@ -11,14 +11,16 @@ export function Checkbox({ value, name, label }: CheckboxProps) {
 	const [searchParams] = useSearchParams()
 	const param = searchParams.getAll(name)
 
+	const valueProp = value ? { value } : {}
+
 	return (
 		<label htmlFor={value} className="m-2 inline-flex items-center">
 			<input
 				type="checkbox"
 				id={value}
 				name={name}
-				value={value}
-				defaultChecked={param.includes(value)}
+				{...valueProp}
+				defaultChecked={param.includes(value ?? "on")}
 				className="mr-2
                           rounded
                           border-transparent
