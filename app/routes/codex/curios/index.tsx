@@ -1,12 +1,10 @@
 import { json } from "@remix-run/node"
-import {
-	Link,
-	useLoaderData,
-} from "@remix-run/react"
+import { Link, useLoaderData } from "@remix-run/react"
 import { getItems } from "~/data/items.server"
+import { CurioSchema } from "~/data/schemas.server"
 
 export const loader = async () => {
-	const items = await getItems({ item_type: ["gadget"] })
+	const items = await getItems(CurioSchema)
 	return json({ title: "Curios", items })
 }
 
@@ -22,10 +20,7 @@ export default function Curios() {
 							className=" group relative m-2 overflow-hidden rounded bg-white shadow hover:shadow-lg"
 							key={item.id}
 						>
-							<Link
-								to={item.slug}
-								className="block h-full w-full"
-							>
+							<Link to={item.slug} className="block h-full w-full">
 								<div className="aspect-video w-full overflow-hidden">
 									<img
 										alt=""
@@ -33,9 +28,7 @@ export default function Curios() {
 										className="h-full transition duration-75 group-hover:scale-105"
 									/>
 								</div>
-								<div className="p-4 text-lg font-bold">
-									{item.display_name}
-								</div>
+								<div className="p-4 text-lg font-bold">{item.display_name}</div>
 							</Link>
 						</li>
 					)
@@ -51,20 +44,5 @@ export default function Curios() {
 				</div>
 			) : null}
 		</>
-	)
-}
-
-function TagList({ tags }: { tags: string[] }) {
-	return (
-		<div className="center-items flex gap-2 py-1">
-			{tags.map((tag) => (
-				<div
-					key={tag}
-					className="small-caps inline-block rounded bg-neutral-200 p-1.5 text-xs font-bold uppercase text-neutral-500"
-				>
-					{tag}
-				</div>
-			))}
-		</div>
 	)
 }

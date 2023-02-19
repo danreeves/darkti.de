@@ -2,9 +2,10 @@ import type { LoaderArgs } from "@remix-run/node"
 import { json } from "@remix-run/node"
 import { useLoaderData } from "@remix-run/react"
 import { getItem } from "~/data/items.server"
+import { CurioSchema } from "~/data/schemas.server"
 
 export const loader = async ({ params }: LoaderArgs) => {
-	let item = await getItem(params.curio || "NO WEAPON PARAM?")
+	let item = await getItem(CurioSchema, params.curio || "NO PARAM?")
 	if (!item) {
 		throw new Response("Not Found", {
 			status: 404,
