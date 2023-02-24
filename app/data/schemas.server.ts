@@ -114,6 +114,7 @@ export const BlessingSchema = z
     id: z.string(),
     display_name: z.string(),
     description: z.string(),
+    // TODO: Empty lists should be nulled in the lua exporter
     description_values: z
       .union([
         z.unknown(),
