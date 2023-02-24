@@ -18,11 +18,16 @@ export default function Curio() {
 	const { item } = useLoaderData<typeof loader>()
 
 	return (
-		<div className="rounded bg-white shadow">
-			<img
-				src={`https://img.darkti.de/pngs/${item.preview_image}.png`}
-				alt={item.display_name}
-			/>
+		<div className="flex flex-col items-center">
+			<div className="sm:rounded bg-white shadow">
+				<img
+					src={`https://img.darkti.de/pngs/${item.preview_image}.png`}
+					alt={item.display_name}
+				/>
+			</div>
+			<p className="m-4 mb-0 md:w-1/2 rounded bg-white p-4 shadow">
+				{item.display_name}
+			</p>
 		</div>
 	)
 }
