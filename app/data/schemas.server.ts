@@ -115,13 +115,16 @@ export const BlessingSchema = z
     display_name: z.string(),
     description: z.string(),
     description_values: z
-      .array(
-        z.object({
-          string_key: z.string(),
-          string_value: z.string(),
-          rarity: z.string(),
-        })
-      )
+      .union([
+        z.unknown(),
+        z.array(
+          z.object({
+            string_key: z.string(),
+            string_value: z.string(),
+            rarity: z.string(),
+          })
+        ),
+      ])
       .optional(),
     trait: z.string(),
   })
