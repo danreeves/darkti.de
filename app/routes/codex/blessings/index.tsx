@@ -1,14 +1,14 @@
 import { json } from "@remix-run/node"
 import { Link, useLoaderData } from "@remix-run/react"
 import { getItems } from "~/data/items.server"
-import { TraitSchema } from "~/data/schemas.server"
+import { BlessingSchema } from "~/data/schemas.server"
 
 export const loader = async () => {
-  const items = await getItems(TraitSchema)
-  return json({ title: "Traits", items })
+  const items = await getItems(BlessingSchema)
+  return json({ title: "Blessings", items })
 }
 
-export default function Traits() {
+export default function Blessings() {
   const { items } = useLoaderData<typeof loader>()
 
   return (

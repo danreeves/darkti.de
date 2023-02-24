@@ -103,7 +103,7 @@ export const SkinSchema = z
     }
   })
 
-export const TraitSchema = z
+export const BlessingSchema = z
   .object({
     item_type: z.literal("TRAIT"),
     icon: z.string(),

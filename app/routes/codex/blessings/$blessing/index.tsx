@@ -2,10 +2,10 @@ import type { LoaderArgs } from "@remix-run/node"
 import { json } from "@remix-run/node"
 import { useLoaderData } from "@remix-run/react"
 import { getItem } from "~/data/items.server"
-import { TraitSchema } from "~/data/schemas.server"
+import { BlessingSchema } from "~/data/schemas.server"
 
 export const loader = async ({ params }: LoaderArgs) => {
-  let item = await getItem(TraitSchema, params.trait || "NO PARAM?")
+  let item = await getItem(BlessingSchema, params.blessing || "NO PARAM?")
   if (!item) {
     throw new Response("Not Found", {
       status: 404,
