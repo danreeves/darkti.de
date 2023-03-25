@@ -1,7 +1,7 @@
 import { json } from "@remix-run/node";
 
 export const loader = async () => {
-	return json({ title: "Darktide Community Tools" });
+	return json({ title: "Darkti.de - A community resource site" });
 };
 
 export default function Home() {
