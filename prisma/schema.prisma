@@ -10,6 +10,6 @@ generator client {
 
 model User {
   id Int @default(autoincrement()) @id
-  public_id String
-  steam_id String
+  public_id String @unique
+  steam_id String @unique
 }
