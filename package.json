@@ -11,6 +11,7 @@
   "dependencies": {
     "@headlessui/react": "^1.7.11",
     "@heroicons/react": "^2.0.16",
+    "@prisma/client": "^4.12.0",
     "@remix-run/node": "^1.13.0",
     "@remix-run/react": "^1.13.0",
     "@remix-run/serve": "^1.13.0",
@@ -21,6 +22,7 @@
     "memoizee": "^0.4.15",
     "plausible-tracker": "^0.3.8",
     "prettier": "^2.8.4",
+    "prisma": "^4.12.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "remix-auth": "^3.4.0",
