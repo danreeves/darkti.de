@@ -3,8 +3,10 @@
   "private": true,
   "sideEffects": false,
   "scripts": {
+    "dev": "run-p dev:*",
+    "dev:remix": "remix dev",
+    "dev:db": "pscale connect darktide development --port 3309",
     "build": "remix build",
-    "dev": "remix dev",
     "start": "remix-serve build",
     "typecheck": "tsc",
     "update-db": "prisma db push"
