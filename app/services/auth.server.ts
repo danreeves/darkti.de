@@ -4,7 +4,8 @@ import { sessionStorage } from "~/services/session.server"
 import { getOrCreateSteamUser } from "~/data/user.server"
 
 export type User = {
-  id: string
+  id: number
+  publicId: string
   avatar: string
   accountType: "steam"
 }
@@ -25,7 +26,8 @@ authenticator.use(
       }
 
       return {
-        id: user.public_id,
+        id: user.id,
+        publicId: user.publicId,
         avatar: steamUser.avatar.medium,
         accountType: "steam",
       }

@@ -10,6 +10,17 @@ generator client {
 
 model User {
   id Int @default(autoincrement()) @id
-  public_id String @unique
-  steam_id String @unique
+  publicId String @unique
+  steamId String @unique
+  auth AuthToken?
+}
+
+model AuthToken {
+	id Int @default(autoincrement()) @id
+	userId Int @unique
+	user User @relation(fields: [userId], references: [id])
+	AccessToken String @db.VarChar(600)
+	RefreshToken String @db.VarChar(600)
+	Sub String
+	ExpiresIn Int
 }

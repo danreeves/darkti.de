@@ -2,7 +2,7 @@ import { prisma } from "~/data/db.server"
 import { nanoid } from "~/utils/nanoid"
 
 export async function getUserBySteamId(steamId: string) {
-  return await prisma.user.findUnique({ where: { steam_id: steamId } })
+  return await prisma.user.findUnique({ where: { steamId } })
 }
 
 export async function createSteamUser(steamId: string) {
@@ -10,8 +10,8 @@ export async function createSteamUser(steamId: string) {
 
   let user = await prisma.user.create({
     data: {
-      public_id: publicId,
-      steam_id: steamId,
+      publicId,
+      steamId,
     },
   })
 
