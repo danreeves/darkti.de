@@ -1,12 +1,13 @@
 import { Fragment } from "react"
 import { Disclosure, Menu, Transition } from "@headlessui/react"
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline"
-import { Link, NavLink, Outlet, useMatches } from "@remix-run/react"
-import { uniqBy } from "lodash"
+import { Link, NavLink, Outlet } from "@remix-run/react"
 import type { User } from "./services/auth.server"
+import { classnames } from "./utils/classnames"
 
 const navigation = [
   { name: "Home", href: "/" },
+  { name: "Armoury", href: "/armoury" },
   { name: "Codex", href: "/codex" },
   { name: "Extension", href: "/extension" },
   { name: "Modding", href: "/modding" },
@@ -16,14 +17,7 @@ const userNavigation = [
   { name: "Sign out", href: "/logout" },
 ]
 
-function classNames(...classes: string[]) {
-  return classes.filter(Boolean).join(" ")
-}
-
 export default function Layout({ user }: { user: User | null }) {
-  const matches = useMatches()
-  console.log(user)
-
   return (
     <>
       <div className="min-h-full">
@@ -52,7 +46,7 @@ export default function Layout({ user }: { user: User | null }) {
                             key={item.name}
                             to={item.href}
                             className={({ isActive }) =>
-                              classNames(
+                              classnames(
                                 isActive
                                   ? "bg-neutral-900 text-white"
                                   : "text-neutral-300 hover:bg-neutral-700 hover:text-white",
@@ -96,7 +90,7 @@ export default function Layout({ user }: { user: User | null }) {
                                   {({ active }) => (
                                     <NavLink
                                       to={item.href}
-                                      className={classNames(
+                                      className={classnames(
                                         active ? "bg-neutral-100" : "",
                                         "block px-4 py-2 text-sm text-neutral-700"
                                       )}
@@ -146,7 +140,7 @@ export default function Layout({ user }: { user: User | null }) {
                       key={item.name}
                       to={item.href}
                       className={({ isActive }) =>
-                        classNames(
+                        classnames(
                           isActive
                             ? "bg-neutral-900 text-white"
                             : "text-neutral-300 hover:bg-neutral-700 hover:text-white",
@@ -189,7 +183,7 @@ export default function Layout({ user }: { user: User | null }) {
                 {/* 			key={item.name} */}
                 {/* 			to={item.href} */}
                 {/* 			className={({ isActive }) => */}
-                {/* 				classNames( */}
+                {/* 				classnames( */}
                 {/* 					isActive */}
                 {/* 						? "bg-neutral-900 text-white" */}
                 {/* 						: "text-neutral-300 hover:bg-neutral-700 hover:text-white", */}

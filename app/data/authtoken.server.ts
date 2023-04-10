@@ -11,13 +11,39 @@ export async function updateAuthToken(payload: UpdateArgs) {
 }
 
 export async function deleteAuthToken(userId: number) {
-  return await prisma.authToken.delete({
-    where: { userId },
-  })
+  try {
+    return await prisma.authToken.delete({
+      where: { userId },
+    })
+  } catch (e) {}
 }
 
 export async function getAuthToken(userId: number) {
-  return await prisma.authToken.findUnique({
+  let auth = await prisma.authToken.findUnique({
     where: { userId },
+  })
+
+  if (!auth) return null
+
+  if (auth.expiresAt <= new Date()) {
+    await prisma.authToken.delete({
+      where: { userId },
+    })
+    return null
+  }
+
+  return auth
+}
+
+export async function getExpiringTokens(inNextMinutes: number) {
+  let inXMinutes = new Date()
+  inXMinutes.setMinutes(inXMinutes.getMinutes() + inNextMinutes)
+
+  return await prisma.authToken.findMany({
+    where: {
+      expiresAt: {
+        lte: inXMinutes,
+      },
+    },
   })
 }
