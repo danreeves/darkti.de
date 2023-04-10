@@ -1,4 +1,4 @@
-import type { ActionArgs } from "@remix-run/node" // or cloudflare/deno
+import type { ActionArgs } from "@remix-run/node"
 import { getClientIPAddress } from "remix-utils"
 
 export const action = async ({ request }: ActionArgs) => {
@@ -10,7 +10,7 @@ export const action = async ({ request }: ActionArgs) => {
   const clientUserAgent = request.headers.get("user-agent")
 
   if (!clientIp || !clientUserAgent) {
-    return
+    return null
   }
 
   const headers = {
@@ -19,9 +19,24 @@ export const action = async ({ request }: ActionArgs) => {
     "user-agent": clientUserAgent,
   }
 
+  let body = await request.json()
+
+  // @ts-ignore: I don't care if this fails really...
+  Object.keys(body).forEach((key) => {
+    // @ts-ignore: I don't care if this fails really...
+    if (typeof body[key] === "string") {
+      // Replace UUIDs with :id
+      // @ts-ignore: I don't care if this fails really...
+      body[key] = body[key].replaceAll(
+        /[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}/g,
+        ":id"
+      )
+    }
+  })
+
   return await fetch(forwardPath, {
     method: request.method,
     headers,
-    body: request.body,
+    body: JSON.stringify(body),
   })
 }
