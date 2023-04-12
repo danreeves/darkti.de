@@ -3,6 +3,11 @@ import { SteamStrategy } from "remix-auth-steam"
 import { sessionStorage } from "~/services/session.server"
 import { getOrCreateSteamUser } from "~/data/user.server"
 
+let domain =
+  process.env.NODE_ENV === "production"
+    ? "https://darkti.de"
+    : "http://localhost:3000"
+
 export type User = {
   id: number
   publicId: string
@@ -15,7 +20,7 @@ export let authenticator = new Authenticator<User>(sessionStorage)
 authenticator.use(
   new SteamStrategy(
     {
-      returnURL: "http://localhost:3000/auth/steam/callback",
+      returnURL: `${domain}/auth/steam/callback`,
       apiKey: process.env.STEAM_API_KEY!,
     },
     async (steamUser) => {
