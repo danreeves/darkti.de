@@ -18,5 +18,5 @@ export let loader = async ({ request }: LoaderArgs) => {
 		}
 	}
 
-	return redirect("/login")
+	// return redirect("/login")
 }
