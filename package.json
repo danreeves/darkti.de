@@ -26,7 +26,6 @@
     "memoizee": "^0.4.15",
     "nanoid": "^4.0.2",
     "nanoid-dictionary": "^4.3.0",
-    "node-fetch": "^3.3.1",
     "plausible-tracker": "^0.3.8",
     "prettier": "^2.8.4",
     "prisma": "^4.12.0",
