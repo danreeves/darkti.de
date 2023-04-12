@@ -6,7 +6,8 @@ import {
 import { refreshToken } from "~/services/darktide.server"
 
 export async function refreshTokens(inNext = 30) {
-  let groupName = "Fetched in"
+  console.log("Starting refresh...")
+  let groupName = "Tokens refreshed in"
   console.time(groupName)
   let tokens = await getExpiringTokens(inNext)
 
