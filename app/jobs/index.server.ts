@@ -9,7 +9,7 @@ export function initJobs() {
   global.tokenRefresher =
     global.tokenRefresher ??
     Cron("?/5 * * * *", { protect: true }, async () => {
-      let expiringInTheNext10Minutes = 30
-      await refreshTokens(expiringInTheNext10Minutes)
+      let expiringInTheNext15Minutes = 15
+      await refreshTokens(expiringInTheNext15Minutes)
     })
 }
