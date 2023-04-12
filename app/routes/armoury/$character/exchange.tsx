@@ -1,3 +1,5 @@
+export let handle = "exchange"
+
 export default function Exchange() {
-  return "Exchange"
+	return "Coming Soon"
 }

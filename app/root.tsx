@@ -8,10 +8,14 @@ import {
 	ScrollRestoration,
 	useLoaderData,
 } from "@remix-run/react"
-import Layout from "./layout"
+import Layout from "~/layout"
 
 import tailwind from "~/tailwind.css"
-import { authenticator } from "./services/auth.server"
+import { authenticator } from "~/services/auth.server"
+
+// Sets up Cron singletons to perform timed jobs on the server
+import { initJobs } from "~/jobs/index.server"
+initJobs && initJobs()
 
 export const links: LinksFunction = () => [
 	{ rel: "stylesheet", href: tailwind },
@@ -27,7 +31,7 @@ export const links: LinksFunction = () => [
 
 export const meta: MetaFunction = () => ({
 	charset: "utf-8",
-	title: "Darkti.de - A community resource site",
+	title: "Darkti.de - unofficial community tools",
 	viewport: "width=device-width,initial-scale=1",
 })
 

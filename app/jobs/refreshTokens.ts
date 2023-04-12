@@ -1,4 +1,3 @@
-import { json } from "@remix-run/node"
 import {
   deleteAuthToken,
   getExpiringTokens,
@@ -6,9 +5,10 @@ import {
 } from "~/data/authtoken.server"
 import { refreshToken } from "~/services/darktide.server"
 
-export let loader = async () => {
-  let inNext30Minutes = 30
-  let tokens = await getExpiringTokens(inNext30Minutes)
+export async function refreshTokens(inNext = 30) {
+  let groupName = "Fetched in"
+  console.time(groupName)
+  let tokens = await getExpiringTokens(inNext)
 
   let tokensToUpdate = tokens.length
   let updatedTokens = 0
@@ -36,5 +36,6 @@ export let loader = async () => {
     }
   }
 
-  return json({ updatedTokens, tokensToUpdate, deletedTokens })
+  console.log({ updatedTokens, tokensToUpdate, deletedTokens })
+  console.timeEnd(groupName)
 }

@@ -137,7 +137,6 @@ export async function getLatencies(auth: AuthToken) {
 
   if (response.ok) {
     let data = await response.json()
-    console.log(data)
     let result = LatenciesSchema.safeParse(data)
     if (result.success) {
       return result.data
@@ -258,7 +257,46 @@ export async function getAccountGear(auth: AuthToken) {
     let data = await response.json()
     let result = AccountGearSchema.safeParse(data)
     if (result.success) {
-      return result.data
+      return result.data.gearList
     }
   }
+}
+
+let AccountTraitSchema = z.object({
+  numRanks: z.number(),
+  stickerBook: z.record(z.number()),
+})
+export async function getAccountTrait(auth: AuthToken, traitCategory: string) {
+  let url = `https://bsp-td-prod.atoma.cloud/data/${auth.sub}/account/traits/${traitCategory}`
+
+  let response = await fetch(url, {
+    headers: {
+      authorization: `Bearer ${auth.accessToken}`,
+    },
+  })
+
+  if (response.ok) {
+    let data = await response.json()
+    let result = AccountTraitSchema.safeParse(data)
+    if (result.success) {
+      let { numRanks, stickerBook } = result.data
+      return Object.entries(stickerBook).map(([trait, bitmask]) => {
+        let ranks: ("seen" | "unseen" | "invalid")[] = []
+        for (let i = 0; i <= numRanks - 1; i++) {
+          if (((bitmask >> (i + 1 + 3)) & 1) === 0) {
+            ranks[i] = "invalid"
+          } else if (((bitmask >> (i + 1 - 1)) & 1) === 1) {
+            ranks[i] = "seen"
+          } else {
+            ranks[i] = "unseen"
+          }
+        }
+        return {
+          trait,
+          ranks,
+        }
+      })
+    }
+  }
+  console.log(response)
 }

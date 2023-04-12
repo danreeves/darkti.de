@@ -20,6 +20,7 @@
     "@remix-run/serve": "^1.13.0",
     "@types/lodash": "^4.14.191",
     "@types/memoizee": "^0.4.8",
+    "croner": "^6.0.3",
     "isbot": "^3.6.6",
     "lodash": "^4.17.21",
     "memoizee": "^0.4.15",
@@ -34,7 +35,8 @@
     "remix-auth": "^3.4.0",
     "remix-auth-steam": "^1.0.4",
     "remix-utils": "^6.0.0",
-    "zod": "^3.20.6"
+    "zod": "^3.20.6",
+    "zodix": "^0.4.0"
   },
   "devDependencies": {
     "@remix-run/dev": "^1.13.0",
