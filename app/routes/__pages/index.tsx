@@ -1,8 +1,8 @@
-import { json } from "@remix-run/node";
+import { json } from "@remix-run/node"
 
 export const loader = async () => {
-	return json({ title: "Darkti.de - A community resource site" });
-};
+	return json({ title: "Darkti.de - unofficial community tools" })
+}
 
 export default function Home() {
 	return (
@@ -11,5 +11,5 @@ export default function Home() {
 				Home
 			</div>
 		</div>
-	);
+	)
 }
