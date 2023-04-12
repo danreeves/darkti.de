@@ -60,6 +60,8 @@ export async function refreshToken(refreshToken: string) {
     if (result.success) {
       return result.data
     }
+  } else {
+    console.log(response)
   }
 }
 
