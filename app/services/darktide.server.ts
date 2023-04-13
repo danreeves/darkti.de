@@ -300,5 +300,4 @@ export async function getAccountTrait(auth: AuthToken, traitCategory: string) {
       })
     }
   }
-  console.log(response)
 }
