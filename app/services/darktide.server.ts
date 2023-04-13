@@ -163,7 +163,7 @@ let AccountSummarySchema = z.object({
         abilities: z.unknown(),
         career: z.object({
           specialization: z.string(),
-          talents: z.array(z.string()),
+          talents: z.array(z.string()).optional(),
         }),
         narrative: z.unknown(),
         personal: z.unknown(),
