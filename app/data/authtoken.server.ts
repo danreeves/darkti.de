@@ -1,5 +1,5 @@
 import type { AuthToken } from "@prisma/client"
-import { prisma } from "~/data/db.server"
+import { prisma } from "../data/db.server"
 
 type UpdateArgs = Omit<AuthToken, "id">
 export async function updateAuthToken(payload: UpdateArgs) {

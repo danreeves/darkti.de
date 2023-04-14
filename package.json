@@ -9,7 +9,8 @@
     "build": "remix build",
     "start": "remix-serve build",
     "typecheck": "tsc",
-    "update-db": "prisma db push"
+    "update-db": "prisma db push",
+    "test" : "vitest"
   },
   "dependencies": {
     "@headlessui/react": "^1.7.11",
@@ -19,6 +20,7 @@
     "@remix-run/node": "^1.13.0",
     "@remix-run/react": "^1.13.0",
     "@remix-run/serve": "^1.13.0",
+    "@tailwindcss/forms": "^0.5.3",
     "@types/lodash": "^4.14.191",
     "@types/memoizee": "^0.4.8",
     "croner": "^6.0.3",
@@ -35,21 +37,22 @@
     "remix-auth": "^3.4.0",
     "remix-auth-steam": "^1.0.4",
     "remix-utils": "^6.0.0",
+    "tailwindcss": "^3.2.7",
     "zod": "^3.20.6",
-    "zodix": "^0.4.0",
-    "@tailwindcss/forms": "^0.5.3",
-    "tailwindcss": "^3.2.7"
+    "zodix": "^0.4.0"
   },
   "devDependencies": {
     "@remix-run/eslint-config": "^1.13.0",
     "@total-typescript/ts-reset": "^0.4.2",
+    "@types/jest": "^29.5.0",
     "@types/nanoid-dictionary": "^4.2.0",
     "@types/react": "^18.0.28",
     "@types/react-dom": "^18.0.11",
     "eslint": "^8.34.0",
     "npm-run-all": "^4.1.5",
     "prettier-plugin-tailwindcss": "^0.2.3",
-    "typescript": "^4.9.5"
+    "typescript": "^4.9.5",
+    "vitest": "^0.30.1"
   },
   "engines": {
     "node": ">=14"
