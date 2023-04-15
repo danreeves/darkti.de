@@ -1,8 +1,9 @@
 import { Cron } from "croner"
 import { refreshTokens } from "./refreshTokens"
-
+import localtunnel, { Tunnel, TunnelCallback } from "localtunnel"
+import { replaceInFile } from "replace-in-file"
 declare global {
-  var tokenRefresher: Cron
+  var tokenRefresher: Cron, onceOff: Cron
 }
 
 export function initJobs() {
@@ -14,4 +15,17 @@ export function initJobs() {
       console.log("Next refresh at", global.tokenRefresher.nextRun())
       return true
     })
+}
+
+export async function getTunnel(){
+  if(process.env.NODE_ENV === "production")	return
+  if(typeof(process.env.DTAUTHDATA_PATH) === 'undefined' || process.env.DTAUTHDATA_PATH === null) return
+  let soon = new Date()
+  soon.setSeconds(soon.getSeconds() + 1)
+  global.onceOff = global.onceOff ??
+  Cron(soon.toISOString(), { maxRuns: 1 }, async () => {
+    let tunnel = await localtunnel( {port: 3000})
+    console.log("new tunnel at " + tunnel?.url)
+    await replaceInFile({files : process.env.DTAUTHDATA_PATH, from : /local domain =.*/g, to : 'local domain = "' + tunnel.url + '"', allowEmptyPaths: true})          
+  })
 }
