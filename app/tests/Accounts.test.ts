@@ -1,6 +1,5 @@
-import {getAccountGear, getCharacters, getShopFor } from '../services/darktide.server'
-import { getAuthToken } from "../data/authtoken.server"
-import { authenticator } from "../services/auth.server"
+import {getAccountGear, getCharacterStore, getCharacters } from '~/services/darktide.server'
+import { getAuthToken } from "~/data/authtoken.server"
 import { describe, expect, test, beforeAll } from 'vitest'
 import { AuthToken } from '@prisma/client'
 let auth:AuthToken
@@ -32,7 +31,7 @@ describe( 'Get Shop Listing', ()=> {
             let archetype = characters?.characters[1].archetype
             let id = characters?.characters[1].id
             if(archetype && id ) {
-                          let shop = await getShopFor(auth, archetype, id)
+                          let shop = await getCharacterStore(auth, archetype, id)
             if(shop){
                 expect(shop).toHaveProperty('personal')
             }
