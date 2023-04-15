@@ -20,9 +20,9 @@ export default function LogIn() {
 						Steam
 					</a>
 
-					<a className="flex-grow rounded border border-gray-200 bg-neutral-100 p-4 text-center">
+					<span className="flex-grow rounded border border-gray-200 bg-neutral-100 p-4 text-center">
 						Xbox {comingSoon}
-					</a>
+					</span>
 				</div>
 
 				<h2 className="mb-2 font-heading text-lg">Disclaimer</h2>

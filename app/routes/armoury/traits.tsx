@@ -53,7 +53,7 @@ export default function Traits() {
 								{traitCategories.map((cat, i) => (
 									<div key={i}>
 										{cat.map((trait) => (
-											<div>
+											<div key={trait.trait}>
 												<div>{trait.trait}</div>
 												{trait.ranks.map((rank, i) => (
 													<div
