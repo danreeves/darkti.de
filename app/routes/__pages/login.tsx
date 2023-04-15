@@ -12,7 +12,7 @@ export default function LogIn() {
 			<div className="rounded bg-white p-4 shadow">
 				<h2 className="mb-2 font-heading text-lg">Sign In with</h2>
 
-				<div className="mt-6 mb-6 flex items-center gap-4">
+				<div className="mb-6 mt-6 flex items-center gap-4">
 					<a
 						className="flex-grow rounded border border-gray-200 bg-neutral-100 p-4 text-center"
 						href="/auth/steam"
