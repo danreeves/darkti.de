@@ -5,7 +5,7 @@ import {
 } from "~/services/darktide.server"
 import { getAuthToken } from "~/data/authtoken.server"
 import { describe, expect, test, beforeAll } from "vitest"
-import { AuthToken } from "@prisma/client"
+import type { AuthToken } from "@prisma/client"
 let auth: AuthToken
 beforeAll(async () => {
 	let response = await getAuthToken(1)
@@ -49,7 +49,7 @@ describe("Characters", () => {
 		if (auth) {
 			let characters = await getCharacters(auth)
 			if (characters) {
-				expect(characters).toBeDefined
+				expect(characters).toBeDefined()
 			}
 		}
 	})
