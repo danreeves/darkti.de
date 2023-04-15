@@ -1,13 +1,12 @@
-import type { AuthToken } from "@prisma/client"
+import { AuthToken } from "@prisma/client"
 import { map } from "lodash"
 import z from "zod"
 
-let JoinSchema = z.object({
+export const JoinSchema = z.object({
   queuePosition: z.number(),
   queueTicket: z.string(),
   retrySuggestion: z.number(),
 })
-
 export async function joinQueue(sessionTicket: string) {
   let url = "https://bsp-auth-prod.atoma.cloud/queue/join"
   let response = await fetch(url, {
@@ -24,13 +23,12 @@ export async function joinQueue(sessionTicket: string) {
   }
 }
 
-let AuthSchema = z.object({
+export const AuthSchema = z.object({
   AccessToken: z.string(),
   ExpiresIn: z.number(),
   RefreshToken: z.string(),
   Sub: z.string(),
 })
-
 export async function checkToken(token: string) {
   let url = "https://bsp-auth-prod.atoma.cloud/queue/check"
   let response = await fetch(url, {
@@ -46,7 +44,6 @@ export async function checkToken(token: string) {
     }
   }
 }
-
 export async function refreshToken(refreshToken: string) {
   let url = "https://bsp-auth-prod.atoma.cloud/queue/refresh"
   let response = await fetch(url, {
@@ -65,6 +62,88 @@ export async function refreshToken(refreshToken: string) {
   }
 }
 
+export const CharactersSchema = z.object({
+  characters: z.array(
+      z.object({
+        id: z.string(),
+        name: z.string(),
+        inventory: z.object({
+          slot_animation_emote_1: z.string().optional(),
+          slot_animation_emote_2: z.string().optional(),
+          slot_animation_emote_3: z.string().optional(),
+          slot_animation_emote_4: z.string().optional(),
+          slot_animation_emote_5: z.string().optional(),
+          slot_attachment_2: z.string().optional(),
+          slot_attachment_3: z.string().optional(),
+          slot_attachment_1: z.string().optional(),
+          slot_body_legs: z.string().optional(),
+          slot_body_face_scar: z.string().optional(),
+          slot_secondary: z.string().optional(),
+          slot_body_hair: z.string().optional(),
+          slot_body_arms: z.string().optional(),
+          slot_body_skin_color: z.string().optional(),
+          slot_portrait_frame: z.string().optional(),
+          slot_body_face: z.string().optional(),
+          slot_animation_end_of_round: z.string().optional(),
+          slot_gear_lowerbody: z.string().optional(),
+          slot_body_eye_color: z.string().optional(),
+          slot_insignia: z.string().optional(),
+          slot_gear_extra_cosmetic: z.string().optional(),
+          slot_body_torso: z.string().optional(),
+          slot_body_face_tattoo: z.string().optional(),
+          slot_body_hair_color: z.string().optional(),
+          slot_body_tattoo: z.string().optional(),
+          slot_primary: z.string().optional(),
+          slot_body_face_hair: z.string().optional(),
+          slot_gear_upperbody: z.string().optional(),
+          slot_gear_head: z.string().optional()
+        }),
+        breed: z.string(),
+        archetype: z.string(),
+        gender: z.string(),
+        lore: z.object({
+          backstory: z.object({
+            crime: z.string(),
+            formative_event: z.string(),
+            growing_up: z.string(),
+            childhood: z.string(),
+            personality: z.string(),
+            planet: z.string()
+          })
+        }),
+        selected_voice: z.string(),
+        abilities: z.object({
+          grenade_ability: z.string(),
+          combat_ability: z.string()
+        }),
+        career: z.object({
+          specialization: z.string(),
+          talents: z.array(z.string()).optional()
+        }),
+        narrative: z.object({
+          events: z.object({
+            onboarding_step_mission_board_introduction: z.boolean().optional(),
+            level_unlock_crafting_station_visited: z.boolean().optional(),
+            level_unlock_credits_store_visited: z.boolean().optional(),
+            level_unlock_premium_store_visited: z.boolean().optional(),
+            mission_board: z.boolean().optional(),
+            level_unlock_barber_visited: z.boolean().optional(),
+            onboarding_step_chapel_video_viewed: z.boolean().optional(),
+            onboarding_step_chapel_cutscene_played: z.boolean().optional(),
+            level_unlock_contract_store_visited: z.boolean().optional()
+          }),
+          stories: z.object({
+            onboarding: z.number(),
+            level_unlock_popups: z.number().optional(),
+            path_of_trust: z.number().optional()
+          })
+        }),
+        personal: z.object({ character_height: z.number() }),
+        prison_number: z.string(),
+        memberships: z.array(z.unknown())
+      }),
+  )
+})
 export async function getCharacters(auth: AuthToken) {
   let url = `https://bsp-td-prod.atoma.cloud/data/${auth.sub}/characters`
 
@@ -76,11 +155,19 @@ export async function getCharacters(auth: AuthToken) {
 
   if (response.ok) {
     let data = await response.json()
-    return data
+    
+    let result = CharactersSchema.safeParse(data)
+    if(result.success){
+      return result.data
+    }else{
+      console.log(result.error)
+    }
+  } else {
+    console.log(response)
   }
 }
 
-let MissionBoardSchema = z.object({
+export const MissionBoardSchema = z.object({
   missions: z.array(
     z.object({
       id: z.string(),
@@ -120,7 +207,7 @@ export async function getMissions(auth: AuthToken) {
   }
 }
 
-let LatenciesSchema = z.object({
+export const LatenciesSchema = z.object({
   regions: z.array(
     z.object({
       region: z.string(),
@@ -146,7 +233,7 @@ export async function getLatencies(auth: AuthToken) {
   }
 }
 
-let AccountSummarySchema = z.object({
+export const AccountSummarySchema = z.object({
   summary: z.object({
     sub: z.string(),
     name: z.string(),
@@ -205,7 +292,9 @@ export async function getAccountSummary(auth: AuthToken) {
   }
 }
 
-let AccountGearSchema = z.object({
+
+// Account 
+export const AccountGearSchema = z.object({
   gearList: z.record(
     z.object({
       slots: z.array(z.string()),
@@ -300,4 +389,87 @@ export async function getAccountTrait(auth: AuthToken, traitCategory: string) {
       })
     }
   }
+}
+
+export const CharacterStoreSchema = z.object({
+  catalog: z.object({
+    id: z.string(),
+    name: z.string(),
+    generation: z.number(),
+    layoutRef: z.string(),
+    validFrom: z.string(),
+    validTo: z.string()
+  }),
+  name: z.string(),
+  public: z.array(z.unknown()),
+  personal: z.array(
+        z.object({
+        offerId: z.string(),
+        sku: z.object({
+          id: z.string(),
+          displayPriority: z.number(),
+          internalName: z.string(),
+          name: z.string(),
+          description: z.string(),
+          category: z.string(),
+          assetId: z.string(),
+          tags: z.array(z.unknown()),
+          dlcReq: z.array(z.unknown())
+        }),
+        entitlement: z.object({
+          id: z.string(),
+          limit: z.number(),
+          type: z.string()
+        }),
+        price: z.object({
+          amount: z.object({ amount: z.number(), type: z.string() }),
+          id: z.string(),
+          priority: z.number(),
+          priceFormula: z.string()
+        }),
+        state: z.string(),
+        description: z.object({
+          id: z.string(),
+          gearId: z.string(),
+          rotation: z.string(),
+          type: z.string(),
+          properties: z.object({}),
+          overrides: z.object({
+            ver: z.number(),
+            rarity: z.number(),
+            characterLevel: z.number(),
+            itemLevel: z.number(),
+            baseItemLevel: z.number(),
+            traits: z.array(z.unknown()),
+            perks: z.array(z.object({id: z.string(), rarity: z.number()})).optional(),
+            base_stats: z.array(
+              z.object({ name: z.string(), value: z.number() })
+            ).optional()
+          })
+        }),
+        media: z.array(z.unknown())
+      }).optional(),    
+  ),
+  rerollsThisRotation: z.number(),
+  currentRotationEnd: z.string()
+})
+export async function getCharacterStore(auth: AuthToken, characterArchetype: string, characterId: string) {
+  let url = `https://bsp-td-prod.atoma.cloud/store/storefront/credits_store_${characterArchetype}?accountId=${auth.sub}&characterId=${characterId}&personal=true`
+    let response = await fetch(url, {
+    headers: {
+      authorization: `Bearer ${auth.accessToken}`,
+    },
+  })
+
+  if (response.ok) {
+    let data = await response.json()
+    let result = CharacterStoreSchema.safeParse(data)
+    if (result.success) {
+      return result.data
+    } else {
+      console.log(result.error)
+    }
+
+  }
+  
 }
