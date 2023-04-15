@@ -525,8 +525,7 @@ export const ShopSchema = z.object({
   name: z.string(),
   public: z.array(z.unknown()),
   personal: z.array(
-    z.union([
-      z.object({
+        z.object({
         offerId: z.string(),
         sku: z.object({
           id: z.string(),
@@ -564,156 +563,14 @@ export const ShopSchema = z.object({
             itemLevel: z.number(),
             baseItemLevel: z.number(),
             traits: z.array(z.unknown()),
-            perks: z.array(z.unknown()),
+            perks: z.array(z.object({id: z.string(), rarity: z.number()})).optional(),
             base_stats: z.array(
               z.object({ name: z.string(), value: z.number() })
-            )
+            ).optional()
           })
         }),
         media: z.array(z.unknown())
-      }),
-      z.object({
-        offerId: z.string(),
-        sku: z.object({
-          id: z.string(),
-          displayPriority: z.number(),
-          internalName: z.string(),
-          name: z.string(),
-          description: z.string(),
-          category: z.string(),
-          assetId: z.string(),
-          tags: z.array(z.unknown()),
-          dlcReq: z.array(z.unknown())
-        }),
-        entitlement: z.object({
-          id: z.string(),
-          limit: z.number(),
-          type: z.string()
-        }),
-        price: z.object({
-          amount: z.object({ amount: z.number(), type: z.string() }),
-          id: z.string(),
-          priority: z.number(),
-          priceFormula: z.string()
-        }),
-        state: z.string(),
-        description: z.object({
-          id: z.string(),
-          gearId: z.string(),
-          rotation: z.string(),
-          type: z.string(),
-          properties: z.object({}),
-          overrides: z.object({
-            ver: z.number(),
-            rarity: z.number(),
-            characterLevel: z.number(),
-            itemLevel: z.number(),
-            baseItemLevel: z.number(),
-            traits: z.array(z.unknown()),
-            perks: z.array(z.object({ id: z.string(), rarity: z.number() })),
-            base_stats: z.array(
-              z.object({ name: z.string(), value: z.number() })
-            )
-          })
-        }),
-        media: z.array(z.unknown())
-      }),
-      z.object({
-        offerId: z.string(),
-        sku: z.object({
-          id: z.string(),
-          displayPriority: z.number(),
-          internalName: z.string(),
-          name: z.string(),
-          description: z.string(),
-          category: z.string(),
-          assetId: z.string(),
-          tags: z.array(z.unknown()),
-          dlcReq: z.array(z.unknown())
-        }),
-        entitlement: z.object({
-          id: z.string(),
-          limit: z.number(),
-          type: z.string()
-        }),
-        price: z.object({
-          amount: z.object({ amount: z.number(), type: z.string() }),
-          id: z.string(),
-          priority: z.number(),
-          priceFormula: z.string()
-        }),
-        state: z.string(),
-        description: z.object({
-          id: z.string(),
-          gearId: z.string(),
-          rotation: z.string(),
-          type: z.string(),
-          properties: z.object({}),
-          overrides: z.object({
-            ver: z.number(),
-            rarity: z.number(),
-            characterLevel: z.number(),
-            itemLevel: z.number(),
-            baseItemLevel: z.number(),
-            traits: z.array(z.object({ id: z.string(), rarity: z.number() })),
-            perks: z.array(z.object({ id: z.string(), rarity: z.number() })),
-            base_stats: z.array(
-              z.object({ name: z.string(), value: z.number() })
-            )
-          })
-        }),
-        media: z.array(z.unknown())
-      }),
-      z.object({
-        offerId: z.string(),
-        sku: z.object({
-          id: z.string(),
-          displayPriority: z.number(),
-          internalName: z.string(),
-          name: z.string(),
-          description: z.string(),
-          category: z.string(),
-          assetId: z.string(),
-          tags: z.array(z.unknown()),
-          dlcReq: z.array(z.unknown())
-        }),
-        entitlement: z.object({
-          id: z.string(),
-          limit: z.number(),
-          type: z.string()
-        }),
-        price: z.object({
-          amount: z.object({ amount: z.number(), type: z.string() }),
-          id: z.string(),
-          priority: z.number(),
-          priceFormula: z.string()
-        }),
-        state: z.string(),
-        description: z.object({
-          id: z.string(),
-          gearId: z.string(),
-          rotation: z.string(),
-          type: z.string(),
-          properties: z.object({}),
-          overrides: z.object({
-            ver: z.number(),
-            rarity: z.number(),
-            characterLevel: z.number(),
-            itemLevel: z.number(),
-            baseItemLevel: z.number(),
-            perks: z.array(z.object({ id: z.string(), rarity: z.number() })),
-            traits: z.array(
-              z.object({
-                id: z.string(),
-                rarity: z.number(),
-                value: z.number()
-              })
-            )
-          })
-        }),
-        media: z.array(z.unknown())
-      })
-    ])
+      }).optional(),    
   ),
   rerollsThisRotation: z.number(),
   currentRotationEnd: z.string()
