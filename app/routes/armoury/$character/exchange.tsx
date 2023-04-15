@@ -8,7 +8,7 @@ import { getItems } from "~/data/items.server"
 import { t } from "~/data/localization.server"
 import { WeaponSchema } from "~/data/schemas.server"
 import { authenticator } from "~/services/auth.server"
-import { getCharacters, getShopFor } from "~/services/darktide.server"
+import { getCharacters, getCharacterStore } from "~/services/darktide.server"
 import { classnames } from "~/utils/classnames"
 
 export let handle = "exchange"
@@ -23,8 +23,8 @@ export async function loader({ request, params }: LoaderArgs) {
 
   if (auth) {
 	let characterList = await getCharacters(auth)
-	let currentCharacter = characterList?.characters[characterList.characters.findIndex( c => c.id == character)]
-	let currentShop = await getShopFor(auth, currentCharacter?.archetype, currentCharacter?.id )
+	let currentCharacter = characterList?.characters[characterList?.characters.findIndex( c => c.id == character)]
+	let currentShop = await getCharacterStore(auth, currentCharacter?.archetype, currentCharacter?.id )
     const weapons = await getItems(WeaponSchema)
 
 	let offers = Object.entries(currentShop.personal)
@@ -82,11 +82,11 @@ export default function Exchange() {
 			<div>
 				<div>Perks</div>
 				{ item.item.description.overrides.perks.map(perk => (
-					<div>{perk.id}</div>
+					<div key={perk.id}>{perk.id}</div>
 				))}
 				<span></span>
 			</div>
-			:""}
+			:null}
 
           <img
             alt=""

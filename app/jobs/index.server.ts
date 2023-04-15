@@ -18,6 +18,8 @@ export function initJobs() {
 }
 
 export async function getTunnel(){
+  if(process.env.NODE_ENV === "production")	return
+  if(typeof(process.env.DTAUTHDATA_PATH) === 'undefined' || process.env.DTAUTHDATA_PATH === null) return
   let soon = new Date()
   soon.setSeconds(soon.getSeconds() + 1)
   global.onceOff = global.onceOff ??
