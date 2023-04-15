@@ -188,7 +188,7 @@ export async function getAccountTrait(auth: AuthToken, traitCategory: string) {
     }
   }
 }
-export async function getShopFor(auth: AuthToken, archetype: string, id: string) {
+export async function getCharacterStore(auth: AuthToken, characterArchetype: string, characterId: string) {
   let url = `https://bsp-td-prod.atoma.cloud/store/storefront/credits_store_${archetype}?accountId=${auth.sub}&characterId=${id}&personal=true`
     let response = await fetch(url, {
     headers: {
