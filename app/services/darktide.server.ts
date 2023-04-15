@@ -1,8 +1,7 @@
-import { AuthToken } from "@prisma/client"
-import { map } from "lodash"
+import type { AuthToken } from "@prisma/client"
 import z from "zod"
 
-export const JoinSchema = z.object({
+let JoinSchema = z.object({
 	queuePosition: z.number(),
 	queueTicket: z.string(),
 	retrySuggestion: z.number(),
@@ -23,7 +22,7 @@ export async function joinQueue(sessionTicket: string) {
 	}
 }
 
-export const AuthSchema = z.object({
+let AuthSchema = z.object({
 	AccessToken: z.string(),
 	ExpiresIn: z.number(),
 	RefreshToken: z.string(),
@@ -62,7 +61,7 @@ export async function refreshToken(refreshToken: string) {
 	}
 }
 
-export const CharactersSchema = z.object({
+let CharactersSchema = z.object({
 	characters: z.array(
 		z.object({
 			id: z.string(),
@@ -167,7 +166,7 @@ export async function getCharacters(auth: AuthToken) {
 	}
 }
 
-export const MissionBoardSchema = z.object({
+let MissionBoardSchema = z.object({
 	missions: z.array(
 		z.object({
 			id: z.string(),
@@ -207,7 +206,7 @@ export async function getMissions(auth: AuthToken) {
 	}
 }
 
-export const LatenciesSchema = z.object({
+let LatenciesSchema = z.object({
 	regions: z.array(
 		z.object({
 			region: z.string(),
@@ -233,7 +232,7 @@ export async function getLatencies(auth: AuthToken) {
 	}
 }
 
-export const AccountSummarySchema = z.object({
+let AccountSummarySchema = z.object({
 	summary: z.object({
 		sub: z.string(),
 		name: z.string(),
@@ -293,7 +292,7 @@ export async function getAccountSummary(auth: AuthToken) {
 }
 
 // Account
-export const AccountGearSchema = z.object({
+let AccountGearSchema = z.object({
 	gearList: z.record(
 		z.object({
 			slots: z.array(z.string()),
@@ -390,7 +389,7 @@ export async function getAccountTrait(auth: AuthToken, traitCategory: string) {
 	}
 }
 
-export const CharacterStoreSchema = z.object({
+let CharacterStoreSchema = z.object({
 	catalog: z.object({
 		id: z.string(),
 		name: z.string(),
