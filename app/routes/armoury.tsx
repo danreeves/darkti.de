@@ -34,7 +34,7 @@ export default function Codex() {
 
 	if (noAuth) {
 		return (
-			<div className="mx-auto flex max-w-7xl place-content-center px-4 pt-6 pb-4 sm:px-8 lg:px-10">
+			<div className="mx-auto flex max-w-7xl place-content-center px-4 pb-4 pt-6 sm:px-8 lg:px-10">
 				<div
 					className="flex rounded-lg bg-yellow-100 p-4 text-sm text-yellow-700"
 					role="alert"
