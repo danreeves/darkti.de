@@ -10,7 +10,7 @@
     "start": "remix-serve build",
     "typecheck": "tsc",
     "update-db": "prisma db push",
-    "test" : "vitest"
+    "test": "vitest"
   },
   "dependencies": {
     "@headlessui/react": "^1.7.11",
@@ -25,6 +25,7 @@
     "@types/memoizee": "^0.4.8",
     "croner": "^6.0.3",
     "isbot": "^3.6.6",
+    "localtunnel": "^2.0.2",
     "lodash": "^4.17.21",
     "memoizee": "^0.4.15",
     "nanoid": "^4.0.2",
@@ -37,6 +38,7 @@
     "remix-auth": "^3.4.0",
     "remix-auth-steam": "^1.0.4",
     "remix-utils": "^6.0.0",
+    "replace-in-file": "^6.3.5",
     "tailwindcss": "^3.2.7",
     "zod": "^3.20.6",
     "zodix": "^0.4.0"
@@ -45,6 +47,7 @@
     "@remix-run/eslint-config": "^1.13.0",
     "@total-typescript/ts-reset": "^0.4.2",
     "@types/jest": "^29.5.0",
+    "@types/localtunnel": "^2.0.1",
     "@types/nanoid-dictionary": "^4.2.0",
     "@types/react": "^18.0.28",
     "@types/react-dom": "^18.0.11",

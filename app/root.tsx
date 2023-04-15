@@ -14,8 +14,11 @@ import tailwind from "~/tailwind.css"
 import { authenticator } from "~/services/auth.server"
 
 // Sets up Cron singletons to perform timed jobs on the server
-import { initJobs } from "~/jobs/index.server"
+import { initJobs, getTunnel } from "~/jobs/index.server"
 initJobs && initJobs()
+if( process.env.NODE_ENV !== "production") {	
+	getTunnel && getTunnel()
+}
 
 export const links: LinksFunction = () => [
 	{ rel: "stylesheet", href: tailwind },

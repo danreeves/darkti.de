@@ -28,6 +28,7 @@ export async function loader({ request, params }: LoaderArgs) {
 		let character = characters?.characters[i]
 		let currentShop = await getShopFor(auth, character?.archetype, character?.id )
 	}
+	return null
   }
 }
 
