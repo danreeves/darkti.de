@@ -69,7 +69,7 @@ export async function loader({ request, params }: LoaderArgs) {
 }
 
 let rarityBorder: Record<string, string> = {
-	1: "border-l-neutral-600 from-neutral-50",
+	1: "border-l-neutral-600 from-neutral-100",
 	2: "border-l-green-600 from-green-50",
 	3: "border-l-blue-600 from-blue-50",
 	4: "border-l-purple-600 from-purple-50",
