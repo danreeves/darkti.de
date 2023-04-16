@@ -5,19 +5,15 @@ import { TagList } from "~/components/TagList"
 import { getItems } from "~/data/items.server"
 import { WeaponSchema } from "~/data/schemas.server"
 import { Form, FormGroup, TextInput, Checkbox } from "~/components/Form"
-
-function getAllOr<T>(
-	searchParams: URLSearchParams,
-	key: string,
-	fallback: T
-): string[] | T {
-	return searchParams.has(key) ? searchParams.getAll(key) : fallback
-}
+import { getSearchParam } from "~/utils/getSearchParam"
 
 export const loader = async ({ request }: LoaderArgs) => {
 	const url = new URL(request.url)
-	const item_type = getAllOr(url.searchParams, "type", ["melee", "ranged"])
-	const archetypes = getAllOr(url.searchParams, "archetype", undefined)
+	const item_type = getSearchParam(url.searchParams, "type", [
+		"melee",
+		"ranged",
+	])
+	const archetypes = getSearchParam(url.searchParams, "archetype", undefined)
 	const name = url.searchParams.get("name") ?? undefined
 	const weapons = await getItems(WeaponSchema, { item_type, archetypes, name })
 	return json({ title: "Weapons", weapons })
@@ -28,7 +24,7 @@ export default function Weapons() {
 
 	return (
 		<>
-			<Form>
+			<Form dir="row">
 				<FormGroup label="Item type">
 					<Checkbox name="type" value="melee" label="Melee" />
 					<Checkbox name="type" value="ranged" label="Ranged" />
