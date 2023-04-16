@@ -6,12 +6,15 @@ import { zx } from "zodix"
 import { getAuthToken } from "~/data/authtoken.server"
 import { getItems } from "~/data/items.server"
 import { t } from "~/data/localization.server"
-import { WeaponSchema } from "~/data/schemas.server"
+import { PerkSchema, WeaponSchema } from "~/data/schemas.server"
+import { replaceAll } from "~/data/utils.server"
 import { authenticator } from "~/services/auth.server"
 import { getCharacters, getCharacterStore } from "~/services/darktide.server"
 import { classnames } from "~/utils/classnames"
 
 export let handle = "exchange"
+
+
 
 export async function loader({ request, params }: LoaderArgs) {
 	const { character } = zx.parseParams(params, { character: z.string() })
@@ -29,15 +32,24 @@ export async function loader({ request, params }: LoaderArgs) {
 			]
 		let currentShop = await getCharacterStore(
 			auth,
-			currentCharacter?.archetype,
-			currentCharacter?.id
+			currentCharacter?.archetype!,
+			currentCharacter?.id!
 		)
 		const weapons = await getItems(WeaponSchema)
-
-		let offers = Object.entries(currentShop.personal)
+    const traits = await getItems(PerkSchema)
+    if(!currentShop) return json({ offers: []})
+		
+    let offers = Object.entries(currentShop)
 			.map(([id, item]) => {
 				let weapon = weapons.find((wep) => wep.id === item?.description.id)
 				if (!weapon) return undefined
+        item?.description.overrides.perks?.map(perk => {
+          let trait = traits.find((trait) => trait.id === perk.id)
+          let values = trait?.description_values?.filter((value) => +value.rarity === perk.rarity)
+          let replacement : {[key : string]: string} = {}
+          values?.map((value) => replacement["{" + value.string_key + ":%s}"] = value.string_value)
+          perk.id =  replaceAll(trait?.description!, replacement)
+        })
 				return {
 					id,
 					item,
@@ -45,9 +57,9 @@ export async function loader({ request, params }: LoaderArgs) {
 				}
 			})
 			.filter(Boolean)
-		return json({ items: offers })
+		return json({ offers: offers })
 	}
-	return null
+	return json({ offers: []})
 }
 
 let rarityBorder: Record<string, string> = {
@@ -59,10 +71,10 @@ let rarityBorder: Record<string, string> = {
 }
 
 export default function Exchange() {
-	let { items } = useLoaderData<typeof loader>()
+	let { offers } = useLoaderData<typeof loader>()
 	return (
 		<div className="grid w-full grow grid-cols-4 gap-4 bg-neutral-200 p-4 shadow-inner">
-			{items.map((item) => (
+			{offers.map((item : any) => (
 				<div
 					key={item.id}
 					className={classnames(
@@ -84,7 +96,7 @@ export default function Exchange() {
 					{item.item.description.overrides.perks.length > 0 ? (
 						<div>
 							<div>Perks</div>
-							{item.item.description.overrides.perks.map((perk) => (
+							{item.item.description.overrides.perks.map((perk: {id: string, rarity:number}) => (
 								<div key={perk.id}>{perk.id}</div>
 							))}
 							<span></span>
