@@ -1,5 +1,6 @@
 import type { AuthToken } from "@prisma/client"
 import z from "zod"
+import { fetch } from "~/utils/fetch"
 
 let JoinSchema = z.object({
 	queuePosition: z.number(),
