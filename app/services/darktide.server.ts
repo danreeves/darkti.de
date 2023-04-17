@@ -392,40 +392,24 @@ export async function getAccountTrait(auth: AuthToken, traitCategory: string) {
 
 let CharacterStoreSchema = z.object({
 	catalog: z.object({
-		id: z.string(),
-		name: z.string(),
-		generation: z.number(),
-		layoutRef: z.string(),
 		validFrom: z.string(),
 		validTo: z.string(),
 	}),
 	name: z.string(),
-	public: z.array(z.unknown()),
 	personal: z.array(
 		z
 			.object({
 				offerId: z.string(),
 				sku: z.object({
 					id: z.string(),
-					displayPriority: z.number(),
 					internalName: z.string(),
 					name: z.string(),
 					description: z.string(),
 					category: z.string(),
-					assetId: z.string(),
-					tags: z.array(z.unknown()),
-					dlcReq: z.array(z.unknown()),
-				}),
-				entitlement: z.object({
-					id: z.string(),
-					limit: z.number(),
-					type: z.string(),
 				}),
 				price: z.object({
 					amount: z.object({ amount: z.number(), type: z.string() }),
 					id: z.string(),
-					priority: z.number(),
-					priceFormula: z.string(),
 				}),
 				state: z.string(),
 				description: z.object({
@@ -435,12 +419,10 @@ let CharacterStoreSchema = z.object({
 					type: z.string(),
 					properties: z.object({}),
 					overrides: z.object({
-						ver: z.number(),
 						rarity: z.number(),
-						characterLevel: z.number(),
 						itemLevel: z.number(),
 						baseItemLevel: z.number(),
-						traits: z.array(z.unknown()),
+						traits: z.array(z.object({})).optional(),
 						perks: z
 							.array(z.object({ id: z.string(), rarity: z.number() }))
 							.optional(),
@@ -449,7 +431,6 @@ let CharacterStoreSchema = z.object({
 							.optional(),
 					}),
 				}),
-				media: z.array(z.unknown()),
 			})
 			.optional()
 	),
@@ -472,7 +453,8 @@ export async function getCharacterStore(
 		let data = await response.json()
 		let result = CharacterStoreSchema.safeParse(data)
 		if (result.success) {
-			return result.data
+			let shop = result.data.personal
+			return shop
 		} else {
 			console.log(result.error)
 		}
