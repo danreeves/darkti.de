@@ -102,10 +102,8 @@ export const SkinSchema = z
 			baseName,
 		}
 	})
-
-export const BlessingSchema = z
+export const TraitSchema = z
 	.object({
-		item_type: z.literal("TRAIT"),
 		icon: z.string(),
 		icon_small: z.string(),
 		weapon_type_restriction: z.array(z.string()),
@@ -115,18 +113,14 @@ export const BlessingSchema = z
 		display_name: z.string(),
 		description: z.string(),
 		// TODO: Empty lists should be nulled in the lua exporter
-		description_values: z
-			.union([
-				z.unknown(),
+		description_values: 
 				z.array(
 					z.object({
 						string_key: z.string(),
 						string_value: z.string(),
 						rarity: z.string(),
 					})
-				),
-			])
-			.optional(),
+				).optional(),			
 		trait: z.string(),
 	})
 	.transform((item) => {
@@ -142,3 +136,7 @@ export const BlessingSchema = z
 			baseName,
 		}
 	})
+
+
+export const BlessingSchema = z.intersection(TraitSchema, z.object({ item_type: z.literal("TRAIT") }))
+export const PerkSchema = z.intersection(TraitSchema, z.object({ item_type: z.literal("PERK") }))
