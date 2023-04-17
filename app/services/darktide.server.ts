@@ -391,9 +391,14 @@ export async function getAccountTrait(auth: AuthToken, traitCategory: string) {
 }
 
 let CharacterStoreSchema = z.object({
+	catalog: z.object({
+		validFrom: z.string(),
+		validTo: z.string(),
+	}),
 	name: z.string(),
 	personal: z.array(
-		z.object({
+		z
+			.object({
 				offerId: z.string(),
 				sku: z.object({
 					id: z.string(),
@@ -413,7 +418,7 @@ let CharacterStoreSchema = z.object({
 					rotation: z.string(),
 					type: z.string(),
 					properties: z.object({}),
-					overrides: z.object({					
+					overrides: z.object({
 						rarity: z.number(),
 						itemLevel: z.number(),
 						baseItemLevel: z.number(),
@@ -429,6 +434,8 @@ let CharacterStoreSchema = z.object({
 			})
 			.optional()
 	),
+	rerollsThisRotation: z.number(),
+	currentRotationEnd: z.string(),
 })
 export async function getCharacterStore(
 	auth: AuthToken,
@@ -446,8 +453,8 @@ export async function getCharacterStore(
 		let data = await response.json()
 		let result = CharacterStoreSchema.safeParse(data)
 		if (result.success) {
-      let shop = result.data.personal
-   		return shop
+			let shop = result.data.personal
+			return shop
 		} else {
 			console.log(result.error)
 		}
