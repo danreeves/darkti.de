@@ -1,4 +1,10 @@
-# [darkti.de](https://darkti.de/)
+# [DARKTI.DE](https://darkti.de/)
+
+<p align="center">
+	<a href="https://ko-fi.com/P5P44MNYZ"><img alt="ko-fi" src="https://ko-fi.com/img/githubbutton_sm.svg" /></a>
+</p>
+
+An unofficial community-driven site for Fatsharks Warhammer 40,000: Darktide.
 
 ## Development
 

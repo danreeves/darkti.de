@@ -18,7 +18,7 @@ export default function Skins() {
 
 	return (
 		<>
-			<Form>
+			<Form dir="row">
 				<Checkbox label="Show descriptions" name="descriptions" />
 				<TextInput label="Search" name="name" className="ml-auto items-end" />
 			</Form>
