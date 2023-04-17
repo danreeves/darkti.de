@@ -24,7 +24,7 @@ export default function Blessings() {
 								<img
 									loading="lazy"
 									alt=""
-									src={`https://img.darkti.de/pngs/${item.icon}.png`}
+									src={`https://img.darkti.de/resize?width=128&file=${item.icon}.png`}
 									className="m-4 rounded bg-neutral-800 transition duration-75 group-hover:scale-105"
 								/>
 							</div>

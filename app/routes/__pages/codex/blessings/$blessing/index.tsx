@@ -21,7 +21,7 @@ export default function Skin() {
 		<div className="flex flex-col items-center">
 			<div className="bg-neutral-800 shadow sm:rounded">
 				<img
-					src={`https://img.darkti.de/pngs/${item.icon}.png`}
+					src={`https://img.darkti.de/resize?width=128&file=${item.icon}.png`}
 					alt={item.display_name}
 				/>
 			</div>

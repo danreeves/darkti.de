@@ -50,7 +50,7 @@ export default function Weapons() {
 								<img
 									loading="lazy"
 									alt=""
-									src={`https://img.darkti.de/pngs/${weapon.preview_image}.png`}
+									src={`https://img.darkti.de/resize?width=256&file=${weapon.preview_image}.png`}
 									className="h-full transition duration-75 group-hover:scale-105"
 								/>
 							</div>

@@ -48,7 +48,7 @@ export async function loader({ request, params }: LoaderArgs) {
 
 					let rarity = item.masterDataInstance.overrides?.rarity ?? 1
 					let baseItemLevel = item.masterDataInstance.overrides?.baseItemLevel
-					let previewImage = `https://img.darkti.de/pngs/${weapon.preview_image}.png`
+					let previewImage = `https://img.darkti.de/resize?width=256&file=${weapon.preview_image}.png`
 					let displayName = weapon.display_name
 					let traits =
 						item.masterDataInstance.overrides?.traits
@@ -60,7 +60,7 @@ export async function loader({ request, params }: LoaderArgs) {
 									baseName,
 									rarity: t.rarity,
 									displayName: blessing.display_name,
-									icon: `https://img.darkti.de/pngs/${blessing.icon}.png`,
+									icon: `https://img.darkti.de/resize?width=256&file=${blessing.icon}.png`,
 								}
 							})
 							.filter(Boolean) ?? []
