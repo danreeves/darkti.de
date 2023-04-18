@@ -5,6 +5,7 @@ import { json } from "@remix-run/server-runtime"
 import { z } from "zod"
 import { zx } from "zodix"
 import { Checkbox, Form, FormGroup, Select, TextInput } from "~/components/Form"
+import { Img } from "~/components/Img"
 import { getAuthToken } from "~/data/authtoken.server"
 import { getItems } from "~/data/items.server"
 import { BlessingSchema, WeaponSchema } from "~/data/schemas.server"
@@ -48,7 +49,7 @@ export async function loader({ request, params }: LoaderArgs) {
 
 					let rarity = item.masterDataInstance.overrides?.rarity ?? 1
 					let baseItemLevel = item.masterDataInstance.overrides?.baseItemLevel
-					let previewImage = `https://img.darkti.de/resize?width=256&file=${weapon.preview_image}.png`
+					let previewImage = `${weapon.preview_image}.png`
 					let displayName = weapon.display_name
 					let traits =
 						item.masterDataInstance.overrides?.traits
@@ -60,7 +61,7 @@ export async function loader({ request, params }: LoaderArgs) {
 									baseName,
 									rarity: t.rarity,
 									displayName: blessing.display_name,
-									icon: `https://img.darkti.de/resize?width=256&file=${blessing.icon}.png`,
+									icon: `${blessing.icon}.png`,
 								}
 							})
 							.filter(Boolean) ?? []
@@ -132,11 +133,10 @@ export default function Inventory() {
 								rarityBorder[item.rarity]
 							)}
 						>
-							<img
-								alt=""
-								loading="lazy"
+							<Img
 								className="pointer-events-none absolute right-0 top-0 h-full"
 								src={item.previewImage}
+								width="256"
 							/>
 							<div className="isolate">
 								<div
@@ -156,12 +156,13 @@ export default function Inventory() {
 								</span>
 								<div className="m-2 flex items-center gap-2">
 									{item.traits.map((trait) => (
-										<img
+										<Img
 											className="h-10 w-10 rounded invert"
 											key={trait.icon}
 											alt={`Tier ${trait.rarity} ${trait.displayName}`}
 											title={`Tier ${trait.rarity} ${trait.displayName}`}
 											src={trait.icon}
+											width="128"
 										/>
 									))}
 								</div>

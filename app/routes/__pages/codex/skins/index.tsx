@@ -4,6 +4,7 @@ import { Link, useLoaderData } from "@remix-run/react"
 import { Checkbox, Form, TextInput } from "~/components/Form"
 import { getItems } from "~/data/items.server"
 import { SkinSchema } from "~/data/schemas.server"
+import { Img } from "~/components/Img"
 
 export const loader = async ({ request }: LoaderArgs) => {
 	const url = new URL(request.url)
@@ -31,10 +32,9 @@ export default function Skins() {
 						>
 							<Link to={item.slug} className="block h-full w-full">
 								<div className="aspect-video w-full overflow-hidden">
-									<img
-										loading="lazy"
-										alt=""
-										src={`https://img.darkti.de/resize?width=256&file=${item.preview_image}.png`}
+									<Img
+										src={`${item.preview_image}.png`}
+										width="256"
 										className="h-full transition duration-75 group-hover:scale-105"
 									/>
 								</div>
