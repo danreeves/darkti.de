@@ -1,6 +1,7 @@
 import type { LoaderArgs } from "@remix-run/node"
 import { json } from "@remix-run/node"
 import { useLoaderData } from "@remix-run/react"
+import { Img } from "~/components/Img"
 import { getItem } from "~/data/items.server"
 import { CurioSchema } from "~/data/schemas.server"
 
@@ -20,8 +21,9 @@ export default function Curio() {
 	return (
 		<div className="flex flex-col items-center">
 			<div className="bg-white shadow sm:rounded">
-				<img
-					src={`https://img.darkti.de/pngs/${item.preview_image}.png`}
+				<Img
+					src={`${item.preview_image}.png`}
+					width="1920"
 					alt={item.display_name}
 				/>
 			</div>

@@ -6,6 +6,7 @@ import { getItems } from "~/data/items.server"
 import { WeaponSchema } from "~/data/schemas.server"
 import { Form, FormGroup, TextInput, Checkbox } from "~/components/Form"
 import { getSearchParam } from "~/utils/getSearchParam"
+import { Img } from "~/components/Img"
 
 export const loader = async ({ request }: LoaderArgs) => {
 	const url = new URL(request.url)
@@ -47,10 +48,9 @@ export default function Weapons() {
 							key={weapon.id}
 						>
 							<div className="pointer-events-none absolute right-0 top-0 z-0 aspect-video h-full overflow-hidden ">
-								<img
-									loading="lazy"
-									alt=""
-									src={`https://img.darkti.de/pngs/${weapon.preview_image}.png`}
+								<Img
+									src={`${weapon.preview_image}.png`}
+									width="256"
 									className="h-full transition duration-75 group-hover:scale-105"
 								/>
 							</div>

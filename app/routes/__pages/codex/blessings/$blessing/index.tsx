@@ -1,6 +1,7 @@
 import type { LoaderArgs } from "@remix-run/node"
 import { json } from "@remix-run/node"
 import { useLoaderData } from "@remix-run/react"
+import { Img } from "~/components/Img"
 import { getItem } from "~/data/items.server"
 import { BlessingSchema } from "~/data/schemas.server"
 
@@ -20,10 +21,7 @@ export default function Skin() {
 	return (
 		<div className="flex flex-col items-center">
 			<div className="bg-neutral-800 shadow sm:rounded">
-				<img
-					src={`https://img.darkti.de/pngs/${item.icon}.png`}
-					alt={item.display_name}
-				/>
+				<Img src={`${item.icon}.png`} width="128" alt={item.display_name} />
 			</div>
 			<p className="m-4 mb-0 rounded bg-white p-4 shadow md:w-1/2">
 				{item.description}

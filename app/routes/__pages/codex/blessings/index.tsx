@@ -1,5 +1,6 @@
 import { json } from "@remix-run/node"
 import { Link, useLoaderData } from "@remix-run/react"
+import { Img } from "~/components/Img"
 import { getItems } from "~/data/items.server"
 import { BlessingSchema } from "~/data/schemas.server"
 
@@ -21,10 +22,9 @@ export default function Blessings() {
 					>
 						<Link to={item.slug} className="block h-full w-full">
 							<div className="flex aspect-video w-full items-center justify-center">
-								<img
-									loading="lazy"
-									alt=""
-									src={`https://img.darkti.de/pngs/${item.icon}.png`}
+								<Img
+									src={`${item.icon}.png`}
+									width="128"
 									className="m-4 rounded bg-neutral-800 transition duration-75 group-hover:scale-105"
 								/>
 							</div>
