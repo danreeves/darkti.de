@@ -31,7 +31,7 @@ export let loader = async ({ request, params }: LoaderArgs) => {
 	let maxChecks = join.queuePosition + 1
 	while (!auth && checks <= maxChecks) {
 		console.log("Checking auth queue", checks, "times")
-		await sleep(1000)
+		await sleep(Math.max(1000, join.retrySuggestion))
 		auth = await checkToken(join.queueTicket)
 		checks++
 	}
