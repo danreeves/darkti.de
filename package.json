@@ -27,6 +27,7 @@
 		"@types/lodash": "^4.14.191",
 		"@types/memoizee": "^0.4.8",
 		"croner": "^6.0.3",
+		"framer-motion": "^10.12.4",
 		"husky": "^8.0.0",
 		"isbot": "^3.6.6",
 		"localtunnel": "^2.0.2",
