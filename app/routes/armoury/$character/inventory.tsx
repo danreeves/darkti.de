@@ -1,8 +1,8 @@
 import { ChevronDoubleUpIcon } from "@heroicons/react/24/outline"
-import { Link, useLoaderData, useLocation, useOutlet } from "@remix-run/react"
+import { NavLink, useLoaderData, useOutlet } from "@remix-run/react"
 import type { LoaderArgs } from "@remix-run/server-runtime"
 import { json } from "@remix-run/server-runtime"
-import { AnimatePresence, motion } from "framer-motion"
+import { AnimatePresence } from "framer-motion"
 import { z } from "zod"
 import { zx } from "zodix"
 import { Checkbox, Form, FormGroup, Select, TextInput } from "~/components/Form"
@@ -131,13 +131,16 @@ export default function Inventory() {
 			<div className="grid w-full grow grid-cols-4 gap-4 bg-neutral-200 p-4 shadow-inner">
 				{items.map((item) => {
 					return (
-						<Link
+						<NavLink
 							to={item.id}
 							key={item.id}
-							className={classnames(
-								"border-l-3 from-1% relative border-2 border-neutral-400 bg-white bg-gradient-to-r shadow",
-								rarityBorder[item.rarity]
-							)}
+							className={({ isActive }) =>
+								classnames(
+									"border-l-3 from-1% relative border-2 border-neutral-400 bg-white bg-gradient-to-r shadow transition",
+									rarityBorder[item.rarity],
+									outlet && !isActive && "opacity-50"
+								)
+							}
 						>
 							<Img
 								className="pointer-events-none absolute right-0 top-0 h-full"
@@ -173,7 +176,7 @@ export default function Inventory() {
 									))}
 								</div>
 							</div>
-						</Link>
+						</NavLink>
 					)
 				})}
 			</div>
