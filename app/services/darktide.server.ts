@@ -166,6 +166,54 @@ export async function getCharacters(auth: AuthToken) {
 		console.log(response)
 	}
 }
+let CharacterWalletSchema = z
+	.object({
+		wallets: z.array(
+			z.object({
+				balance: z.object({ amount: z.number(), type: z.string() }),
+				lastTransactionId: z.number(),
+			})
+		),
+	})
+	.transform((item) => {
+		let credits =
+			item.wallets.find((s) => s.balance.type === "credits") || undefined
+		let marks =
+			item.wallets.find((s) => s.balance.type === "marks") || undefined
+		let diamantine =
+			item.wallets.find((s) => s.balance.type === "diamantine") || undefined
+		let plasteel =
+			item.wallets.find((s) => s.balance.type === "plasteel") || undefined
+		return {
+			credits,
+			marks,
+			plasteel,
+			diamantine,
+		}
+	})
+
+export async function getCharacterWallet(auth: AuthToken, characterId: string) {
+	let url = `https://bsp-td-prod.atoma.cloud/data/${auth.sub}/characters/${characterId}/wallets`
+
+	let response = await fetch(url, {
+		headers: {
+			authorization: `Bearer ${auth.accessToken}`,
+		},
+	})
+
+	if (response.ok) {
+		let data = await response.json()
+
+		let result = CharacterWalletSchema.safeParse(data)
+		if (result.success) {
+			return result.data
+		} else {
+			console.log(result.error)
+		}
+	} else {
+		console.log(response)
+	}
+}
 
 let MissionBoardSchema = z.object({
 	missions: z.array(
@@ -424,7 +472,9 @@ let CharacterStoreSchema = z.object({
 						rarity: z.number(),
 						itemLevel: z.number(),
 						baseItemLevel: z.number(),
-						traits: z.array(z.object({})).optional(),
+						traits: z
+							.array(z.object({ id: z.string(), rarity: z.number() }))
+							.optional(),
 						perks: z
 							.array(z.object({ id: z.string(), rarity: z.number() }))
 							.optional(),
