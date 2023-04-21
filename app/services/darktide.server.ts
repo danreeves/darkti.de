@@ -306,6 +306,7 @@ let AccountGearSchema = z.object({
 							.array(
 								z.object({
 									value: z.number().optional(),
+									modified: z.number().optional(),
 									id: z.string(),
 									rarity: z.number(),
 								})
@@ -322,11 +323,12 @@ let AccountGearSchema = z.object({
 							.optional(),
 						characterLevel: z.number().optional(),
 						baseItemLevel: z.number().optional(),
-						baseStats: z
+						base_stats: z
 							.array(z.object({ name: z.string(), value: z.number() }))
 							.optional(),
 						rarity: z.number().optional(),
 						itemLevel: z.number().optional(),
+						slot_weapon_skin: z.string().optional(),
 					})
 					.optional(),
 			}),
