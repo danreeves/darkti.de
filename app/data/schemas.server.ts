@@ -69,8 +69,10 @@ export const CurioSchema = z
 		let baseName = item.id.split("/").at(-1)!
 		let slug = baseName?.replaceAll("_", "-")!
 		let display_name = t(item.display_name)
+		let item_type = item.item_type.toLowerCase()
 		return {
 			...item,
+			item_type,
 			display_name,
 			slug,
 			baseName,

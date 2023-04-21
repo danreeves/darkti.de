@@ -11,17 +11,33 @@ import { z } from "zod"
 import { zx } from "zodix"
 import { getAuthToken } from "~/data/authtoken.server"
 import { getItems } from "~/data/items.server"
-import { PerkSchema, WeaponSchema } from "~/data/schemas.server"
+import {
+	BlessingSchema,
+	CurioSchema,
+	PerkSchema,
+	WeaponSchema,
+} from "~/data/schemas.server"
 import { replaceAll } from "~/data/utils.server"
 import { authenticator } from "~/services/auth.server"
-import { getCharacters, getCharacterStore } from "~/services/darktide.server"
+import {
+	getCharacters,
+	getCharacterStore,
+	getCharacterWallet,
+} from "~/services/darktide.server"
 import { classnames } from "~/utils/classnames"
+import { getSearchParam } from "~/utils/getSearchParam"
 
 export let handle = "exchange"
 
+let sort = function (a: number, b: number) {
+	if (a > b) return 1
+	if (a < b) return -1
+	return 0
+}
+
 export async function loader({ request, params }: LoaderArgs) {
 	const { character } = zx.parseParams(params, { character: z.string() })
-	const emptyResult = { offers: [], wallet: null }
+	const emptyResult = { offers: [], wallet: undefined }
 	let user = await authenticator.isAuthenticated(request, {
 		failureRedirect: "/login",
 	})
@@ -43,14 +59,26 @@ export async function loader({ request, params }: LoaderArgs) {
 				currentCharacter.archetype,
 				currentCharacter.id
 			)
+			let url = new URL(request.url)
+			let filterItemTypes = getSearchParam(url.searchParams, "type", [
+				"melee",
+				"ranged",
+				"gadget",
+			])
+			let sortBy = getSearchParam(url.searchParams, "sort", "total rating")
 			const weapons = await getItems(WeaponSchema)
+			const curios = await getItems(CurioSchema)
 			const traits = await getItems(PerkSchema)
-			if (!currentShop) return json({ offers: [] })
+			const blessings = await getItems(BlessingSchema)
+			let wallet = await getCharacterWallet(auth, currentCharacter.id)
+
+			if (!currentShop) return json(emptyResult)
 
 			let offers = Object.entries(currentShop)
 				.map(([id, item]) => {
 					let weapon = weapons.find((wep) => wep.id === item?.description.id)
-					if (!weapon) return undefined
+					let curio = curios.find((cur) => cur.id === item?.description.id)
+					if (!weapon && !curio) return undefined
 					if (!item) return undefined
 					if (item.description.overrides.perks) {
 						item.description.overrides.perks.forEach((perk) => {
@@ -69,16 +97,56 @@ export async function loader({ request, params }: LoaderArgs) {
 							}
 						})
 					}
+					let blessing =
+						item.description.overrides?.traits
+							?.map((t) => {
+								let blessing = blessings.find((b) => b.id === t.id)
+								if (!blessing) return undefined
+								let [baseName] = t.id.match(/\w+$/) ?? []
+								return {
+									baseName,
+									rarity: t.rarity,
+									displayName: blessing.display_name,
+									icon: `${blessing.icon}.png`,
+								}
+							})
+							.filter(Boolean) ?? []
 					let rarity = item.description.overrides.rarity
+					let shopitem = weapon || curio
+					if (!shopitem) return undefined
 					return {
 						id,
 						item,
+						blessing,
 						rarity,
-						weapon,
+						shopitem,
 					}
 				})
 				.filter(Boolean)
-			return json({ offers: offers, wallet: null })
+			offers = offers
+				.filter(
+					(item) =>
+						item &&
+						item.shopitem &&
+						filterItemTypes.includes(item.shopitem.item_type)
+				)
+				.sort((a, b) => {
+					if (sortBy[0] === "Total Rating") {
+						return sort(
+							a.item.description.overrides.itemLevel,
+							b.item.description.overrides.itemLevel
+						)
+					} else if (sortBy[0] === "Base Rating") {
+						return sort(
+							a.item.description.overrides.baseItemLevel,
+							b.item.description.overrides.baseItemLevel
+						)
+					} else if (sortBy[0] === "Price") {
+						return sort(a.item.price.amount.amount, b.item.price.amount.amount)
+					}
+					return 0
+				})
+			return json({ offers, wallet })
 		}
 	}
 	return json(emptyResult)
@@ -100,7 +168,7 @@ let rarityColor: Record<string, string> = {
 	5: "text-orange-800",
 }
 export default function Exchange() {
-	let { offers } = useLoaderData<typeof loader>()
+	let { offers, wallet } = useLoaderData<typeof loader>()
 	return (
 		<>
 			<div className="grid w-full grow grid-cols-2 gap-4 bg-neutral-200 p-4 shadow-inner">
@@ -118,7 +186,7 @@ export default function Exchange() {
 								rarityColor[offer.rarity]
 							)}
 						>
-							{offer.weapon.display_name}
+							{offer.shopitem.display_name}
 						</div>
 						<div className="">
 							<span className="m-2 flex items-center font-bold leading-none">
@@ -163,22 +231,28 @@ export default function Exchange() {
 							alt=""
 							loading="lazy"
 							className="max-w-1/2 pointer-events-none absolute right-0 top-0 h-full"
-							src={`https://img.darkti.de/pngs/${offer.weapon.preview_image}.png`}
+							src={`https://img.darkti.de/pngs/${offer.shopitem.preview_image}.png`}
 						/>
 					</div>
 				))}
 			</div>
 			<div className="p-4">
+				{wallet && wallet.credits && wallet.credits.balance ? (
+					<div className="m-2 flex items-center font-bold leading-none text-amber-500">
+						Wallet:{" "}
+						<CircleStackIcon className="mr-0.5 h-4 w-4" aria-hidden="true" />
+						{wallet.credits.balance.amount.toLocaleString()}
+					</div>
+				) : null}
 				<Form dir="col">
-					<TextInput label="Search" name="name" />
-
-					<FormGroup label="Item type">
+					<FormGroup label="Filter Type">
 						<Checkbox name="type" value="melee" label="Melee" />
 						<Checkbox name="type" value="ranged" label="Ranged" />
+						<Checkbox name="type" value="gadget" label="Curio" />
 					</FormGroup>
 
-					<Select label="Blessing" name="blessing">
-						<option value="TotalRating">Total Raing</option>
+					<Select label="Sort by" name="sort">
+						<option value="Total Rating">Total Rating</option>
 						<option value="Base Rating">Base Rating</option>
 						<option value="Price">Price</option>
 					</Select>
