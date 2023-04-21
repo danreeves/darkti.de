@@ -55,7 +55,7 @@ export default function Codex() {
 
 	return (
 		<>
-			<div className="isolate w-full bg-white p-4 shadow">
+			<div className="relative z-50 w-full bg-white p-4 shadow">
 				<div className="mx-auto flex max-w-7xl justify-between">
 					<nav>
 						{characters.map((char) => (

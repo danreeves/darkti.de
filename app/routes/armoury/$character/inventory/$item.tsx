@@ -10,6 +10,11 @@ import { BlessingSchema, WeaponSchema } from "~/data/schemas.server"
 import { authenticator } from "~/services/auth.server"
 import { getAccountGear } from "~/services/darktide.server"
 import { motion } from "framer-motion"
+import { classnames } from "~/utils/classnames"
+import { Img } from "~/components/Img"
+import { ChevronDoubleUpIcon } from "@heroicons/react/24/outline"
+import { t } from "~/data/localization.server"
+import { getWeaponTemplate } from "~/data/weaponTemplates.server"
 
 export let handle = "inventory"
 
@@ -46,13 +51,16 @@ export async function loader({ request, params }: LoaderArgs) {
 				(wep) => item && wep.id === item.masterDataInstance.id
 			)
 
-			if (!item || !weapon) {
-				redirect(`/armoury/${characterId}/inventory`)
-				return json(null)
+			let weaponTemplate = getWeaponTemplate(weapon?.baseName ?? "unknown")
+
+			if (!item || !weapon || !weaponTemplate) {
+				return redirect(`/armoury/${characterId}/inventory`)
 			}
 
+			let description = weapon.description
 			let rarity = item.masterDataInstance.overrides?.rarity ?? 1
 			let baseItemLevel = item.masterDataInstance.overrides?.baseItemLevel
+			let itemLevel = item.masterDataInstance.overrides?.itemLevel
 			let previewImage = `${weapon.preview_image}.png`
 			let displayName = weapon.display_name
 			let traits =
@@ -69,6 +77,18 @@ export async function loader({ request, params }: LoaderArgs) {
 						}
 					})
 					.filter(Boolean) ?? []
+			let baseStats = (item.masterDataInstance.overrides?.base_stats ?? [])
+				.map((baseStat) => {
+					if (weaponTemplate) {
+						let baseStatConfig = weaponTemplate.base_stats[baseStat.name]
+						return {
+							displayName: t(baseStatConfig?.display_name ?? "unknown"),
+							value: baseStat.value,
+						}
+					}
+					return undefined
+				})
+				.filter(Boolean)
 
 			return json({
 				displayName,
@@ -76,9 +96,13 @@ export async function loader({ request, params }: LoaderArgs) {
 				previewImage,
 				baseItemLevel,
 				traits,
+				baseStats,
+				itemLevel,
+				description,
 			})
 		}
 	}
+
 	return json(null)
 }
 
@@ -107,14 +131,100 @@ export default function Item() {
 	return (
 		<motion.div
 			key={pathname}
-			className="absolute right-0 top-0 h-full w-2/3 bg-white"
+			className={classnames(
+				"absolute right-0 top-0 flex h-full w-2/3 flex-col border-l-4 bg-white",
+				rarityBorder[item.rarity]
+			)}
 			initial={{ translateX: "10%", opacity: 0 }}
 			animate={{ translateX: 0, opacity: 1 }}
 			exit={{ translateX: "50%", opacity: 0 }}
 			transition={{ type: "easeOut", duration: 0.1 }}
 		>
-			<div>
-				<pre>{JSON.stringify(item, null, 4)}</pre>
+			<div className="flex flex-row">
+				<div className="w-1/2">
+					<h2
+						className={classnames(
+							"m-6 mb-1 font-heading text-xl",
+							rarityColor[item.rarity]
+						)}
+					>
+						{item.displayName}
+					</h2>
+					<span
+						className={classnames(
+							"m-6 mt-0 flex items-center font-heading text-lg font-bold leading-none",
+							rarityColor[item.rarity]
+						)}
+						title="Item level"
+					>
+						<ChevronDoubleUpIcon
+							className="mr-0.5 h-5 w-5"
+							aria-hidden="true"
+						/>
+						{item.itemLevel}
+					</span>
+
+					<style>{`
+.stat:nth-child(1) {
+  grid-area: 1 / 1 / 2 / 2;
+}
+.stat:nth-child(2) {
+  grid-area: 2 / 1 / 3 / 2;
+}
+.stat:nth-child(3) {
+  grid-area: 2 / 3 / 3 / 4;
+}
+.stat:nth-child(4) {
+  grid-area: 1 / 2 / 2 / 3;
+}
+.stat:nth-child(5) {
+  grid-area: 2 / 2 / 3 / 3;
+}
+`}</style>
+					<div className="relative m-6 mt-0">
+						<span
+							className={
+								"absolute right-0 top-0 flex items-center font-heading text-lg text-sm font-bold"
+							}
+							title="Base item level"
+						>
+							<ChevronDoubleUpIcon
+								className="mr-0.5 h-3 w-3"
+								aria-hidden="true"
+							/>
+							{item.baseItemLevel}
+						</span>
+						<div
+							data-section="base-stats"
+							className="grid grid-cols-3 grid-rows-2 gap-2"
+						>
+							{item.baseStats.map((stat) => {
+								return (
+									<div key={stat.displayName} className="stat">
+										<div className="font-heading">{stat.displayName}</div>
+										<div className="flex flex-row">
+											<div className="relative w-full border border-amber-400 p-px">
+												<div
+													style={{ width: stat.value * 100 + "%" }}
+													className="z-2 absolute left-0 top-0 h-full border border-white bg-amber-400"
+												/>
+												<div className="z-1 isolate m-px mx-1 font-heading text-xs leading-none text-white">
+													{Math.round(stat.value * 100)}%
+												</div>
+											</div>
+										</div>
+									</div>
+								)
+							})}
+						</div>
+					</div>
+					<p className="m-6">{item.description}</p>
+				</div>
+				<Img
+					src={item.previewImage}
+					width="720"
+					className="w-1/2 scale-x-[-1]"
+				/>
 			</div>
 		</motion.div>
 	)
