@@ -50,6 +50,7 @@ export async function loader({ request, params }: LoaderArgs) {
 
 					let rarity = item.masterDataInstance.overrides?.rarity ?? 1
 					let baseItemLevel = item.masterDataInstance.overrides?.baseItemLevel
+					let itemLevel = item.masterDataInstance.overrides?.itemLevel
 					let previewImage = `${weapon.preview_image}.png`
 					let displayName = weapon.display_name
 					let traits =
@@ -70,6 +71,7 @@ export async function loader({ request, params }: LoaderArgs) {
 						id,
 						rarity,
 						baseItemLevel,
+						itemLevel,
 						previewImage,
 						displayName,
 						traits,
@@ -101,6 +103,7 @@ export async function loader({ request, params }: LoaderArgs) {
 			return json({ items, traits })
 		}
 	}
+
 	return json({ items: [], traits: [] })
 }
 
@@ -122,7 +125,6 @@ let rarityColor: Record<string, string> = {
 
 export default function Inventory() {
 	let outlet = useOutlet()
-	let { pathname } = useLocation()
 	let { items, traits } = useLoaderData<typeof loader>()
 	return (
 		<div className="relative flex grow flex-row overflow-hidden">
@@ -151,12 +153,12 @@ export default function Inventory() {
 								>
 									{item.displayName}
 								</div>
-								<span className="m-2 flex items-center font-bold leading-none">
+								<span className="m-2 flex items-center font-heading font-bold leading-none">
 									<ChevronDoubleUpIcon
 										className="mr-0.5 h-4 w-4"
 										aria-hidden="true"
 									/>
-									{item.baseItemLevel}
+									{item.itemLevel}
 								</span>
 								<div className="m-2 flex items-center gap-2">
 									{item.traits.map((trait) => (

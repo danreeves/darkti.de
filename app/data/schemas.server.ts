@@ -113,14 +113,15 @@ export const TraitSchema = z
 		display_name: z.string(),
 		description: z.string(),
 		// TODO: Empty lists should be nulled in the lua exporter
-		description_values: 
-				z.array(
-					z.object({
-						string_key: z.string(),
-						string_value: z.string(),
-						rarity: z.string(),
-					})
-				).optional(),			
+		description_values: z
+			.array(
+				z.object({
+					string_key: z.string(),
+					string_value: z.string(),
+					rarity: z.string(),
+				})
+			)
+			.optional(),
 		trait: z.string(),
 	})
 	.transform((item) => {
@@ -137,6 +138,11 @@ export const TraitSchema = z
 		}
 	})
 
-
-export const BlessingSchema = z.intersection(TraitSchema, z.object({ item_type: z.literal("TRAIT") }))
-export const PerkSchema = z.intersection(TraitSchema, z.object({ item_type: z.literal("PERK") }))
+export const BlessingSchema = z.intersection(
+	TraitSchema,
+	z.object({ item_type: z.literal("TRAIT") })
+)
+export const PerkSchema = z.intersection(
+	TraitSchema,
+	z.object({ item_type: z.literal("PERK") })
+)
