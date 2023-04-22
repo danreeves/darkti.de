@@ -30,8 +30,8 @@ import { getSearchParam } from "~/utils/getSearchParam"
 export let handle = "exchange"
 
 let sort = function (a: number, b: number) {
-	if (a > b) return 1
-	if (a < b) return -1
+	if (a > b) return -1
+	if (a < b) return 1
 	return 0
 }
 
@@ -180,16 +180,23 @@ export default function Exchange() {
 							rarityBorder[String(offer.rarity) ?? "0"]
 						)}
 					>
-						<div
-							className={classnames(
-								"m-2 font-bold leading-none",
-								rarityColor[offer.rarity]
-							)}
-						>
-							{offer.shopitem.display_name}
+						<div className="flex justify-between">
+							<div
+								className={classnames(
+									"m-2 font-bold leading-none",
+									rarityColor[offer.rarity]
+								)}
+							>
+								{offer.shopitem.display_name}
+							</div>
+							{offer.item.state === "completed" ? (
+								<div className="z-40 bg-cyan-900 p-2">
+									<p className="font-bold text-white">Purchased</p>
+								</div>
+							) : null}
 						</div>
 						<div className="">
-							<span className="m-2 flex items-center font-bold leading-none">
+							<span className="m-2 flex items-center font-heading font-bold leading-none">
 								<ChevronDoubleUpIcon
 									className="mr-0.5 h-4 w-4"
 									aria-hidden="true"
@@ -211,7 +218,7 @@ export default function Exchange() {
 									className="mr-0.5 h-4 w-4"
 									aria-hidden="true"
 								/>
-								{offer.item.price.amount.amount}
+								{offer.item.price.amount.amount.toLocaleString()}
 							</div>
 						</div>
 						{offer.item.description.overrides.perks &&
