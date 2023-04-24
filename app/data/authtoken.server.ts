@@ -26,9 +26,11 @@ export async function getAuthToken(userId: number) {
 	if (!auth) return null
 
 	if (auth.expiresAt <= new Date()) {
-		await prisma.authToken.delete({
-			where: { userId },
-		})
+		try {
+			await prisma.authToken.delete({
+				where: { userId },
+			})
+		} catch (e) {}
 		return null
 	}
 
