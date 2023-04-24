@@ -8,6 +8,7 @@ export default function Character() {
 				<PageLink to="inventory">Inventory</PageLink>
 				<PageLink to="exchange">Armoury Exchange</PageLink>
 				<PageLink to="requisitorium">Requisitorium</PageLink>
+				<PageLink to="contracts">Contracts</PageLink>
 			</nav>
 			<Outlet />
 		</div>

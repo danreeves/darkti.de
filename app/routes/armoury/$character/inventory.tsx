@@ -136,7 +136,7 @@ export default function Inventory() {
 							key={item.id}
 							className={({ isActive }) =>
 								classnames(
-									"border-l-3 from-1% relative border-2 border-neutral-400 bg-white bg-gradient-to-r shadow transition",
+									"from-1% relative border-2 border-neutral-400 bg-white bg-gradient-to-r shadow transition",
 									rarityBorder[item.rarity],
 									outlet && !isActive && "opacity-50"
 								)

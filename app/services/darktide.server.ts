@@ -512,3 +512,63 @@ export async function getCharacterStore(
 		}
 	}
 }
+
+let ContractsSchema = z.object({
+	contract: z.object({
+		id: z.string(),
+		rotation: z.string(),
+		creationTime: z.string(),
+		refreshTime: z.string(),
+		rerollCost: z.object({
+			type: z.string(),
+			amount: z.number(),
+		}),
+		reward: z.object({
+			type: z.string(),
+			amount: z.number(),
+		}),
+		fulfilled: z.boolean(),
+		tasks: z.array(
+			z.object({
+				id: z.string(),
+				reward: z.object({
+					type: z.string(),
+					amount: z.number(),
+				}),
+				rewarded: z.boolean(),
+				fulfilled: z.boolean(),
+				criteria: z.object({
+					count: z.number(),
+					complexity: z.string(),
+					taskType: z.string(),
+					value: z.number(),
+					weaponType: z.string().optional(),
+					enemyType: z.string().optional(),
+					resourceTypes: z.array(z.string()).optional(),
+				}),
+			})
+		),
+	}),
+})
+export async function getCharacterContracts(
+	auth: AuthToken,
+	characterId: string,
+	createIfMissing = false
+) {
+	let url = `https://bsp-td-prod.atoma.cloud/data/${auth.sub}/characters/${characterId}/contracts/current?createIfMissing=${createIfMissing}`
+	let response = await fetch(url, {
+		headers: {
+			authorization: `Bearer ${auth.accessToken}`,
+		},
+	})
+
+	if (response.ok) {
+		let data = await response.json()
+		let result = ContractsSchema.safeParse(data)
+		if (result.success) {
+			return result.data.contract
+		} else {
+			console.log(result.error)
+		}
+	}
+}
