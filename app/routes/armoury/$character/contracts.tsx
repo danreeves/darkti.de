@@ -1,5 +1,10 @@
-import { useLoaderData } from "@remix-run/react"
-import type { LoaderArgs } from "@remix-run/server-runtime"
+import {
+	Form,
+	useActionData,
+	useLoaderData,
+	useNavigation,
+} from "@remix-run/react"
+import type { ActionArgs, LoaderArgs } from "@remix-run/server-runtime"
 import { json } from "@remix-run/server-runtime"
 import { useEffect, useState } from "react"
 import { z } from "zod"
@@ -11,6 +16,31 @@ import { classnames } from "~/utils/classnames"
 
 export let handle = "contracts"
 
+export async function action({ params, request }: ActionArgs) {
+	let { character: characterId } = zx.parseParams(params, {
+		character: z.string(),
+	})
+	let user = await authenticator.isAuthenticated(request, {
+		failureRedirect: "/login",
+	})
+
+	let auth = await getAuthToken(user.id)
+
+	if (!auth) return json({ error: "No auth" })
+
+	let formData = await request.formData()
+	let taskId = formData.get("reroll-task")
+
+	if (taskId) {
+		// Not implemented yet
+		// let result = await deleteCharacterTask(auth, characterId, taskId)
+	}
+
+	return json(null)
+}
+
+// TODO: type me
+// @ts-expect-error
 function criteriaToDescription(criteria) {
 	switch (criteria.taskType) {
 		case "CompleteMissions":
@@ -71,6 +101,7 @@ export async function loader({ params, request }: LoaderArgs) {
 			allComplete: numComplete === tasks.length,
 			percentage: (numComplete / tasks.length) * 100,
 			completionReward: `${contract.reward.amount} ${contract.reward.type}`,
+			rerollCost: `${contract.rerollCost.amount} ${contract.rerollCost.type}`,
 		})
 	}
 
@@ -118,6 +149,9 @@ function timeUntil(date: number) {
 
 export default function Contracts() {
 	let contract = useLoaderData<typeof loader>()
+	let navigation = useNavigation()
+	let actionData = useActionData<typeof action>()
+
 	let [timeLeft, setTimeLeft] = useState("...")
 
 	useEffect(() => {
@@ -135,9 +169,17 @@ export default function Contracts() {
 	}
 
 	return (
-		<div className="flex w-full flex-col bg-neutral-200 p-4 shadow-inner">
+		<Form
+			className="flex w-full flex-col bg-neutral-200 p-4 shadow-inner"
+			method="post"
+		>
 			<div className="mb-2">Refreshes in {timeLeft}</div>
-			<div className="grid w-full grow grid-cols-3 gap-4">
+			<div
+				className={classnames(
+					"grid w-full grow grid-cols-3 gap-4",
+					navigation.state !== "idle" && "opacity-50"
+				)}
+			>
 				{contract.tasks.map((task) => (
 					<div
 						key={task.id}
@@ -178,7 +220,7 @@ export default function Contracts() {
 								<div>{task.reward}</div>
 							</div>
 						</div>
-						<div>
+						<div className="mb-2">
 							<div className="relative w-full border border-amber-400 p-px">
 								<div
 									style={{ width: `${task.percentage}%` }}
@@ -188,6 +230,17 @@ export default function Contracts() {
 									{Math.round(task.percentage)}%
 								</div>
 							</div>
+						</div>
+						<div className="mb-2">
+							<button
+								type="submit"
+								name="reroll-task"
+								value={task.id}
+								disabled={navigation.state != "idle"}
+								className="inline-flex shrink cursor-pointer flex-row items-center gap-2 rounded border bg-white p-2 text-neutral-600 text-white shadow hover:bg-neutral-50 disabled:cursor-not-allowed disabled:bg-neutral-200"
+							>
+								Replace task for {contract?.rerollCost}
+							</button>
 						</div>
 					</div>
 				))}
@@ -213,7 +266,7 @@ export default function Contracts() {
 							<div>{contract.completionReward}</div>
 						</div>
 					</div>
-					<div>
+					<div className="mb-2">
 						<div className="relative w-full border border-amber-400 p-px">
 							<div
 								style={{ width: `${contract.percentage}%` }}
@@ -226,6 +279,6 @@ export default function Contracts() {
 					</div>
 				</div>
 			</div>
-		</div>
+		</Form>
 	)
 }
