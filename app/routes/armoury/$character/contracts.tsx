@@ -237,7 +237,7 @@ export default function Contracts() {
 								name="reroll-task"
 								value={task.id}
 								disabled={navigation.state != "idle"}
-								className="inline-flex shrink cursor-pointer flex-row items-center gap-2 rounded border bg-white p-2 text-neutral-600 text-white shadow hover:bg-neutral-50 disabled:cursor-not-allowed disabled:bg-neutral-200"
+								className="inline-flex shrink cursor-pointer flex-row items-center gap-2 rounded border bg-white p-2 text-neutral-600 shadow hover:bg-neutral-50 disabled:cursor-not-allowed disabled:bg-neutral-200"
 							>
 								Replace task for {contract?.rerollCost}
 							</button>
