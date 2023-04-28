@@ -1,9 +1,4 @@
-import {
-	Form,
-	useActionData,
-	useLoaderData,
-	useNavigation,
-} from "@remix-run/react"
+import { Form, useLoaderData, useNavigation } from "@remix-run/react"
 import type { ActionArgs, LoaderArgs } from "@remix-run/server-runtime"
 import { json } from "@remix-run/server-runtime"
 import { useEffect, useState } from "react"
@@ -11,7 +6,10 @@ import { z } from "zod"
 import { zx } from "zodix"
 import { getAuthToken } from "~/data/authtoken.server"
 import { authenticator } from "~/services/auth.server"
-import { getCharacterContracts } from "~/services/darktide.server"
+import {
+	deleteCharacterTask,
+	getCharacterContracts,
+} from "~/services/darktide.server"
 import { classnames } from "~/utils/classnames"
 
 export let handle = "contracts"
@@ -24,19 +22,16 @@ export async function action({ params, request }: ActionArgs) {
 		failureRedirect: "/login",
 	})
 
-	let auth = await getAuthToken(user.id)
+	let formData = await request.formData()
+	let taskId = formData.get("reroll-task")?.toString()
+	if (!taskId) return null
 
+	let auth = await getAuthToken(user.id)
 	if (!auth) return json({ error: "No auth" })
 
-	let formData = await request.formData()
-	let taskId = formData.get("reroll-task")
+	let result = await deleteCharacterTask(auth, characterId, taskId)
 
-	if (taskId) {
-		// Not implemented yet
-		// let result = await deleteCharacterTask(auth, characterId, taskId)
-	}
-
-	return json(null)
+	return json(result)
 }
 
 // TODO: type me
@@ -150,7 +145,6 @@ function timeUntil(date: number) {
 export default function Contracts() {
 	let contract = useLoaderData<typeof loader>()
 	let navigation = useNavigation()
-	let actionData = useActionData<typeof action>()
 
 	let [timeLeft, setTimeLeft] = useState("...")
 
@@ -223,7 +217,7 @@ export default function Contracts() {
 						<div className="mb-2">
 							<div className="relative w-full border border-amber-400 p-px">
 								<div
-									style={{ width: `${task.percentage}%` }}
+									style={{ width: `${Math.min(task.percentage, 100)}%` }}
 									className="z-2 absolute left-0 top-0 h-full border border-white bg-amber-400"
 								/>
 								<div className="z-1 isolate m-px mx-1 font-heading text-xs leading-none text-white">
@@ -236,7 +230,7 @@ export default function Contracts() {
 								type="submit"
 								name="reroll-task"
 								value={task.id}
-								disabled={navigation.state != "idle"}
+								disabled={navigation.state != "idle" || task.complete}
 								className="inline-flex shrink cursor-pointer flex-row items-center gap-2 rounded border bg-white p-2 text-neutral-600 shadow hover:bg-neutral-50 disabled:cursor-not-allowed disabled:bg-neutral-200"
 							>
 								Replace task for {contract?.rerollCost}
@@ -269,7 +263,7 @@ export default function Contracts() {
 					<div className="mb-2">
 						<div className="relative w-full border border-amber-400 p-px">
 							<div
-								style={{ width: `${contract.percentage}%` }}
+								style={{ width: `${Math.min(contract.percentage, 100)}%` }}
 								className="z-2 absolute left-0 top-0 h-full border border-white bg-amber-400"
 							/>
 							<div className="z-1 isolate m-px mx-1 font-heading text-xs leading-none text-white">

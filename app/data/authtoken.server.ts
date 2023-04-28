@@ -19,22 +19,27 @@ export async function deleteAuthToken(userId: number) {
 }
 
 export async function getAuthToken(userId: number) {
-	let auth = await prisma.authToken.findUnique({
-		where: { userId },
-	})
+	try {
+		let auth = await prisma.authToken.findUnique({
+			where: { userId },
+		})
 
-	if (!auth) return null
+		if (!auth) return null
 
-	if (auth.expiresAt <= new Date()) {
-		try {
-			await prisma.authToken.delete({
-				where: { userId },
-			})
-		} catch (e) {}
+		if (auth.expiresAt <= new Date()) {
+			try {
+				await prisma.authToken.delete({
+					where: { userId },
+				})
+			} catch (e) {}
+			return null
+		}
+
+		return auth
+	} catch (e) {
+		console.log(e)
 		return null
 	}
-
-	return auth
 }
 
 export async function getExpiringTokens(inNextMinutes: number) {
