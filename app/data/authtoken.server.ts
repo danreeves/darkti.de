@@ -16,7 +16,10 @@ export async function deleteAuthToken(userId: number) {
 		return await prisma.authToken.delete({
 			where: { userId },
 		})
-	} catch (e) {}
+	} catch (e) {
+	} finally {
+		getAuthToken.clear()
+	}
 }
 
 async function _getAuthToken(userId: number) {
