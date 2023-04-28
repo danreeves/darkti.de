@@ -8,6 +8,7 @@ import { zx } from "zodix"
 import { getAuthToken } from "~/data/authtoken.server"
 import { authenticator } from "~/services/auth.server"
 import {
+	completeCharacterContract,
 	deleteCharacterTask,
 	getCharacterContracts,
 	getCharacterWallet,
@@ -24,16 +25,24 @@ export async function action({ params, request }: ActionArgs) {
 		failureRedirect: "/login",
 	})
 
-	let formData = await request.formData()
-	let taskId = formData.get("reroll-task")?.toString()
-	if (!taskId) return null
-
 	let auth = await getAuthToken(user.id)
 	if (!auth) return json({ error: "No auth" })
 
-	let result = await deleteCharacterTask(auth, characterId, taskId)
+	let formData = await request.formData()
+	let taskId = formData.get("reroll-task")?.toString()
+	let completeContract = formData.get("complete-contract")?.toString()
 
-	return json(result)
+	if (taskId) {
+		let result = await deleteCharacterTask(auth, characterId, taskId)
+		return json(result)
+	}
+
+	if (completeContract) {
+		let result = await completeCharacterContract(auth, characterId)
+		return json(result)
+	}
+
+	return null
 }
 
 // TODO: type me
@@ -105,6 +114,7 @@ export async function loader({ params, request }: LoaderArgs) {
 			percentage: (numComplete / tasks.length) * 100,
 			completionReward: `${contract.reward.amount} ${contract.reward.type}`,
 			rerollCost: `${contract.rerollCost.amount} ${contract.rerollCost.type}`,
+			contractRewarded: contract.fulfilled,
 			wallet,
 		})
 	}
@@ -194,7 +204,7 @@ export default function Contracts() {
 			</div>
 			<div
 				className={classnames(
-					"grid w-full grow grid-cols-3 gap-4",
+					"grid w-full grow grid-cols-1 gap-4 lg:grid-cols-2",
 					navigation.state !== "idle" && "opacity-50"
 				)}
 			>
@@ -204,7 +214,7 @@ export default function Contracts() {
 						className={classnames(
 							"relative flex flex-col justify-between border-2 border-neutral-400 bg-white p-2 shadow transition",
 							difficultyBorder[task.difficulty],
-							task.complete && "opacity-50"
+							task.complete && "border-green-400 opacity-50"
 						)}
 					>
 						<div
@@ -215,8 +225,8 @@ export default function Contracts() {
 						>
 							{task.description}
 						</div>
-						<div className="mb-2 flex flex-row justify-between">
-							<div className="flex flex-row gap-2">
+						<div className="mb-2 flex flex-row flex-wrap justify-between">
+							<div className="flex flex-row gap-2 whitespace-nowrap">
 								<div className="font-bold">Difficulty:</div>
 								<div
 									className={classnames(
@@ -294,6 +304,22 @@ export default function Contracts() {
 								{Math.round(data.percentage)}%
 							</div>
 						</div>
+					</div>
+
+					<div className="mb-2">
+						<button
+							type="submit"
+							name="complete-contract"
+							value="yes"
+							disabled={
+								navigation.state != "idle" ||
+								!data.allComplete ||
+								data.contractRewarded
+							}
+							className="inline-flex shrink cursor-pointer flex-row items-center gap-2 rounded border bg-white p-2 text-neutral-600 shadow hover:bg-neutral-50 disabled:cursor-not-allowed disabled:bg-neutral-200"
+						>
+							Complete contract
+						</button>
 					</div>
 				</div>
 			</div>
