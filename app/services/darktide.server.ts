@@ -592,12 +592,37 @@ export async function deleteCharacterTask(
 
 	if (response.ok) {
 		let data = await response.json()
-		console.log(data)
 		let result = DeleteTaskSchema.safeParse(data)
 		if (result.success) {
 			return result.data.refreshedContract
 		} else {
 			console.log(result.error)
 		}
+	}
+}
+
+export async function completeCharacterContract(
+	auth: AuthToken,
+	characterId: string
+) {
+	let url = `https://bsp-td-prod.atoma.cloud/data/${auth.sub}/characters/${characterId}/contracts/current/complete`
+	let response = await fetch(url, {
+		method: "POST",
+		headers: {
+			authorization: `Bearer ${auth.accessToken}`,
+		},
+	})
+
+	if (response.ok) {
+		let data = await response.json()
+		console.log(data)
+		let result = ContractsSchema.safeParse(data)
+		if (result.success) {
+			return result.data.contract
+		} else {
+			console.log(result.error)
+		}
+	} else {
+		console.log(response)
 	}
 }
