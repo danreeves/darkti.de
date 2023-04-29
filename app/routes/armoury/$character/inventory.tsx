@@ -1,5 +1,5 @@
 import { ChevronDoubleUpIcon } from "@heroicons/react/24/outline"
-import { NavLink, useLoaderData, useOutlet } from "@remix-run/react"
+import { Link, NavLink, useLoaderData, useOutlet } from "@remix-run/react"
 import type { LoaderArgs } from "@remix-run/server-runtime"
 import { json } from "@remix-run/server-runtime"
 import { AnimatePresence } from "framer-motion"
@@ -123,12 +123,34 @@ let rarityColor: Record<string, string> = {
 	5: "text-orange-800",
 }
 
+function BgLink({
+	children,
+	to,
+	className,
+}: {
+	children: React.ReactNode
+	to?: string
+	className: string
+}) {
+	if (to) {
+		return (
+			<Link to={to} className={className}>
+				{children}
+			</Link>
+		)
+	}
+	return <div className={className}>{children}</div>
+}
+
 export default function Inventory() {
 	let outlet = useOutlet()
 	let { items, traits } = useLoaderData<typeof loader>()
 	return (
 		<div className="relative flex h-full grow flex-row overflow-hidden">
-			<div className="grid h-full w-full grow auto-rows-min grid-cols-1 flex-row flex-wrap gap-4 overflow-y-scroll bg-neutral-200 p-4 shadow-inner lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+			<BgLink
+				to={outlet ? "." : undefined}
+				className="grid h-full w-full grow auto-rows-min grid-cols-1 flex-row flex-wrap gap-4 overflow-y-scroll bg-neutral-200 p-4 shadow-inner lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4"
+			>
 				{items.map((item) => {
 					return (
 						<NavLink
@@ -179,7 +201,7 @@ export default function Inventory() {
 						</NavLink>
 					)
 				})}
-			</div>
+			</BgLink>
 			<div className="w-52 p-4">
 				<Form dir="col">
 					<TextInput label="Search" name="name" />
