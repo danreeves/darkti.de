@@ -123,33 +123,17 @@ let rarityColor: Record<string, string> = {
 	5: "text-orange-800",
 }
 
-function BgLink({
-	children,
-	to,
-	className,
-}: {
-	children: React.ReactNode
-	to?: string
-	className: string
-}) {
-	if (to) {
-		return (
-			<Link to={to} className={className}>
-				{children}
-			</Link>
-		)
-	}
-	return <div className={className}>{children}</div>
-}
-
 export default function Inventory() {
 	let outlet = useOutlet()
 	let { items, traits } = useLoaderData<typeof loader>()
 	return (
 		<div className="relative flex h-full grow flex-row overflow-hidden">
-			<BgLink
-				to={outlet ? "." : undefined}
-				className="grid h-full w-full grow auto-rows-min grid-cols-1 flex-row flex-wrap gap-4 overflow-y-scroll bg-neutral-200 p-4 shadow-inner lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4"
+			<Link
+				to="."
+				className={classnames(
+					"grid h-full w-full grow auto-rows-min grid-cols-1 flex-row flex-wrap gap-4 overflow-y-scroll bg-neutral-200 p-4 shadow-inner lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4",
+					!outlet && "cursor-default"
+				)}
 			>
 				{items.map((item) => {
 					return (
@@ -201,7 +185,7 @@ export default function Inventory() {
 						</NavLink>
 					)
 				})}
-			</BgLink>
+			</Link>
 			<div className="w-52 p-4">
 				<Form dir="col">
 					<TextInput label="Search" name="name" />
