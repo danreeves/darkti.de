@@ -59,6 +59,10 @@ function criteriaToDescription(criteria) {
 			return `Kill ${criteria.count} ${criteria.enemyType} with ${criteria.weaponType}`
 		case "CollectPickup":
 			return `Collect ${criteria.count} books`
+		case "CompleteMissionsNoDeath":
+			return `Complete ${criteria.count} mission${
+				criteria.count > 1 ? "s" : ""
+			} with no player deaths`
 		default:
 			console.log("missing localisation for", criteria)
 			return "Unknown task"
