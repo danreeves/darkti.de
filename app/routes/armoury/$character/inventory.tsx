@@ -127,8 +127,8 @@ export default function Inventory() {
 	let outlet = useOutlet()
 	let { items, traits } = useLoaderData<typeof loader>()
 	return (
-		<div className="relative flex grow flex-row overflow-hidden">
-			<div className="grid w-full grow grid-cols-4 gap-4 bg-neutral-200 p-4 shadow-inner">
+		<div className="relative flex h-full grow flex-row overflow-hidden">
+			<div className="grid h-full w-full grow auto-rows-min grid-cols-1 flex-row flex-wrap gap-4 overflow-y-scroll bg-neutral-200 p-4 shadow-inner lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
 				{items.map((item) => {
 					return (
 						<NavLink
@@ -136,18 +136,18 @@ export default function Inventory() {
 							key={item.id}
 							className={({ isActive }) =>
 								classnames(
-									"from-1% relative border-2 border-neutral-400 bg-white bg-gradient-to-r shadow transition",
+									"from-1% relative h-full w-full basis-1/4 border-2 border-neutral-400 bg-white bg-gradient-to-r shadow transition",
 									rarityBorder[item.rarity],
 									outlet && !isActive && "opacity-50"
 								)
 							}
 						>
 							<Img
-								className="pointer-events-none absolute right-0 top-0 h-full"
+								className="pointer-events-none absolute bottom-0 right-0 aspect-video max-h-full scale-x-[-1]"
 								src={item.previewImage}
 								width="256"
 							/>
-							<div className="isolate">
+							<div className="isolate flex min-h-full flex-col">
 								<div
 									className={classnames(
 										"m-2 font-bold leading-none",
@@ -163,7 +163,7 @@ export default function Inventory() {
 									/>
 									{item.itemLevel}
 								</span>
-								<div className="m-2 flex items-center gap-2">
+								<div className="m-2 mt-auto flex items-center gap-2">
 									{item.traits.map((trait) => (
 										<Img
 											className="h-10 w-10 rounded invert"
@@ -180,7 +180,7 @@ export default function Inventory() {
 					)
 				})}
 			</div>
-			<div className="p-4">
+			<div className="w-52 p-4">
 				<Form dir="col">
 					<TextInput label="Search" name="name" />
 

@@ -18,7 +18,6 @@ import { initJobs, getTunnel } from "~/jobs/index.server"
 initJobs && initJobs()
 getTunnel && getTunnel()
 
-
 export const links: LinksFunction = () => [
 	{ rel: "stylesheet", href: tailwind },
 	{
@@ -46,14 +45,13 @@ export default function App() {
 	const { user } = useLoaderData<typeof loader>()
 
 	return (
-		<html lang="en" className="h-full bg-gray-100">
+		<html lang="en" className="h-screen bg-gray-100">
 			<head>
 				<Meta />
 				<Links />
 			</head>
-			<body className="h-full">
+			<body className="h-screen">
 				<Layout user={user} />
-				<ScrollRestoration />
 				<Scripts />
 				<LiveReload />
 			</body>
