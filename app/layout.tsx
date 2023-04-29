@@ -20,7 +20,7 @@ const userNavigation = [
 export default function Layout({ user }: { user: User | null }) {
 	return (
 		<>
-			<div className="min-h-full">
+			<div className="flex h-screen flex-col overflow-hidden">
 				<Disclosure as="nav" className="bg-neutral-800">
 					{({ open }) => (
 						<>
@@ -202,13 +202,6 @@ export default function Layout({ user }: { user: User | null }) {
 				</Disclosure>
 
 				<Outlet />
-
-				<footer className="mx-auto max-w-7xl px-4 pb-4 pt-6 sm:px-8 lg:px-10">
-					<div className="flex items-center justify-center gap-4 rounded bg-gray-200 p-4 text-gray-600 shadow-inner ">
-						<a href="https://github.com/danreeves/darkti.de">Source Code</a>
-						<a href="https://plausible.io/darkti.de">Site Analytics</a>
-					</div>
-				</footer>
 			</div>
 		</>
 	)

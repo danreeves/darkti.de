@@ -5,7 +5,7 @@ export default function PageLayout() {
 	const matches = useMatches()
 
 	return (
-		<>
+		<div className="h-full w-full overflow-scroll pb-16">
 			<header className="bg-white shadow">
 				<Title title={matches.at(-1)?.data?.title} />
 				<Breadcrumbs
@@ -24,7 +24,14 @@ export default function PageLayout() {
 					<Outlet />
 				</div>
 			</main>
-		</>
+
+			<footer className="mx-auto max-w-7xl px-4 pb-4 pt-6 sm:px-8 lg:px-10">
+				<div className="flex items-center justify-center gap-4 rounded bg-gray-200 p-4 text-gray-600 shadow-inner ">
+					<a href="https://github.com/danreeves/darkti.de">Source Code</a>
+					<a href="https://plausible.io/darkti.de">Site Analytics</a>
+				</div>
+			</footer>
+		</div>
 	)
 }
 

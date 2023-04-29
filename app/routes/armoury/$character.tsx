@@ -3,7 +3,7 @@ import { classnames } from "~/utils/classnames"
 
 export default function Character() {
 	return (
-		<div className="flex flex-row">
+		<div className="flex h-full flex-row overflow-hidden">
 			<nav className="border-4-2 flex shrink-0 flex-col bg-white">
 				<PageLink to="inventory">Inventory</PageLink>
 				<PageLink to="exchange">Armoury Exchange</PageLink>
