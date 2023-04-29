@@ -4,6 +4,7 @@ import {
 	NavLink,
 	useLoaderData,
 	useOutlet,
+	useParams,
 	useSearchParams,
 } from "@remix-run/react"
 import type { LoaderArgs } from "@remix-run/server-runtime"
@@ -132,6 +133,7 @@ let rarityColor: Record<string, string> = {
 export default function Inventory() {
 	let outlet = useOutlet()
 	let { items, traits } = useLoaderData<typeof loader>()
+	let { character } = useParams()
 	let [_searchParams] = useSearchParams()
 	let searchParams = _searchParams.toString()
 	return (
@@ -195,7 +197,7 @@ export default function Inventory() {
 				})}
 			</Link>
 			<div className="w-52 p-4">
-				<Form dir="col">
+				<Form dir="col" key={character}>
 					<TextInput label="Search" name="name" />
 
 					<FormGroup label="Item type">
