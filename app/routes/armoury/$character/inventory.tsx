@@ -1,5 +1,11 @@
 import { ChevronDoubleUpIcon } from "@heroicons/react/24/outline"
-import { Link, NavLink, useLoaderData, useOutlet } from "@remix-run/react"
+import {
+	Link,
+	NavLink,
+	useLoaderData,
+	useOutlet,
+	useSearchParams,
+} from "@remix-run/react"
 import type { LoaderArgs } from "@remix-run/server-runtime"
 import { json } from "@remix-run/server-runtime"
 import { AnimatePresence } from "framer-motion"
@@ -126,10 +132,12 @@ let rarityColor: Record<string, string> = {
 export default function Inventory() {
 	let outlet = useOutlet()
 	let { items, traits } = useLoaderData<typeof loader>()
+	let [_searchParams] = useSearchParams()
+	let searchParams = _searchParams.toString()
 	return (
 		<div className="relative flex h-full grow flex-row overflow-hidden">
 			<Link
-				to="."
+				to={`.?${searchParams}`}
 				className={classnames(
 					"grid h-full w-full grow auto-rows-min grid-cols-1 flex-row flex-wrap gap-4 overflow-y-scroll bg-neutral-200 p-4 shadow-inner lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4",
 					!outlet && "cursor-default"
@@ -138,7 +146,7 @@ export default function Inventory() {
 				{items.map((item) => {
 					return (
 						<NavLink
-							to={item.id}
+							to={`${item.id}?${searchParams}`}
 							key={item.id}
 							className={({ isActive }) =>
 								classnames(
