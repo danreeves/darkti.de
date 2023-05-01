@@ -1,6 +1,7 @@
 import { Checkbox, Form, FormGroup, Select } from "~/components/Form"
 import {
 	Form as RemixForm,
+	useActionData,
 	useLoaderData,
 	useNavigation,
 } from "@remix-run/react"
@@ -8,7 +9,7 @@ import {
 	ChevronDoubleUpIcon,
 	CircleStackIcon,
 } from "@heroicons/react/24/outline"
-import type { LoaderArgs } from "@remix-run/server-runtime"
+import type { ActionArgs, LoaderArgs } from "@remix-run/server-runtime"
 import { redirect } from "@remix-run/server-runtime"
 import { json } from "@remix-run/server-runtime"
 import { z } from "zod"
@@ -27,6 +28,7 @@ import {
 	getAccountSummary,
 	getCharacterStore,
 	getCharacterWallet,
+	purchaseItem,
 } from "~/services/darktide.server"
 import { classnames } from "~/utils/classnames"
 import { getSearchParam } from "~/utils/getSearchParam"
@@ -35,6 +37,62 @@ import { t } from "~/data/localization.server"
 import { getWeaponTemplate } from "~/data/weaponTemplates.server"
 
 export let handle = "exchange"
+
+export async function action({ params, request }: ActionArgs) {
+	let { character: characterId } = zx.parseParams(params, {
+		character: z.string(),
+	})
+	let user = await authenticator.isAuthenticated(request, {
+		failureRedirect: "/login",
+	})
+
+	let auth = await getAuthToken(user.id)
+	if (!auth) return json({ error: "No auth" })
+
+	let accountSummary = await getAccountSummary(auth)
+	if (!accountSummary) {
+		return json({ error: "Couldn't fetch account" })
+	}
+	let currentCharacter = accountSummary.summary.characters.find(
+		(c) => c.id == characterId
+	)
+	if (!currentCharacter) {
+		return json({ error: "Couldn't find current character" })
+	}
+
+	let store = await getCharacterStore(
+		auth,
+		currentCharacter.archetype,
+		currentCharacter.id
+	)
+	if (!store) {
+		return json({ error: "Couldn't fetch store" })
+	}
+
+	let wallet = await getCharacterWallet(auth, currentCharacter.id)
+	if (!wallet) {
+		return json({ error: "Couldn't fetch wallet" })
+	}
+
+	let formData = await request.formData()
+	let itemId = formData.get("buy-item")?.toString()
+
+	let offer = store.personal.find((offer) => offer?.offerId === itemId)
+	if (!offer) {
+		return json({ error: "Couldn't find offer" })
+	}
+
+	let result = await purchaseItem(auth, {
+		catalogId: store.catalog.id,
+		storeName: store.name,
+		characterId: currentCharacter.id,
+		lastTransactionId: (wallet.credits?.lastTransactionId ?? 0) + 1,
+		offerId: offer.offerId,
+		ownedSkus: [],
+	})
+
+	return json({ result })
+}
 
 let sort = function (a: number, b: number) {
 	if (a > b) return -1
@@ -91,8 +149,8 @@ export async function loader({ request, params }: LoaderArgs) {
 			return json(EMPTY_RESULT)
 		}
 
-		let offers = Object.entries(currentShop.personal)
-			.map(([id, item]) => {
+		let offers = currentShop.personal
+			.map((item) => {
 				let weapon = weapons.find((wep) => wep.id === item?.description.id)
 				let curio = curios.find((cur) => cur.id === item?.description.id)
 				let shopItem = weapon || curio
@@ -181,7 +239,7 @@ export async function loader({ request, params }: LoaderArgs) {
 					.filter(Boolean)
 
 				return {
-					id,
+					id: item.offerId,
 					displayName: shopItem.display_name,
 					itemType: shopItem.item_type,
 					traits,
@@ -246,6 +304,7 @@ export const raritySymbol = ["0", "Ⅰ", "Ⅱ", "Ⅲ", "Ⅳ", "Ⅴ"]
 export default function Exchange() {
 	let navigation = useNavigation()
 	let { offers, wallet } = useLoaderData<typeof loader>()
+
 	return (
 		<>
 			<RemixForm
