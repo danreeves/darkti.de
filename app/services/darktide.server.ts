@@ -155,7 +155,6 @@ export async function getCharacters(auth: AuthToken) {
 
 	if (response.ok) {
 		let data = await response.json()
-
 		let result = CharactersSchema.safeParse(data)
 		if (result.success) {
 			return result.data
@@ -472,6 +471,7 @@ let CharacterStoreSchema = z.object({
 						rarity: z.number(),
 						itemLevel: z.number(),
 						baseItemLevel: z.number(),
+						characterLevel: z.number(),
 						traits: z
 							.array(z.object({ id: z.string(), rarity: z.number() }))
 							.optional(),
@@ -505,7 +505,7 @@ export async function getCharacterStore(
 		let data = await response.json()
 		let result = CharacterStoreSchema.safeParse(data)
 		if (result.success) {
-			let shop = result.data.personal
+			let shop = result.data
 			return shop
 		} else {
 			console.log(result.error)
@@ -615,7 +615,6 @@ export async function completeCharacterContract(
 
 	if (response.ok) {
 		let data = await response.json()
-		console.log(data)
 		let result = ContractsSchema.safeParse(data)
 		if (result.success) {
 			return result.data.contract
