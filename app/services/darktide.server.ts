@@ -1,6 +1,5 @@
 import type { AuthToken } from "@prisma/client"
 import z from "zod"
-import { fetch } from "~/utils/fetch"
 
 let JoinSchema = z.object({
 	queuePosition: z.number(),
@@ -443,6 +442,8 @@ let CharacterStoreSchema = z.object({
 	catalog: z.object({
 		validFrom: z.string(),
 		validTo: z.string(),
+		id: z.string(),
+		name: z.string(),
 	}),
 	name: z.string(),
 	personal: z.array(
@@ -492,9 +493,10 @@ let CharacterStoreSchema = z.object({
 export async function getCharacterStore(
 	auth: AuthToken,
 	characterArchetype: string,
-	characterId: string
+	characterId: string,
+	storeType = "credits"
 ) {
-	let url = `https://bsp-td-prod.atoma.cloud/store/storefront/credits_store_${characterArchetype}?accountId=${auth.sub}&characterId=${characterId}&personal=true`
+	let url = `https://bsp-td-prod.atoma.cloud/store/storefront/${storeType}_store_${characterArchetype}?accountId=${auth.sub}&characterId=${characterId}&personal=true`
 	let response = await fetch(url, {
 		headers: {
 			authorization: `Bearer ${auth.accessToken}`,
@@ -510,6 +512,85 @@ export async function getCharacterStore(
 		} else {
 			console.log(result.error)
 		}
+	}
+}
+
+let PurchaseSchema = z.object({
+	amount: z.object({ amount: z.number(), type: z.string() }),
+	offer: z.object({
+		offerId: z.string(),
+		sku: z.object({
+			id: z.string(),
+		}),
+		entitlement: z.object({
+			id: z.string(),
+			type: z.string(),
+			limit: z.number(),
+		}),
+		price: z.object({
+			amount: z.object({
+				amount: z.number(),
+				type: z.string(),
+			}),
+			id: z.string(),
+		}),
+		state: z.string(),
+		description: z.object({
+			id: z.string(),
+			gearId: z.string(),
+			rotation: z.string(),
+			type: z.string(),
+			properties: z.unknown(),
+			overrides: z.unknown(),
+		}),
+	}),
+	items: z.array(
+		z.object({
+			uuid: z.string(),
+			slots: z.array(z.unknown()),
+			characterId: z.string(),
+			masterDataInstance: z.unknown(),
+			gearId: z.string(),
+			id: z.string(),
+			overrides: z.unknown(),
+		})
+	),
+})
+type PurchaseRequest = {
+	catalogId: string
+	characterId: string
+	lastTransactionId?: number
+	offerId: string
+	ownedSkus: string[]
+	storeName: string
+}
+export async function purchaseItem(
+	auth: AuthToken,
+	purchaseRequest: PurchaseRequest
+) {
+	let url = `https://bsp-td-prod.atoma.cloud/store/${auth.sub}/wallets/${purchaseRequest.characterId}/purchases`
+
+	let response = await fetch(url, {
+		method: "POST",
+		body: JSON.stringify(purchaseRequest),
+		headers: {
+			"Content-Type": "application/json",
+			authorization: `Bearer ${auth.accessToken}`,
+		},
+	})
+
+	if (response.ok) {
+		let data = await response.json()
+		let result = PurchaseSchema.safeParse(data)
+		if (result.success) {
+			return result.data
+		} else {
+			console.log(result.error)
+		}
+	} else {
+		console.log(response)
+		let data = await response.json()
+		console.log(JSON.stringify(data, null, 4))
 	}
 }
 
