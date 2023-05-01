@@ -68,7 +68,10 @@ export function Select({
 	children: ReactNode
 }) {
 	return (
-		<label htmlFor={name} className={`flex grow flex-col ${className ?? ""}`}>
+		<label
+			htmlFor={name}
+			className={`flex max-w-full grow flex-col ${className ?? ""}`}
+		>
 			<span className="font-heading text-xs font-black uppercase">{label}</span>
 			<select name={name} id={name} {...rest} />
 		</label>

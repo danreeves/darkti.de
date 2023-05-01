@@ -1,4 +1,5 @@
 import type { AuthToken } from "@prisma/client"
+import memoizee from "memoizee"
 import { prisma } from "~/data/db.server"
 
 type UpdateArgs = Omit<AuthToken, "id">
@@ -15,27 +16,37 @@ export async function deleteAuthToken(userId: number) {
 		return await prisma.authToken.delete({
 			where: { userId },
 		})
-	} catch (e) {}
+	} catch (e) {
+	} finally {
+		getAuthToken.clear()
+	}
 }
 
-export async function getAuthToken(userId: number) {
-	let auth = await prisma.authToken.findUnique({
-		where: { userId },
-	})
+async function _getAuthToken(userId: number) {
+	try {
+		let auth = await prisma.authToken.findUnique({
+			where: { userId },
+		})
 
-	if (!auth) return null
+		if (!auth) return null
 
-	if (auth.expiresAt <= new Date()) {
-		try {
-			await prisma.authToken.delete({
-				where: { userId },
-			})
-		} catch (e) {}
+		if (auth.expiresAt <= new Date()) {
+			try {
+				await prisma.authToken.delete({
+					where: { userId },
+				})
+			} catch (e) {}
+			return null
+		}
+
+		return auth
+	} catch (e) {
+		console.log(e)
 		return null
 	}
-
-	return auth
 }
+
+export const getAuthToken = memoizee(_getAuthToken, { maxAge: 5000 })
 
 export async function getExpiringTokens(inNextMinutes: number) {
 	let inXMinutes = new Date()

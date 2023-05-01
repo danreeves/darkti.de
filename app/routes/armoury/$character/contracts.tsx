@@ -1,9 +1,5 @@
-import {
-	Form,
-	useActionData,
-	useLoaderData,
-	useNavigation,
-} from "@remix-run/react"
+import { CircleStackIcon, Square2StackIcon } from "@heroicons/react/24/outline"
+import { Form, useLoaderData, useNavigation } from "@remix-run/react"
 import type { ActionArgs, LoaderArgs } from "@remix-run/server-runtime"
 import { json } from "@remix-run/server-runtime"
 import { useEffect, useState } from "react"
@@ -11,7 +7,12 @@ import { z } from "zod"
 import { zx } from "zodix"
 import { getAuthToken } from "~/data/authtoken.server"
 import { authenticator } from "~/services/auth.server"
-import { getCharacterContracts } from "~/services/darktide.server"
+import {
+	completeCharacterContract,
+	deleteCharacterTask,
+	getCharacterContracts,
+	getCharacterWallet,
+} from "~/services/darktide.server"
 import { classnames } from "~/utils/classnames"
 
 export let handle = "contracts"
@@ -25,18 +26,23 @@ export async function action({ params, request }: ActionArgs) {
 	})
 
 	let auth = await getAuthToken(user.id)
-
 	if (!auth) return json({ error: "No auth" })
 
 	let formData = await request.formData()
-	let taskId = formData.get("reroll-task")
+	let taskId = formData.get("reroll-task")?.toString()
+	let completeContract = formData.get("complete-contract")?.toString()
 
 	if (taskId) {
-		// Not implemented yet
-		// let result = await deleteCharacterTask(auth, characterId, taskId)
+		let result = await deleteCharacterTask(auth, characterId, taskId)
+		return json(result)
 	}
 
-	return json(null)
+	if (completeContract) {
+		let result = await completeCharacterContract(auth, characterId)
+		return json(result)
+	}
+
+	return null
 }
 
 // TODO: type me
@@ -51,7 +57,14 @@ function criteriaToDescription(criteria) {
 			return `Kill ${criteria.count} monstrosities`
 		case "KillMinions":
 			return `Kill ${criteria.count} ${criteria.enemyType} with ${criteria.weaponType}`
+		case "CollectPickup":
+			return `Collect ${criteria.count} books`
+		case "CompleteMissionsNoDeath":
+			return `Complete ${criteria.count} mission${
+				criteria.count > 1 ? "s" : ""
+			} with no player deaths`
 		default:
+			console.log("missing localisation for", criteria)
 			return "Unknown task"
 	}
 }
@@ -67,7 +80,10 @@ export async function loader({ params, request }: LoaderArgs) {
 	let auth = await getAuthToken(user.id)
 
 	if (auth) {
-		let contract = await getCharacterContracts(auth, characterId)
+		let [contract, wallet] = await Promise.all([
+			getCharacterContracts(auth, characterId, true),
+			getCharacterWallet(auth, characterId),
+		])
 		if (!contract) {
 			return json(null)
 		}
@@ -102,6 +118,8 @@ export async function loader({ params, request }: LoaderArgs) {
 			percentage: (numComplete / tasks.length) * 100,
 			completionReward: `${contract.reward.amount} ${contract.reward.type}`,
 			rerollCost: `${contract.rerollCost.amount} ${contract.rerollCost.type}`,
+			contractRewarded: contract.fulfilled,
+			wallet,
 		})
 	}
 
@@ -148,23 +166,24 @@ function timeUntil(date: number) {
 }
 
 export default function Contracts() {
-	let contract = useLoaderData<typeof loader>()
+	let data = useLoaderData<typeof loader>()
 	let navigation = useNavigation()
-	let actionData = useActionData<typeof action>()
 
-	let [timeLeft, setTimeLeft] = useState("...")
+	let [timeLeft, setTimeLeft] = useState(
+		timeUntil(parseInt(data?.refreshTime ?? "0", 10))
+	)
 
 	useEffect(() => {
 		let intervalId = setInterval(() => {
-			if (contract?.refreshTime) {
-				let refreshTime = parseInt(contract?.refreshTime, 10)
+			if (data?.refreshTime) {
+				let refreshTime = parseInt(data?.refreshTime, 10)
 				setTimeLeft(timeUntil(refreshTime))
 			}
 		}, 1000)
 		return () => clearInterval(intervalId)
-	}, [contract?.refreshTime])
+	}, [data?.refreshTime])
 
-	if (!contract) {
+	if (!data) {
 		return null
 	}
 
@@ -173,20 +192,33 @@ export default function Contracts() {
 			className="flex w-full flex-col bg-neutral-200 p-4 shadow-inner"
 			method="post"
 		>
-			<div className="mb-2">Refreshes in {timeLeft}</div>
+			<div className="mb-2 flex flex-row justify-between">
+				<div>Refreshes in {timeLeft}</div>
+				<div className="flex flex-row gap-4">
+					<div className="flex items-center">
+						<CircleStackIcon className="mr-1 h-4 w-4" aria-hidden />{" "}
+						{data.wallet?.credits?.balance.amount.toLocaleString() ?? "--"}{" "}
+						credits
+					</div>
+					<div className="flex items-center">
+						<Square2StackIcon className="mr-1 h-4 w-4" aria-hidden />{" "}
+						{data.wallet?.marks?.balance.amount.toLocaleString() ?? "--"} marks
+					</div>
+				</div>
+			</div>
 			<div
 				className={classnames(
-					"grid w-full grow grid-cols-3 gap-4",
+					"grid w-full grow grid-cols-1 gap-4 lg:grid-cols-2",
 					navigation.state !== "idle" && "opacity-50"
 				)}
 			>
-				{contract.tasks.map((task) => (
+				{data.tasks.map((task) => (
 					<div
 						key={task.id}
 						className={classnames(
 							"relative flex flex-col justify-between border-2 border-neutral-400 bg-white p-2 shadow transition",
 							difficultyBorder[task.difficulty],
-							task.complete && "opacity-50"
+							task.complete && "border-green-400 opacity-50"
 						)}
 					>
 						<div
@@ -197,8 +229,8 @@ export default function Contracts() {
 						>
 							{task.description}
 						</div>
-						<div className="mb-2 flex flex-row justify-between">
-							<div className="flex flex-row gap-2">
+						<div className="mb-2 flex flex-row flex-wrap justify-between">
+							<div className="flex flex-row gap-2 whitespace-nowrap">
 								<div className="font-bold">Difficulty:</div>
 								<div
 									className={classnames(
@@ -223,7 +255,7 @@ export default function Contracts() {
 						<div className="mb-2">
 							<div className="relative w-full border border-amber-400 p-px">
 								<div
-									style={{ width: `${task.percentage}%` }}
+									style={{ width: `${Math.min(task.percentage, 100)}%` }}
 									className="z-2 absolute left-0 top-0 h-full border border-white bg-amber-400"
 								/>
 								<div className="z-1 isolate m-px mx-1 font-heading text-xs leading-none text-white">
@@ -236,10 +268,10 @@ export default function Contracts() {
 								type="submit"
 								name="reroll-task"
 								value={task.id}
-								disabled={navigation.state != "idle"}
+								disabled={navigation.state != "idle" || task.complete}
 								className="inline-flex shrink cursor-pointer flex-row items-center gap-2 rounded border bg-white p-2 text-neutral-600 shadow hover:bg-neutral-50 disabled:cursor-not-allowed disabled:bg-neutral-200"
 							>
-								Replace task for {contract?.rerollCost}
+								Replace task for {data?.rerollCost}
 							</button>
 						</div>
 					</div>
@@ -249,7 +281,7 @@ export default function Contracts() {
 					<div
 						className={classnames(
 							"mb-2 font-heading text-lg",
-							contract.allComplete && "line-through"
+							data.allComplete && "line-through"
 						)}
 					>
 						Contract completion
@@ -258,24 +290,40 @@ export default function Contracts() {
 						<div className="flex flex-row gap-2">
 							<div className="font-bold">Progress:</div>
 							<div>
-								{contract.numComplete} / {contract.tasks.length}
+								{data.numComplete} / {data.tasks.length}
 							</div>
 						</div>
 						<div className="flex flex-row gap-2">
 							<div className="font-bold">Reward:</div>
-							<div>{contract.completionReward}</div>
+							<div>{data.completionReward}</div>
 						</div>
 					</div>
 					<div className="mb-2">
 						<div className="relative w-full border border-amber-400 p-px">
 							<div
-								style={{ width: `${contract.percentage}%` }}
+								style={{ width: `${Math.min(data.percentage, 100)}%` }}
 								className="z-2 absolute left-0 top-0 h-full border border-white bg-amber-400"
 							/>
 							<div className="z-1 isolate m-px mx-1 font-heading text-xs leading-none text-white">
-								{Math.round(contract.percentage)}%
+								{Math.round(data.percentage)}%
 							</div>
 						</div>
+					</div>
+
+					<div className="mb-2">
+						<button
+							type="submit"
+							name="complete-contract"
+							value="yes"
+							disabled={
+								navigation.state != "idle" ||
+								!data.allComplete ||
+								data.contractRewarded
+							}
+							className="inline-flex shrink cursor-pointer flex-row items-center gap-2 rounded border bg-white p-2 text-neutral-600 shadow hover:bg-neutral-50 disabled:cursor-not-allowed disabled:bg-neutral-200"
+						>
+							Complete contract
+						</button>
 					</div>
 				</div>
 			</div>
