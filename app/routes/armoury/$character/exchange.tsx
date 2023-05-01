@@ -1,11 +1,15 @@
-import { Checkbox, Form, FormGroup, Select, TextInput } from "~/components/Form"
-import { useLoaderData } from "@remix-run/react"
+import { Checkbox, Form, FormGroup, Select } from "~/components/Form"
+import {
+	Form as RemixForm,
+	useLoaderData,
+	useNavigation,
+} from "@remix-run/react"
 import {
 	ChevronDoubleUpIcon,
 	CircleStackIcon,
-	Square3Stack3DIcon,
 } from "@heroicons/react/24/outline"
-import { LoaderArgs, redirect } from "@remix-run/server-runtime"
+import type { LoaderArgs } from "@remix-run/server-runtime"
+import { redirect } from "@remix-run/server-runtime"
 import { json } from "@remix-run/server-runtime"
 import { z } from "zod"
 import { zx } from "zodix"
@@ -20,136 +24,205 @@ import {
 import { replaceAll } from "~/data/utils.server"
 import { authenticator } from "~/services/auth.server"
 import {
-	getCharacters,
+	getAccountSummary,
 	getCharacterStore,
 	getCharacterWallet,
 } from "~/services/darktide.server"
 import { classnames } from "~/utils/classnames"
 import { getSearchParam } from "~/utils/getSearchParam"
+import { Img } from "~/components/Img"
+import { t } from "~/data/localization.server"
+import { getWeaponTemplate } from "~/data/weaponTemplates.server"
 
 export let handle = "exchange"
 
 let sort = function (a: number, b: number) {
-	if (a > b) return 1
-	if (a < b) return -1
+	if (a > b) return -1
+	if (a < b) return 1
 	return 0
 }
 
+let EMPTY_RESULT = { offers: [], wallet: undefined }
+
 export async function loader({ request, params }: LoaderArgs) {
-	const { character } = zx.parseParams(params, { character: z.string() })
-	const emptyResult = { offers: [], wallet: undefined }
+	let { character } = zx.parseParams(params, { character: z.string() })
+	let url = new URL(request.url)
+	let filterItemTypes = getSearchParam(url.searchParams, "type", [
+		"melee",
+		"ranged",
+		"gadget",
+	])
+	let sortBy = url.searchParams.get("sort") ?? "baseItemLevel"
+
 	let user = await authenticator.isAuthenticated(request, {
 		failureRedirect: "/login",
 	})
-
 	let auth = await getAuthToken(user.id)
 
 	if (auth) {
-		let characterList = await getCharacters(auth)
-		if (characterList === undefined) {
+		let accountSummary = await getAccountSummary(auth)
+		if (!accountSummary) {
 			redirect("/armoury")
-			return json(emptyResult)
+			return json(EMPTY_RESULT)
 		}
-		let currentCharacter = characterList.characters.find(
+		let currentCharacter = accountSummary.summary.characters.find(
 			(c) => c.id == character
 		)
-		if (currentCharacter) {
-			let currentShop = await getCharacterStore(
-				auth,
-				currentCharacter.archetype,
-				currentCharacter.id
-			)
-			let url = new URL(request.url)
-			let filterItemTypes = getSearchParam(url.searchParams, "type", [
-				"melee",
-				"ranged",
-				"gadget",
+		if (!currentCharacter) {
+			redirect("/armoury")
+			return json(EMPTY_RESULT)
+		}
+
+		let [currentShop, weapons, curios, allPerks, allBlessings, wallet] =
+			await Promise.all([
+				getCharacterStore(
+					auth,
+					currentCharacter.archetype,
+					currentCharacter.id
+				),
+				getItems(WeaponSchema),
+				getItems(CurioSchema),
+				getItems(PerkSchema),
+				getItems(BlessingSchema),
+				getCharacterWallet(auth, currentCharacter.id),
 			])
-			let sortBy = getSearchParam(url.searchParams, "sort", "total rating")
-			const weapons = await getItems(WeaponSchema)
-			const curios = await getItems(CurioSchema)
-			const traits = await getItems(PerkSchema)
-			const blessings = await getItems(BlessingSchema)
-			let wallet = await getCharacterWallet(auth, currentCharacter.id)
 
-			if (!currentShop) return json(emptyResult)
+		if (!currentShop) {
+			return json(EMPTY_RESULT)
+		}
 
-			let offers = Object.entries(currentShop)
-				.map(([id, item]) => {
-					let weapon = weapons.find((wep) => wep.id === item?.description.id)
-					let curio = curios.find((cur) => cur.id === item?.description.id)
-					if (!weapon && !curio) return undefined
-					if (!item) return undefined
-					if (item.description.overrides.perks) {
-						item.description.overrides.perks.forEach((perk) => {
-							let trait = traits.find((trait) => trait.id === perk.id)
-							if (trait && trait.description && trait.description_values) {
+		let offers = Object.entries(currentShop.personal)
+			.map(([id, item]) => {
+				let weapon = weapons.find((wep) => wep.id === item?.description.id)
+				let curio = curios.find((cur) => cur.id === item?.description.id)
+				let shopItem = weapon || curio
+
+				if (!weapon && !curio) return undefined
+				if (!item) return undefined
+				if (!shopItem) return undefined
+
+				let perks =
+					item.description.overrides?.perks
+						?.map((perk) => {
+							let trait = allPerks.find((trait) => trait.id === perk.id)
+
+							if (!trait) {
+								return undefined
+							}
+
+							let description = "<No description>"
+							if (trait.description && trait.description_values) {
 								let values = trait.description_values.filter(
 									(value) => +value.rarity === perk.rarity
 								)
 								let replacement: { [key: string]: string } = {}
-								values.map(
+								values.forEach(
 									(value) =>
 										(replacement["{" + value.string_key + ":%s}"] =
 											value.string_value)
 								)
-								perk.id = replaceAll(trait.description, replacement)
+								description = replaceAll(trait.description, replacement)
+							} else if (trait.description) {
+								description = trait.description
+							}
+							return {
+								id: perk.id,
+								rarity: perk.rarity,
+								description,
 							}
 						})
-					}
-					let blessing =
-						item.description.overrides?.traits
-							?.map((t) => {
-								let blessing = blessings.find((b) => b.id === t.id)
-								if (!blessing) return undefined
-								let [baseName] = t.id.match(/\w+$/) ?? []
-								return {
-									baseName,
-									rarity: t.rarity,
-									displayName: blessing.display_name,
-									icon: `${blessing.icon}.png`,
-								}
-							})
-							.filter(Boolean) ?? []
-					let rarity = item.description.overrides.rarity
-					let shopitem = weapon || curio
-					if (!shopitem) return undefined
-					return {
-						id,
-						item,
-						blessing,
-						rarity,
-						shopitem,
-					}
-				})
-				.filter(Boolean)
-			offers = offers
-				.filter(
-					(item) =>
-						item &&
-						item.shopitem &&
-						filterItemTypes.includes(item.shopitem.item_type)
-				)
-				.sort((a, b) => {
-					if (sortBy[0] === "Total Rating") {
-						return sort(
-							a.item.description.overrides.itemLevel,
-							b.item.description.overrides.itemLevel
-						)
-					} else if (sortBy[0] === "Base Rating") {
-						return sort(
-							a.item.description.overrides.baseItemLevel,
-							b.item.description.overrides.baseItemLevel
-						)
-					} else if (sortBy[0] === "Price") {
-						return sort(a.item.price.amount.amount, b.item.price.amount.amount)
-					}
-					return 0
-				})
-			return json({ offers, wallet })
-		}
+						.filter(Boolean) ?? []
+
+				let traits =
+					item.description.overrides?.traits
+						?.map((t) => {
+							let blessing = allBlessings.find((b) => b.id === t.id)
+							if (!blessing) return undefined
+							let [baseName] = t.id.match(/\w+$/) ?? []
+
+							let description = "<No description>"
+							if (blessing.description && blessing.description_values) {
+								let values = blessing.description_values.filter(
+									(value) => +value.rarity === t.rarity
+								)
+								let replacement: { [key: string]: string } = {}
+								values.forEach(
+									(value) =>
+										(replacement["{" + value.string_key + ":%s}"] =
+											value.string_value)
+								)
+								description = replaceAll(blessing.description, replacement)
+							} else if (blessing.description) {
+								description = blessing.description
+							}
+							return {
+								baseName,
+								rarity: t.rarity,
+								displayName: blessing.display_name,
+								icon: `${blessing.icon}.png`,
+								description,
+							}
+						})
+						.filter(Boolean) ?? []
+				let rarity = item.description.overrides.rarity
+
+				let weaponTemplate = getWeaponTemplate(weapon?.baseName ?? "unknown")
+				let baseStats = (item.description.overrides?.base_stats ?? [])
+					.map((baseStat) => {
+						if (weaponTemplate) {
+							let baseStatConfig = weaponTemplate.base_stats[baseStat.name]
+							return {
+								displayName: t(baseStatConfig?.display_name ?? "unknown"),
+								value: baseStat.value,
+							}
+						}
+						return undefined
+					})
+					.filter(Boolean)
+
+				return {
+					id,
+					displayName: shopItem.display_name,
+					itemType: shopItem.item_type,
+					traits,
+					perks,
+					rarity,
+					itemLevel: item.description.overrides.itemLevel,
+					baseItemLevel: item.description.overrides.baseItemLevel,
+					price: item.price,
+					previewImage: shopItem.preview_image + ".png",
+					baseStats,
+					purchased: item.state === "completed",
+					// TODO: where to get level from? chrome extension uses /web/:sub/summary
+					// equippableAt: item.description.overrides.characterLevel,
+					// canEquip:
+					// 	item.description.overrides.characterLevel <=
+					// 	currentCharacter.level,
+				}
+			})
+			.filter(Boolean)
+
+		let filteredOffers = offers
+			.filter((item) => item && filterItemTypes.includes(item.itemType))
+			.sort((itemA, itemB) => {
+				let sortTypes: Record<
+					string,
+					(a: typeof itemA, b: typeof itemB) => number
+				> = {
+					baseItemLevel: (a, b) => sort(a.baseItemLevel, b.baseItemLevel),
+					itemLevel: (a, b) => sort(a.itemLevel, b.itemLevel),
+					price: (a, b) => sort(a.price.amount.amount, b.price.amount.amount),
+				}
+
+				if (sortBy && sortBy in sortTypes) {
+					return sortTypes[sortBy](itemA, itemB)
+				}
+				return 0
+			})
+		return json({ offers: filteredOffers, wallet })
 	}
-	return json(emptyResult)
+
+	return json(EMPTY_RESULT)
 }
 
 let rarityBorder: Record<string, string> = {
@@ -167,83 +240,187 @@ let rarityColor: Record<string, string> = {
 	4: "text-purple-800",
 	5: "text-orange-800",
 }
+
+export const raritySymbol = ["0", "Ⅰ", "Ⅱ", "Ⅲ", "Ⅳ", "Ⅴ"]
+
 export default function Exchange() {
+	let navigation = useNavigation()
 	let { offers, wallet } = useLoaderData<typeof loader>()
 	return (
 		<>
-			<div className="grid w-full grow grid-cols-2 gap-4 bg-neutral-200 p-4 shadow-inner">
+			<RemixForm
+				method="post"
+				className="grid w-full grow grid-cols-2 gap-4 overflow-y-scroll bg-neutral-200 p-4 shadow-inner"
+			>
 				{offers.map((offer) => (
 					<div
 						key={offer.id}
 						className={classnames(
 							"border-l-3 from-1% relative border-2 border-neutral-400 bg-white bg-gradient-to-r shadow",
-							rarityBorder[String(offer.rarity) ?? "0"]
+							rarityBorder[offer.rarity],
+							offer.purchased && "opacity-50"
 						)}
 					>
-						<div
-							className={classnames(
-								"m-2 font-bold leading-none",
-								rarityColor[offer.rarity]
-							)}
-						>
-							{offer.shopitem.display_name}
-						</div>
-						<div className="">
-							<span className="m-2 flex items-center font-bold leading-none">
-								<ChevronDoubleUpIcon
-									className="mr-0.5 h-4 w-4"
-									aria-hidden="true"
-								/>
-								<span
+						<Img
+							className="pointer-events-none absolute bottom-0 right-0 max-h-full scale-x-[-1]"
+							src={offer.previewImage}
+							width="256"
+						/>
+						<div className="isolate flex min-h-full flex-col">
+							<div className="m-2 flex flex-row font-heading">
+								<div className="mr-1 flex items-center font-heading font-bold ">
+									<ChevronDoubleUpIcon
+										className="mr-0.5 h-4 w-4"
+										aria-hidden="true"
+									/>
+									{offer.itemLevel}
+								</div>
+								<div
 									className={classnames(
-										"m-2 font-bold leading-none",
+										"font-bold ",
 										rarityColor[offer.rarity]
 									)}
 								>
-									{offer.item.description.overrides.itemLevel}
-								</span>
-								[{offer.item.description.overrides.baseItemLevel}]
-							</span>
-						</div>
-						<div>
-							<div className="m-2 flex items-center font-bold leading-none text-amber-500">
-								<CircleStackIcon
-									className="mr-0.5 h-4 w-4"
-									aria-hidden="true"
-								/>
-								{offer.item.price.amount.amount}
+									{offer.displayName}
+								</div>
 							</div>
-						</div>
-						{offer.item.description.overrides.perks &&
-						offer.item.description.overrides.perks.length > 0 ? (
-							<div>
-								{offer.item.description.overrides.perks.map((perk) => (
-									<div key={perk.id} className="m-2 flex items-center">
-										<Square3Stack3DIcon className="mr-0.5 h-4 w-4" />
-										{perk.id}
-									</div>
-								))}
-								<span></span>
-							</div>
-						) : null}
 
-						<img
-							alt=""
-							loading="lazy"
-							className="max-w-1/2 pointer-events-none absolute right-0 top-0 h-full"
-							src={`https://img.darkti.de/pngs/${offer.shopitem.preview_image}.png`}
-						/>
+							<style>{`
+.stat:nth-child(1) {
+  grid-area: 1 / 1 / 2 / 2;
+}
+.stat:nth-child(2) {
+  grid-area: 2 / 1 / 3 / 2;
+}
+.stat:nth-child(3) {
+  grid-area: 2 / 3 / 3 / 4;
+}
+.stat:nth-child(4) {
+  grid-area: 1 / 2 / 2 / 3;
+}
+.stat:nth-child(5) {
+  grid-area: 2 / 2 / 3 / 3;
+}
+`}</style>
+							<div className="relative m-2 mt-0">
+								<span
+									className={
+										"absolute right-0 top-0 flex items-center font-heading text-lg text-sm font-bold"
+									}
+									title="Base item level"
+								>
+									<ChevronDoubleUpIcon
+										className="mr-0.5 h-3 w-3"
+										aria-hidden="true"
+									/>
+									{offer.baseItemLevel}
+								</span>
+								<div
+									data-section="base-stats"
+									className="grid grid-cols-3 grid-rows-2 gap-2"
+								>
+									{offer.baseStats.map((stat) => {
+										return (
+											<div key={stat.displayName} className="stat">
+												<div className="font-heading">{stat.displayName}</div>
+												<div className="flex flex-row">
+													<div className="relative w-full border border-amber-400 p-px">
+														<div
+															style={{ width: stat.value * 100 + "%" }}
+															className="z-2 absolute left-0 top-0 h-full border border-white bg-amber-400"
+														/>
+														<div className="z-1 isolate m-px mx-1 font-heading text-xs leading-none text-white">
+															{Math.round(stat.value * 100)}%
+														</div>
+													</div>
+												</div>
+											</div>
+										)
+									})}
+								</div>
+							</div>
+
+							{offer.perks.length > 0 ? (
+								<div className="m-2">
+									<div className="font-heading font-bold">Perks</div>
+									{offer.perks.map((perk) => (
+										<div key={perk.id} className="flex items-center">
+											<div className="mr-2">{raritySymbol[perk.rarity]}</div>
+											{perk.description}
+										</div>
+									))}
+								</div>
+							) : null}
+
+							{offer.traits.length > 0 ? (
+								<div className="m-2">
+									<div className="font-heading font-bold">Blessings</div>
+									<div className="flex w-2/3 items-center gap-2">
+										{offer.traits.map((blessing) => (
+											<div
+												key={blessing.icon}
+												className="flex flex-row items-center"
+											>
+												<div className="relative flex aspect-square w-16 shrink-0 flex-row items-center">
+													<Img
+														className="aspect-square rounded invert"
+														alt={`Tier ${blessing.rarity} ${blessing.displayName}`}
+														title={`Tier ${blessing.rarity} ${blessing.displayName}`}
+														src={blessing.icon}
+														width="128"
+													/>
+													<div
+														aria-hidden
+														className="absolute left-0 top-0 text-center leading-none"
+													>
+														{raritySymbol[blessing.rarity]}
+													</div>
+												</div>
+												<div className="flex flex-col">
+													<div className="font-bold">
+														{blessing.displayName}
+													</div>
+													<div>{blessing.description}</div>
+												</div>
+											</div>
+										))}
+									</div>
+								</div>
+							) : null}
+
+							<div className="mt-auto">
+								<button
+									type="submit"
+									name="buy-item"
+									value={offer.id}
+									disabled={navigation.state != "idle" || offer.purchased}
+									className={classnames(
+										"m-2 flex inline-flex shrink cursor-pointer flex-row items-center items-center gap-2 rounded border bg-white p-2 font-bold leading-none text-amber-500 shadow hover:bg-neutral-50 disabled:cursor-not-allowed disabled:bg-neutral-200",
+										offer.purchased && "text-neutral-400"
+									)}
+								>
+									<CircleStackIcon className="h-4 w-4" aria-hidden="true" />
+									{offer.purchased
+										? "Purchased"
+										: `Buy for ${offer.price.amount.amount.toLocaleString()} ${
+												offer.price.amount.type
+										  }`}
+								</button>
+							</div>
+						</div>
 					</div>
 				))}
-			</div>
+			</RemixForm>
+
 			<div className="p-4">
 				{wallet && wallet.credits && wallet.credits.balance ? (
-					<div className="m-2 flex items-center font-bold leading-none text-amber-500">
-						Wallet:{" "}
-						<CircleStackIcon className="mr-0.5 h-4 w-4" aria-hidden="true" />
-						{wallet.credits.balance.amount.toLocaleString()}
+					<div className="mb-4 flex items-center font-bold leading-none text-amber-500">
+						<CircleStackIcon className="mr-1 h-4 w-4" aria-hidden="true" />
+						{wallet.credits.balance.amount.toLocaleString()}{" "}
+						{wallet.credits.balance.type}
 					</div>
 				) : null}
+
 				<Form dir="col">
 					<FormGroup label="Filter Type">
 						<Checkbox name="type" value="melee" label="Melee" />
@@ -251,10 +428,10 @@ export default function Exchange() {
 						<Checkbox name="type" value="gadget" label="Curio" />
 					</FormGroup>
 
-					<Select label="Sort by" name="sort">
-						<option value="Total Rating">Total Rating</option>
-						<option value="Base Rating">Base Rating</option>
-						<option value="Price">Price</option>
+					<Select label="Sort by" name="sort" className="w-full">
+						<option value="baseItemLevel">Base Rating</option>
+						<option value="itemLevel">Total Rating</option>
+						<option value="price">Price</option>
 					</Select>
 				</Form>
 			</div>
