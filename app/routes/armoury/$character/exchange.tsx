@@ -20,6 +20,7 @@ import {
 	BlessingSchema,
 	CurioSchema,
 	PerkSchema,
+	TraitSchema,
 	WeaponSchema,
 } from "~/data/schemas.server"
 import { replaceAll } from "~/data/utils.server"
@@ -131,19 +132,13 @@ export async function loader({ request, params }: LoaderArgs) {
 			return json(EMPTY_RESULT)
 		}
 
-		let [currentShop, weapons, curios, allPerks, allBlessings, wallet] =
-			await Promise.all([
-				getCharacterStore(
-					auth,
-					currentCharacter.archetype,
-					currentCharacter.id
-				),
-				getItems(WeaponSchema),
-				getItems(CurioSchema),
-				getItems(PerkSchema),
-				getItems(BlessingSchema),
-				getCharacterWallet(auth, currentCharacter.id),
-			])
+		let [currentShop, weapons, curios, allTraits, wallet] = await Promise.all([
+			getCharacterStore(auth, currentCharacter.archetype, currentCharacter.id),
+			getItems(WeaponSchema),
+			getItems(CurioSchema),
+			getItems(TraitSchema),
+			getCharacterWallet(auth, currentCharacter.id),
+		])
 
 		if (!currentShop) {
 			return json(EMPTY_RESULT)
@@ -159,10 +154,13 @@ export async function loader({ request, params }: LoaderArgs) {
 				if (!item) return undefined
 				if (!shopItem) return undefined
 
+				let itemPerks = item.description.overrides?.perks
+				let itemTraits = item.description.overrides?.traits
+
 				let perks =
-					item.description.overrides?.perks
+					itemPerks
 						?.map((perk) => {
-							let trait = allPerks.find((trait) => trait.id === perk.id)
+							let trait = allTraits.find((trait) => trait.id === perk.id)
 
 							if (!trait) {
 								return undefined
@@ -192,9 +190,9 @@ export async function loader({ request, params }: LoaderArgs) {
 						.filter(Boolean) ?? []
 
 				let traits =
-					item.description.overrides?.traits
+					itemTraits
 						?.map((t) => {
-							let blessing = allBlessings.find((b) => b.id === t.id)
+							let blessing = allTraits.find((b) => b.id === t.id)
 							if (!blessing) return undefined
 							let [baseName] = t.id.match(/\w+$/) ?? []
 
@@ -222,6 +220,7 @@ export async function loader({ request, params }: LoaderArgs) {
 							}
 						})
 						.filter(Boolean) ?? []
+
 				let rarity = item.description.overrides.rarity
 
 				let weaponTemplate = getWeaponTemplate(weapon?.baseName ?? "unknown")
