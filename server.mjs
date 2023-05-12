@@ -22,6 +22,9 @@ let app = fastify({
 // BLOCKED: https://github.com/mcansh/remix-fastify/pull/100
 // await app.register(import("@fastify/compress"), { global: true })
 
+await app.register(import("@fastify/cookie"))
+await app.register(import("@fastify/session"))
+
 await app.register(remixFastifyPlugin, {
 	build: serverBuild,
 	mode: MODE,
