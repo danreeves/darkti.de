@@ -1,5 +1,7 @@
 import { customAlphabet } from "nanoid"
-import { nolookalikesSafe } from "nanoid-dictionary"
+import nanoidDictionary from "nanoid-dictionary"
+
+let { nolookalikesSafe } = nanoidDictionary
 
 const _nanoid = customAlphabet(nolookalikesSafe, 14)
 

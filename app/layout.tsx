@@ -7,6 +7,7 @@ import { classnames } from "./utils/classnames"
 
 const navigation = [
 	{ name: "Home", href: "/" },
+
 	{ name: "Armoury", href: "/armoury" },
 	{ name: "Codex", href: "/codex" },
 	{ name: "Extension", href: "/extension" },

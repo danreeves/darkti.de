@@ -1,7 +1,7 @@
 import type { LoaderArgs } from "@remix-run/node"
 import { json } from "@remix-run/node"
 import { useLoaderData } from "@remix-run/react"
-import { reverse, sortBy } from "lodash"
+import { reverse, sortBy } from "lodash-es"
 import { getAuthToken } from "~/data/authtoken.server"
 import { authenticator } from "~/services/auth.server"
 import { getMissions } from "~/services/darktide.server"

@@ -5,7 +5,6 @@ import {
 	LiveReload,
 	Meta,
 	Scripts,
-	ScrollRestoration,
 	useLoaderData,
 } from "@remix-run/react"
 import Layout from "~/layout"
@@ -14,9 +13,8 @@ import tailwind from "~/tailwind.css"
 import { authenticator } from "~/services/auth.server"
 
 // Sets up Cron singletons to perform timed jobs on the server
-import { initJobs, getTunnel } from "~/jobs/index.server"
+import { initJobs } from "~/jobs/index.server"
 initJobs && initJobs()
-getTunnel && getTunnel()
 
 export const links: LinksFunction = () => [
 	{ rel: "stylesheet", href: tailwind },

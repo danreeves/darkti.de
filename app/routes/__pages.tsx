@@ -1,5 +1,5 @@
 import { Link, Outlet, useMatches } from "@remix-run/react"
-import { uniqBy } from "lodash"
+import { uniqBy } from "lodash-es"
 
 export default function PageLayout() {
 	const matches = useMatches()
