@@ -25,7 +25,7 @@ let app = fastify({
 await app.register(remixFastifyPlugin, {
 	build: serverBuild,
 	mode: MODE,
-	// getLoadContext: () => ({ loadContextName: "John Doe" }),
+	getLoadContext: () => ({ loadContextName: "John Doe" }),
 	// purgeRequireCacheInDevelopment: false,
 	// unstable_earlyHints: false,
 })
