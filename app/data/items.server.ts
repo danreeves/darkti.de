@@ -1,4 +1,4 @@
-import { sortBy } from "lodash"
+import { sortBy } from "lodash-es"
 import ITEM_DATA from "./exported/item_master_list.json"
 import type { ZodSchema } from "zod"
 import { filterBySchema } from "./utils.server"
