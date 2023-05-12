@@ -22,17 +22,12 @@ let app = fastify({
 // BLOCKED: https://github.com/mcansh/remix-fastify/pull/100
 // await app.register(import("@fastify/compress"), { global: true })
 
-await app.register(import("@fastify/cookie"))
-await app.register(import("@fastify/session"), {
-	secret: process.env.SECRETSECRET,
-})
-
 await app.register(remixFastifyPlugin, {
 	build: serverBuild,
 	mode: MODE,
-	getLoadContext: () => ({ loadContextName: "John Doe" }),
-	purgeRequireCacheInDevelopment: true,
-	unstable_earlyHints: true,
+	// getLoadContext: () => ({ loadContextName: "John Doe" }),
+	// purgeRequireCacheInDevelopment: false,
+	// unstable_earlyHints: false,
 })
 
 let port = process.env.PORT ? Number(process.env.PORT) || 3000 : 3000
