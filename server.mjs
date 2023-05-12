@@ -23,7 +23,9 @@ let app = fastify({
 // await app.register(import("@fastify/compress"), { global: true })
 
 await app.register(import("@fastify/cookie"))
-await app.register(import("@fastify/session"))
+await app.register(import("@fastify/session"), {
+	secret: process.end.SECRETSECRET,
+})
 
 await app.register(remixFastifyPlugin, {
 	build: serverBuild,
