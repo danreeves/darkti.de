@@ -24,7 +24,7 @@ let app = fastify({
 
 await app.register(import("@fastify/cookie"))
 await app.register(import("@fastify/session"), {
-	secret: process.end.SECRETSECRET,
+	secret: process.env.SECRETSECRET,
 })
 
 await app.register(remixFastifyPlugin, {
