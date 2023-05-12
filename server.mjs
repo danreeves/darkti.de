@@ -26,7 +26,7 @@ await app.register(remixFastifyPlugin, {
 	build: serverBuild,
 	mode: MODE,
 	getLoadContext: () => ({ loadContextName: "John Doe" }),
-	// purgeRequireCacheInDevelopment: false,
+	purgeRequireCacheInDevelopment: true,
 	// unstable_earlyHints: false,
 })
 
