@@ -1,9 +1,15 @@
 import fastify from "fastify"
-import { remixFastifyPlugin } from "@mcansh/remix-fastify"
+// import { remixFastifyPlugin } from "@mcansh/remix-fastify"
+import { remixFastifyPlugin } from "./remix-fastify.js"
+import { installGlobals } from "@remix-run/node"
+
+installGlobals()
 
 import * as serverBuild from "./build/index.mjs"
 
 let MODE = process.env.NODE_ENV
+
+console.log(MODE)
 
 let app = fastify({
 	logger: {
@@ -23,7 +29,7 @@ await app.register(remixFastifyPlugin, {
 	build: serverBuild,
 	mode: MODE,
 	getLoadContext: () => ({}),
-	purgeRequireCacheInDevelopment: true,
+	purgeRequireCacheInDevelopment: false,
 })
 
 let port = process.env.PORT ? Number(process.env.PORT) || 3000 : 3000

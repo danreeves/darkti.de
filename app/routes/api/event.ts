@@ -1,4 +1,5 @@
-import { ActionArgs, json } from "@remix-run/node"
+import type { ActionArgs } from "@remix-run/node"
+import { json } from "@remix-run/node"
 import { getClientIPAddress } from "remix-utils"
 
 export const action = async ({ request }: ActionArgs) => {
@@ -21,12 +22,13 @@ export const action = async ({ request }: ActionArgs) => {
 		}
 
 		let body = await request.text()
-		console.log(body)
 
 		body = body.replaceAll(
 			/[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}/g,
 			":id"
 		)
+
+		console.log({ body })
 
 		return await fetch(forwardPath, {
 			method: request.method,
