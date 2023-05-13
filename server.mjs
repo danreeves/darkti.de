@@ -1,10 +1,7 @@
 import fastify from "fastify"
 import { remixFastifyPlugin } from "@mcansh/remix-fastify"
-import { installGlobals } from "@remix-run/node"
 
 import * as serverBuild from "./build/index.mjs"
-
-installGlobals()
 
 let MODE = process.env.NODE_ENV
 
@@ -25,9 +22,8 @@ let app = fastify({
 await app.register(remixFastifyPlugin, {
 	build: serverBuild,
 	mode: MODE,
-	getLoadContext: () => ({ loadContextName: "John Doe" }),
+	getLoadContext: () => ({}),
 	purgeRequireCacheInDevelopment: true,
-	// unstable_earlyHints: false,
 })
 
 let port = process.env.PORT ? Number(process.env.PORT) || 3000 : 3000
