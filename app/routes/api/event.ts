@@ -20,25 +20,18 @@ export const action = async ({ request }: ActionArgs) => {
 			"user-agent": clientUserAgent,
 		}
 
-		let body = await request.json()
+		let body = await request.text()
+		console.log(body)
 
-		// @ts-ignore: I don't care if this fails really...
-		Object.keys(body).forEach((key) => {
-			// @ts-ignore: I don't care if this fails really...
-			if (typeof body[key] === "string") {
-				// Replace UUIDs with :id
-				// @ts-ignore: I don't care if this fails really...
-				body[key] = body[key].replaceAll(
-					/[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}/g,
-					":id"
-				)
-			}
-		})
+		body = body.replaceAll(
+			/[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}/g,
+			":id"
+		)
 
 		return await fetch(forwardPath, {
 			method: request.method,
 			headers,
-			body: JSON.stringify(body),
+			body: body,
 		})
 	} catch (e) {
 		console.log("event error")
