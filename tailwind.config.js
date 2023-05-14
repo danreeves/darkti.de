@@ -4,6 +4,7 @@ module.exports = {
 	theme: {
 		fontFamily: {
 			heading: ["Archivo", "sans-serif"],
+			montserrat: ["Montserrat", "sans-serif"],
 		},
 		listStyleType: {
 			none: "none",

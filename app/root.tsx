@@ -24,7 +24,7 @@ export const links: LinksFunction = () => [
 	},
 	{
 		rel: "stylesheet",
-		href: "https://fonts.bunny.net/css?family=archivo:900",
+		href: "https://fonts.bunny.net/css?family=archivo:900|montserrat:600,700",
 	},
 ]
 
