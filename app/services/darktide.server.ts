@@ -219,10 +219,26 @@ let MissionBoardSchema = z.object({
 			id: z.string(),
 			map: z.string(),
 			circumstance: z.string(),
-			flags: z.unknown(),
+			flags: z.object({
+				event: z.unknown(),
+				altered: z.unknown().optional(),
+			}),
 			credits: z.number(),
 			xp: z.number(),
-			extraRewards: z.unknown(),
+			extraRewards: z.object({
+				circumstances: z
+					.object({
+						credits: z.number(),
+						xp: z.number(),
+					})
+					.optional(),
+				sideMission: z
+					.object({
+						credits: z.number(),
+						xp: z.number(),
+					})
+					.optional(),
+			}),
 			challenge: z.number(),
 			resistance: z.number(),
 			start: z.string(),
