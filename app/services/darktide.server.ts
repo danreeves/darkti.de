@@ -213,7 +213,7 @@ export async function getCharacterWallet(auth: AuthToken, characterId: string) {
 	}
 }
 
-let MissionBoardSchema = z.object({
+export let MissionBoardSchema = z.object({
 	missions: z.array(
 		z.object({
 			id: z.string(),
