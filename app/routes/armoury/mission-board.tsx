@@ -7,7 +7,6 @@ import { authenticator } from "~/services/auth.server"
 import { getMissions } from "~/services/darktide.server"
 import { MissionTimer } from "~/components/MissionTimer"
 
-import dm_propaganda_medium from "~/img/dm_propaganda_medium.png"
 import mission_type_05 from "~/img/mission_type_05.png"
 import hunting_grounds_01 from "~/img/hunting_grounds_01.png"
 import party_scripture from "~/img/party_scripture.png"
@@ -44,7 +43,7 @@ export default function Missions() {
 							className="relative w-96 h-56 rounded text-green-100 shadow font-montserrat"
 						>
 							<img
-								src={dm_propaganda_medium}
+								src={`https://darktide-images.vercel.app/_vercel/image?q=100&url=pngs/content/ui/textures/missions/${mission.map}_medium.png&w=512`}
 								alt=""
 								className="absolute w-full h-full top-0 left-0 object-cover rounded"
 							/>
