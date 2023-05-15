@@ -65,10 +65,19 @@ export default function Missions() {
 											hsl(0 0% 0% / 0) 100%)`,
 								}}
 							>
-								<div className="h-7 flex flex-row justify-between items-center text-sm">
-									<div className="uppercase">Assassination</div>
+								<div className="h-8 flex flex-row justify-between items-center text-sm">
+									<div className="uppercase">
+										{
+											missionLoc[
+												`loc_mission_type_${
+													missionInfo[mission.map as keyof typeof missionInfo]
+														.mission_type
+												}_name` as keyof typeof missionLoc
+											]
+										}
+									</div>
 
-									<div className="w-full h-6 flex justify-end gap-[2px] mt-3 mr-2">
+									<div className="w-full h-6 flex justify-end gap-[2px] mt-3 mr-[0.625rem]">
 										{Array(mission.challenge).fill(
 											<span className="w-2 h-full bg-green-100"></span>
 										)}
@@ -165,9 +174,14 @@ export default function Missions() {
 
 							<MissionTimer mission={mission} />
 
-							<div className="absolute w-10 h-10 -top-3 -left-3 p-[2px] bg-gray-900">
+							<div className="absolute w-10 h-10 -top-2 -left-3 p-[2px] bg-gray-900">
 								<img
-									src={mission_type_05}
+									src={img_url(
+										`content/ui/textures/icons/mission_types/mission_type_${
+											missionInfo[mission.map as keyof typeof missionInfo]
+												.mission_type
+										}`
+									)}
 									alt=""
 									className="border border-solid p-1 border-gray-300"
 								/>
