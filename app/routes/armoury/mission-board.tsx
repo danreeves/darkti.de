@@ -15,6 +15,10 @@ import party_scripture from "~/img/party_scripture.png"
 import objective_credits from "~/img/objective_credits.png"
 import objective_xp from "~/img/objective_xp.png"
 
+const img_url = (src: string) => {
+	return `https://darktide-images.vercel.app/_vercel/image?q=100&url=pngs/${src}.png&w=512`
+}
+
 export let loader = async ({ request }: LoaderArgs) => {
 	let user = await authenticator.isAuthenticated(request, {
 		failureRedirect: "/login",
@@ -45,7 +49,9 @@ export default function Missions() {
 							className="relative w-96 h-56 rounded text-green-100 shadow font-montserrat"
 						>
 							<img
-								src={`https://darktide-images.vercel.app/_vercel/image?q=100&url=pngs/content/ui/textures/missions/${mission.map}_medium.png&w=512`}
+								src={img_url(
+									`content/ui/textures/missions/${mission.map}_medium`
+								)}
 								alt=""
 								className="absolute w-full h-full top-0 left-0 object-cover rounded"
 							/>
