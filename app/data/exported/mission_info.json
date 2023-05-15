@@ -1,0 +1,16 @@
+{
+	"lm_cooling": { "zone_id": "tank_foundry", "mission_type": "07" },
+	"km_enforcer": { "zone_id": "watertown", "mission_type": "02" },
+	"cm_habs": { "zone_id": "transit", "mission_type": "03" },
+	"dm_propaganda": { "zone_id": "dust", "mission_type": "04" },
+	"lm_scavenge": { "zone_id": "dust", "mission_type": "01" },
+	"lm_rails": { "zone_id": "transit", "mission_type": "01" },
+	"hm_cartel": { "zone_id": "watertown", "mission_type": "06" },
+	"dm_forge": { "zone_id": "tank_foundry", "mission_type": "05" },
+	"hm_strain": { "zone_id": "dust", "mission_type": "04" },
+	"hm_complex": { "zone_id": "throneside", "mission_type": "06" },
+	"km_station": { "zone_id": "transit", "mission_type": "02" },
+	"fm_resurgence": { "zone_id": "throneside", "mission_type": "05" },
+	"fm_cargo": { "zone_id": "tank_foundry", "mission_type": "01" },
+	"dm_stockpile": { "zone_id": "watertown", "mission_type": "05" }
+}
