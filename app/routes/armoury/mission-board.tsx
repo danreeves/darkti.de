@@ -5,6 +5,7 @@ import { reverse, sortBy } from "lodash-es"
 import { getAuthToken } from "~/data/authtoken.server"
 import { authenticator } from "~/services/auth.server"
 import { getMissions } from "~/services/darktide.server"
+import { MissionTimer } from "~/components/MissionTimer"
 
 import dm_propaganda_medium from "~/img/dm_propaganda_medium.png"
 import mission_type_05 from "~/img/mission_type_05.png"
@@ -19,6 +20,7 @@ export let loader = async ({ request }: LoaderArgs) => {
 	})
 
 	let auth = await getAuthToken(user.id)
+
 	if (auth) {
 		let { missions } = (await getMissions(auth)) || { missions: [] }
 		let sortedMissions = reverse(sortBy(missions, ["challenge", "resistance"]))
@@ -81,13 +83,13 @@ export default function Missions() {
 										pathogen.
 									</p>
 
-									<p className="relative mt-2 pt-2 text-xs text-yellow-400">
+									<p className="relative mt-2 pt-[0.375rem] align-text-middle text-sm text-yellow-400">
 										Hi-Intensity Shock Troop Gauntlet
 										<div className="absolute w-10 h-10 -top-1 -left-12 border border-yellow-400  bg-gray-900 ">
 											<div
 												className="absolute w-[124px] h-[124px] top-0 left-0 bg-yellow-400"
 												style={{
-													webkitMaskImage: `url(${hunting_grounds_01})`,
+													WebkitMaskImage: `url(${hunting_grounds_01})`,
 													maskImage: `url(${hunting_grounds_01})`,
 													transformOrigin: "top left",
 													transform:
@@ -104,7 +106,7 @@ export default function Missions() {
 													aria-label="Credits"
 													className="absolute w-16 h-16 top-1 bg-green-100"
 													style={{
-														webkitMaskImage: `url(${objective_credits})`,
+														WebkitMaskImage: `url(${objective_credits})`,
 														maskImage: `url(${objective_credits})`,
 														transformOrigin: "top left",
 														transform: "scale(calc(16 / 64))",
@@ -126,7 +128,7 @@ export default function Missions() {
 													aria-label="Experience"
 													className="absolute w-16 h-16 top-1 bg-green-100"
 													style={{
-														webkitMaskImage: `url(${objective_xp})`,
+														WebkitMaskImage: `url(${objective_xp})`,
 														maskImage: `url(${objective_xp})`,
 														transformOrigin: "top left",
 														transform: "scale(calc(16 / 64))",
@@ -154,12 +156,7 @@ export default function Missions() {
 								</div>
 							</div>
 
-							<div className="absolute bottom-0 right-0 w-full flex flex-row items-end">
-								<div className="w-[50%] h-2 bg-yellow-400 rounded-bl"></div>
-								<div className="w-12 h-4 bg-gray-800 text-center align-middle text-xs text-green-50 rounded-tl rounded-br">
-									59:59
-								</div>
-							</div>
+							<MissionTimer mission={mission} />
 
 							<div className="absolute w-10 h-10 -top-3 -left-3 p-[2px] bg-gray-900">
 								<img
