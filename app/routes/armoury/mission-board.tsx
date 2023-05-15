@@ -5,6 +5,7 @@ import { reverse, sortBy } from "lodash-es"
 import { getAuthToken } from "~/data/authtoken.server"
 import { authenticator } from "~/services/auth.server"
 import { getMissions } from "~/services/darktide.server"
+import mission_loc from "~/data/exported/mission_localization_en.json"
 import { MissionTimer } from "~/components/MissionTimer"
 
 import mission_type_05 from "~/img/mission_type_05.png"
