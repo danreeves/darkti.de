@@ -9,14 +9,17 @@ import { MissionTimer } from "~/components/MissionTimer"
 import missionLoc from "~/data/exported/mission_localization_en.json"
 import missionInfo from "~/data/exported/mission_info.json"
 
-import mission_type_05 from "~/img/mission_type_05.png"
 import hunting_grounds_01 from "~/img/hunting_grounds_01.png"
 import party_scripture from "~/img/party_scripture.png"
 import objective_credits from "~/img/objective_credits.png"
 import objective_xp from "~/img/objective_xp.png"
 
-const img_url = (src: string) => {
+const img_url = (src: string): string => {
 	return `https://darktide-images.vercel.app/_vercel/image?q=100&url=pngs/${src}.png&w=512`
+}
+
+const loc = (key: string): string => {
+	return missionLoc[key as keyof typeof missionLoc] || ""
 }
 
 export let loader = async ({ request }: LoaderArgs) => {
@@ -56,50 +59,60 @@ export default function Missions() {
 								className="absolute w-full h-full top-0 left-0 object-cover rounded"
 							/>
 
-							<div
-								className="relative w-full pl-9 pb-2"
-								style={{
-									background: `linear-gradient(180deg,
+							<div className="h-full hover:opacity-20 transition-opacity">
+								<div
+									className="relative w-full h-full pl-9 pb-2"
+									style={{
+										background: `linear-gradient(180deg,
 											hsl(0 0% 0% / 1) 0%,
 											hsl(0 0% 0% / 0.35) 80%,
 											hsl(0 0% 0% / 0) 100%)`,
-								}}
-							>
-								<div className="h-8 flex flex-row justify-between items-center text-sm">
-									<div className="uppercase">
-										{
-											missionLoc[
+									}}
+								>
+									<div className="h-8 flex flex-row justify-between items-center text-sm">
+										<div className="uppercase">
+											{loc(
 												`loc_mission_type_${
 													missionInfo[mission.map as keyof typeof missionInfo]
 														.mission_type
-												}_name` as keyof typeof missionLoc
-											]
-										}
+												}_name`
+											)}
+										</div>
+
+										<div className="w-full h-6 flex justify-end gap-[2px] mt-2 mr-2">
+											{Array(mission.challenge).fill(
+												<span className="w-2 h-full bg-green-100"></span>
+											)}
+											{Array(5 - mission.challenge).fill(
+												<span className="w-2 h-full border border-green-100"></span>
+											)}
+										</div>
 									</div>
 
-									<div className="w-full h-6 flex justify-end gap-[2px] mt-3 mr-[0.625rem]">
-										{Array(mission.challenge).fill(
-											<span className="w-2 h-full bg-green-100"></span>
-										)}
-										{Array(5 - mission.challenge).fill(
-											<span className="w-2 h-full border border-green-100"></span>
-										)}
+									<div className="-mt-1 pr-4">
+										<h2 className="font-bold !opacity-100">
+											{loc(`loc_mission_name_${mission.map}`)}
+										</h2>
+										<div className="-mt-1 text-xs">
+											{loc(
+												`loc_zone_${
+													missionInfo[mission.map as keyof typeof missionInfo]
+														.zone_id
+												}`
+											)}
+										</div>
+
+										<p className="relative mt-2 text-xs">
+											{loc(
+												missionInfo[mission.map as keyof typeof missionInfo]
+													.mission_description
+											)}
+										</p>
 									</div>
 								</div>
 
-								<div className="pr-4">
-									<h2 className="font-bold">Chasm Transit {i}</h2>
-									<div className="-mt-1 text-xs">
-										Terminus Station HL-36 "The Train Place"
-									</div>
-
-									<p className="relative mt-2 text-xs">
-										The Heretics are brewing a pathogen in one of the Hourglass'
-										fuel refineries. Get access to said refinery and destroy the
-										pathogen.
-									</p>
-
-									<p className="relative mt-2 pt-[0.375rem] align-text-middle text-sm text-yellow-400">
+								<div className="absolute left-9 top-32 text-xs">
+									<p className="relative pt-[0.375rem] align-text-middle text-sm text-yellow-400">
 										Hi-Intensity Shock Troop Gauntlet
 										<div className="absolute w-10 h-10 -top-1 -left-12 border border-yellow-400  bg-gray-900 ">
 											<div
@@ -170,21 +183,21 @@ export default function Missions() {
 										</div>
 									</div>
 								</div>
-							</div>
 
-							<MissionTimer mission={mission} />
+								<MissionTimer mission={mission} />
 
-							<div className="absolute w-10 h-10 -top-2 -left-3 p-[2px] bg-gray-900">
-								<img
-									src={img_url(
-										`content/ui/textures/icons/mission_types/mission_type_${
-											missionInfo[mission.map as keyof typeof missionInfo]
-												.mission_type
-										}`
-									)}
-									alt=""
-									className="border border-solid p-1 border-gray-300"
-								/>
+								<div className="absolute w-10 h-10 -top-2 -left-3 p-[2px] bg-gray-900">
+									<img
+										src={img_url(
+											`content/ui/textures/icons/mission_types/mission_type_${
+												missionInfo[mission.map as keyof typeof missionInfo]
+													.mission_type
+											}`
+										)}
+										alt=""
+										className="border border-solid p-1 border-gray-300"
+									/>
+								</div>
 							</div>
 						</div>
 					))}
