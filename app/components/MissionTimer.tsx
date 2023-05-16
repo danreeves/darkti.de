@@ -12,11 +12,15 @@ export function MissionTimer({
 
 	useEffect(() => {
 		const interval = setInterval(() => {
+			if (Date.now() >= Number(mission.expiry)) {
+				window.location.reload()
+				return
+			}
 			setDateNow(Date.now())
 		}, 1_000)
 
 		return () => clearInterval(interval)
-	}, [dateNow])
+	}, [dateNow, mission.expiry])
 
 	return (
 		<div className="absolute bottom-0 right-0 w-full flex flex-row justify-between items-end">
