@@ -1,4 +1,6 @@
 import type { LoaderArgs } from "@remix-run/node"
+import type { z } from "zod"
+import type { MissionBoardSchema } from "~/services/darktide.server"
 import { json } from "@remix-run/node"
 import { useLoaderData } from "@remix-run/react"
 import { reverse, sortBy } from "lodash-es"
@@ -20,6 +22,22 @@ const img_url = (src: string): string => {
 
 const loc = (key: string): string => {
 	return missionLoc[key as keyof typeof missionLoc] || ""
+}
+
+const determineSecondary = (
+	mission: z.infer<typeof MissionBoardSchema>["missions"][number]
+): string => {
+	if (!mission.extraRewards.sideMission) {
+		return "none"
+	}
+
+	const rewardRatio = mission.extraRewards.sideMission.credits / mission.credits
+	const SCRIPTURE_RATIO = 0.2
+	const GRIMOIRE_RATIO = 0.6
+
+	return rewardRatio > (SCRIPTURE_RATIO + GRIMOIRE_RATIO) / 2
+		? "grimoire"
+		: "scripture"
 }
 
 export let loader = async ({ request }: LoaderArgs) => {
@@ -190,13 +208,23 @@ export default function Missions() {
 												)}
 											</li>
 										</ul>
-										<div className="absolute w-10 h-10 -top-1 -left-12 p-[2px] bg-gray-900">
-											<img
-												src={party_scripture}
-												alt=""
-												className="border border-solid p-1 border-gray-300"
-											/>
-										</div>
+										{mission?.extraRewards?.sideMission && (
+											<div className="absolute w-10 h-10 -top-1 -left-12 p-[2px] bg-gray-900">
+												<img
+													src={img_url(
+														`content/ui/textures/icons/pocketables/hud/small/party_${determineSecondary(
+															mission
+														)}`
+													)}
+													alt={loc(
+														`loc_objective_side_mission_${determineSecondary(
+															mission
+														)}_header`
+													)}
+													className="border border-solid p-1 border-gray-300"
+												/>
+											</div>
+										)}
 									</div>
 								</div>
 								<MissionTimer mission={mission} />
