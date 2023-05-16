@@ -8,8 +8,8 @@ import { getMissions } from "~/services/darktide.server"
 import { MissionTimer } from "~/components/MissionTimer"
 import missionLoc from "~/data/exported/mission_localization_en.json"
 import missionInfo from "~/data/exported/mission_info.json"
+import circumstanceInfo from "~/data/exported/circumstance_info.json"
 
-import hunting_grounds_01 from "~/img/hunting_grounds_01.png"
 import party_scripture from "~/img/party_scripture.png"
 import objective_credits from "~/img/objective_credits.png"
 import objective_xp from "~/img/objective_xp.png"
@@ -112,21 +112,37 @@ export default function Missions() {
 								</div>
 
 								<div className="absolute left-9 top-32 text-xs">
-									<p className="relative pt-[0.375rem] align-text-middle text-sm text-yellow-400">
-										Hi-Intensity Shock Troop Gauntlet
-										<div className="absolute w-10 h-10 -top-1 -left-12 border border-yellow-400  bg-gray-900 ">
-											<div
-												className="absolute w-[124px] h-[124px] top-0 left-0 bg-yellow-400"
-												style={{
-													WebkitMaskImage: `url(${hunting_grounds_01})`,
-													maskImage: `url(${hunting_grounds_01})`,
-													transformOrigin: "top left",
-													transform:
-														"scale(calc(40 / 124 * 0.8)) translate(10%, 10%)",
-												}}
-											></div>
-										</div>
-									</p>
+									{mission.circumstance !== "default" ? (
+										<p className="relative pt-[0.375rem] align-text-middle text-sm text-yellow-400">
+											{loc(
+												circumstanceInfo[
+													mission.circumstance as keyof typeof circumstanceInfo
+												].display_name
+											)}
+											<div className="absolute w-10 h-10 -top-1 -left-12 border border-yellow-400 bg-gray-900 ">
+												<div
+													className="absolute w-[124px] h-[124px] top-0 left-0 bg-yellow-400"
+													style={{
+														WebkitMaskImage: `url(${img_url(
+															circumstanceInfo[
+																mission.circumstance as keyof typeof circumstanceInfo
+															].icon.replace("materials", "textures")
+														)})`,
+														maskImage: `url(${img_url(
+															circumstanceInfo[
+																mission.circumstance as keyof typeof circumstanceInfo
+															].icon.replace("materials", "textures")
+														)})`,
+														transformOrigin: "top left",
+														transform:
+															"scale(calc(40 / 124 * 0.8)) translate(10%, 10%)",
+													}}
+												></div>
+											</div>
+										</p>
+									) : (
+										<div className="relative h-[1.6rem]"></div>
+									)}
 
 									<div className="relative mt-5 text-sm">
 										<ul className="mt-1 flex flex-row gap-6">
@@ -145,7 +161,7 @@ export default function Missions() {
 													{mission.credits +
 														(mission.extraRewards?.circumstances?.credits || 0)}
 												</span>
-												<span></span>
+
 												{mission.extraRewards?.sideMission && (
 													<div className="relative ml-6 -mt-1 text-xs">
 														+ {mission.extraRewards.sideMission.credits}
@@ -183,9 +199,7 @@ export default function Missions() {
 										</div>
 									</div>
 								</div>
-
 								<MissionTimer mission={mission} />
-
 								<div className="absolute w-10 h-10 -top-2 -left-3 p-[2px] bg-gray-900">
 									<img
 										src={img_url(
