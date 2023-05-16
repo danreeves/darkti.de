@@ -23,13 +23,13 @@ export function MissionTimer({
 			<div
 				className={`h-2 bg-yellow-400 rounded-bl`}
 				style={{
-					width: `${
-						((Number(mission.expiry) - dateNow) /
-							(Number(mission.expiry) - Number(mission.start))) *
-						100
-					}%`,
+					width: `calc(${
+						(Number(mission.expiry) - dateNow) /
+						(Number(mission.expiry) - Number(mission.start))
+					} * (100% - 3.5rem))`,
 				}}
 			></div>
+
 			<div className="w-14 h-6 bg-gray-800  flex flex-row justify-center items-center text-sm text-green-50 rounded-tl rounded-br">
 				<span className="tabular-nums">
 					{msToClockString(Number(mission.expiry) - dateNow)}

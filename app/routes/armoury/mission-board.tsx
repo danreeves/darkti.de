@@ -45,7 +45,7 @@ export default function Missions() {
 		<>
 			<h1 className="sr-only">Missions</h1>
 			<div className="w-full h-full flex justify-center px-6 xl:px-48 pt-6 overflow-y-scroll">
-				<div className="w-full flex flex-wrap justify-between gap-6">
+				<div className="w-full flex flex-wrap justify-evenly gap-10">
 					{missions.map((mission, i) => (
 						<div
 							key={mission.id}
@@ -113,7 +113,7 @@ export default function Missions() {
 
 								<div className="absolute left-9 top-32 text-xs">
 									{mission.circumstance !== "default" ? (
-										<p className="relative pt-[0.375rem] align-text-middle text-sm text-yellow-400">
+										<div className="relative pt-[0.375rem] align-text-middle text-sm text-yellow-400">
 											{loc(
 												circumstanceInfo[
 													mission.circumstance as keyof typeof circumstanceInfo
@@ -139,7 +139,7 @@ export default function Missions() {
 													}}
 												></div>
 											</div>
-										</p>
+										</div>
 									) : (
 										<div className="relative h-[1.6rem]"></div>
 									)}
