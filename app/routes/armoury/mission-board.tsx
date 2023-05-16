@@ -12,10 +12,6 @@ import missionLoc from "~/data/exported/mission_localization_en.json"
 import missionInfo from "~/data/exported/mission_info.json"
 import circumstanceInfo from "~/data/exported/circumstance_info.json"
 
-import party_scripture from "~/img/party_scripture.png"
-import objective_credits from "~/img/objective_credits.png"
-import objective_xp from "~/img/objective_xp.png"
-
 const img_url = (src: string): string => {
 	return `https://darktide-images.vercel.app/_vercel/image?q=100&url=pngs/${src}.png&w=512`
 }
@@ -169,8 +165,12 @@ export default function Missions() {
 													aria-label="Credits"
 													className="absolute w-16 h-16 top-1 bg-green-100"
 													style={{
-														WebkitMaskImage: `url(${objective_credits})`,
-														maskImage: `url(${objective_credits})`,
+														WebkitMaskImage: `url(${img_url(
+															"glyphs/objective_credits"
+														)})`,
+														maskImage: `url(${img_url(
+															"glyphs/objective_credits"
+														)})`,
 														transformOrigin: "top left",
 														transform: "scale(calc(16 / 64))",
 													}}
@@ -191,8 +191,10 @@ export default function Missions() {
 													aria-label="Experience"
 													className="absolute w-16 h-16 top-1 bg-green-100"
 													style={{
-														WebkitMaskImage: `url(${objective_xp})`,
-														maskImage: `url(${objective_xp})`,
+														WebkitMaskImage: `url(${img_url(
+															"glyphs/objective_xp"
+														)})`,
+														maskImage: `url(${img_url("glyphs/objective_xp")})`,
 														transformOrigin: "top left",
 														transform: "scale(calc(16 / 64))",
 													}}
