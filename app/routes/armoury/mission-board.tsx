@@ -58,12 +58,12 @@ export default function Missions() {
 	return (
 		<>
 			<h1 className="sr-only">Missions</h1>
-			<div className="w-full h-full flex justify-center px-6 xl:px-48 pt-6 overflow-y-scroll">
+			<div className="w-full h-full flex justify-center p-12 xl:px-48 overflow-y-scroll">
 				<div className="w-full flex flex-wrap justify-evenly gap-10">
-					{missions.map((mission, i) => (
+					{missions.map((mission) => (
 						<div
 							key={mission.id}
-							className="relative w-96 h-56 rounded text-green-100 shadow font-montserrat"
+							className="relative w-96 h-56 rounded drop-shadow-lg text-green-100 font-montserrat"
 						>
 							<img
 								src={img_url(
@@ -116,7 +116,7 @@ export default function Missions() {
 											)}
 										</div>
 
-										<p className="relative mt-2 text-xs">
+										<p className="relative mt-2 text-xs invisible xs:visible">
 											{loc(
 												missionInfo[mission.map as keyof typeof missionInfo]
 													.mission_description
@@ -159,7 +159,12 @@ export default function Missions() {
 									)}
 
 									<div className="relative mt-5 text-sm">
-										<ul className="mt-1 flex flex-row gap-6">
+										<ul
+											className="mt-1 flex flex-row gap-6"
+											style={{
+												textShadow: "black 0 0 3px",
+											}}
+										>
 											<li>
 												<span
 													aria-label="Credits"

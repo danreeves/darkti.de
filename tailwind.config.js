@@ -11,6 +11,9 @@ module.exports = {
 			square: "square",
 			roman: "upper-roman",
 		},
+		screens: {
+			xs: "400px",
+		},
 	},
 	plugins: [require("@tailwindcss/forms")],
 }
