@@ -22,8 +22,6 @@ import { getAccountGear } from "~/services/darktide.server"
 import { classnames } from "~/utils/classnames"
 import { getSearchParam } from "~/utils/getSearchParam"
 
-export let handle = "inventory"
-
 export async function loader({ request, params }: LoaderArgs) {
 	let { character } = zx.parseParams(params, { character: z.string() })
 	let url = new URL(request.url)
