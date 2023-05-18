@@ -494,7 +494,7 @@ export async function getCharacterStore(
 	auth: AuthToken,
 	characterArchetype: string,
 	characterId: string,
-	storeType = "credits"
+	storeType: "credits" | "marks"
 ) {
 	let url = `https://bsp-td-prod.atoma.cloud/store/storefront/${storeType}_store_${characterArchetype}?accountId=${auth.sub}&characterId=${characterId}&personal=true`
 	let response = await fetch(url, {

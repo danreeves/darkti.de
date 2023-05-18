@@ -13,6 +13,7 @@ console.log(MODE)
 
 let app = fastify({
 	logger: {
+		level: "info",
 		transport: {
 			target: "@fastify/one-line-logger",
 		},
@@ -35,9 +36,10 @@ await app.register(remixFastifyPlugin, {
 let port = process.env.PORT ? Number(process.env.PORT) || 3000 : 3000
 
 let address = await app.listen({ port, host: "0.0.0.0" })
-console.log(`App server running on ${address}`)
 
 if (MODE === "development") {
 	let { broadcastDevReady } = await import("@remix-run/node")
 	broadcastDevReady(serverBuild)
 }
+
+console.log(`App server running on ${address}`)

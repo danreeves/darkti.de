@@ -30,7 +30,9 @@ export default function Codex() {
 	let { noAuth, characters } = useLoaderData<typeof loader>()
 
 	let matches = useMatches()
-	let pageHandle = matches.at(-1)?.handle ?? "inventory"
+	let currentPage = matches.at(-1)
+	let currentRoute = currentPage.id.replace("routes", "")
+	let currentRouteParams = currentPage.params
 
 	if (noAuth) {
 		return (
@@ -58,17 +60,26 @@ export default function Codex() {
 			<div className="relative z-40 w-full bg-white p-4 shadow">
 				<div className="mx-auto flex max-w-7xl justify-between">
 					<nav>
-						{characters.map((char) => (
-							<NavLink
-								key={char.id}
-								to={`${char.id}/${pageHandle}`}
-								className={({ isActive }) =>
-									classnames("p-4 ", isActive ? "font-bold" : "")
-								}
-							>
-								{char.name}
-							</NavLink>
-						))}
+						{characters.map((char) => {
+							let route = currentRoute
+							let params = { ...currentRouteParams, character: char.id }
+
+							for (const [key, value] of Object.entries(params)) {
+								route = route.replace(`$${key}`, value)
+							}
+
+							return (
+								<NavLink
+									key={char.id}
+									to={route}
+									className={({ isActive }) =>
+										classnames("p-4 ", isActive ? "font-bold" : "")
+									}
+								>
+									{char.name}
+								</NavLink>
+							)
+						})}
 					</nav>
 
 					<nav>

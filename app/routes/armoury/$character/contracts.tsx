@@ -15,8 +15,6 @@ import {
 } from "~/services/darktide.server"
 import { classnames } from "~/utils/classnames"
 
-export let handle = "contracts"
-
 export async function action({ params, request }: ActionArgs) {
 	let { character: characterId } = zx.parseParams(params, {
 		character: z.string(),

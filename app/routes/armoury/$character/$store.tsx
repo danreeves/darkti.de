@@ -1,7 +1,6 @@
 import { Checkbox, Form, FormGroup, Select } from "~/components/Form"
 import {
 	Form as RemixForm,
-	useActionData,
 	useLoaderData,
 	useNavigation,
 } from "@remix-run/react"
@@ -16,13 +15,7 @@ import { z } from "zod"
 import { zx } from "zodix"
 import { getAuthToken } from "~/data/authtoken.server"
 import { getItems } from "~/data/items.server"
-import {
-	BlessingSchema,
-	CurioSchema,
-	PerkSchema,
-	TraitSchema,
-	WeaponSchema,
-} from "~/data/schemas.server"
+import { CurioSchema, TraitSchema, WeaponSchema } from "~/data/schemas.server"
 import { replaceAll } from "~/data/utils.server"
 import { authenticator } from "~/services/auth.server"
 import {
@@ -37,12 +30,22 @@ import { Img } from "~/components/Img"
 import { t } from "~/data/localization.server"
 import { getWeaponTemplate } from "~/data/weaponTemplates.server"
 
-export let handle = "exchange"
+let storeSlugToType: Record<string, "credits" | "marks"> = {
+	exchange: "credits",
+	requisitorium: "marks",
+}
 
 export async function action({ params, request }: ActionArgs) {
-	let { character: characterId } = zx.parseParams(params, {
+	let { character: characterId, store: storeSlug } = zx.parseParams(params, {
 		character: z.string(),
+		store: z.string(),
 	})
+
+	let storeType = storeSlugToType[storeSlug]
+	if (!storeType) {
+		return json({ error: "Invalid store type" })
+	}
+
 	let user = await authenticator.isAuthenticated(request, {
 		failureRedirect: "/login",
 	})
@@ -64,7 +67,8 @@ export async function action({ params, request }: ActionArgs) {
 	let store = await getCharacterStore(
 		auth,
 		currentCharacter.archetype,
-		currentCharacter.id
+		currentCharacter.id,
+		storeType
 	)
 	if (!store) {
 		return json({ error: "Couldn't fetch store" })
@@ -87,7 +91,7 @@ export async function action({ params, request }: ActionArgs) {
 		catalogId: store.catalog.id,
 		storeName: store.name,
 		characterId: currentCharacter.id,
-		lastTransactionId: (wallet.credits?.lastTransactionId ?? 0) + 1,
+		lastTransactionId: (wallet[storeType]?.lastTransactionId ?? 0) + 1,
 		offerId: offer.offerId,
 		ownedSkus: [],
 	})
@@ -104,7 +108,16 @@ let sort = function (a: number, b: number) {
 let EMPTY_RESULT = { offers: [], wallet: undefined }
 
 export async function loader({ request, params }: LoaderArgs) {
-	let { character } = zx.parseParams(params, { character: z.string() })
+	let { character, store } = zx.parseParams(params, {
+		character: z.string(),
+		store: z.string(),
+	})
+
+	let storeType = storeSlugToType[store]
+	if (!storeType) {
+		return json(EMPTY_RESULT)
+	}
+
 	let url = new URL(request.url)
 	let filterItemTypes = getSearchParam(url.searchParams, "type", [
 		"melee",
@@ -133,7 +146,12 @@ export async function loader({ request, params }: LoaderArgs) {
 		}
 
 		let [currentShop, weapons, curios, allTraits, wallet] = await Promise.all([
-			getCharacterStore(auth, currentCharacter.archetype, currentCharacter.id),
+			getCharacterStore(
+				auth,
+				currentCharacter.archetype,
+				currentCharacter.id,
+				storeType
+			),
 			getItems(WeaponSchema),
 			getItems(CurioSchema),
 			getItems(TraitSchema),
@@ -215,7 +233,7 @@ export async function loader({ request, params }: LoaderArgs) {
 								baseName,
 								rarity: t.rarity,
 								displayName: blessing.display_name,
-								icon: `${blessing.icon}.png`,
+								icon: blessing.icon ? `${blessing.icon}.png` : null,
 								description,
 							}
 						})
@@ -276,7 +294,10 @@ export async function loader({ request, params }: LoaderArgs) {
 				}
 				return 0
 			})
-		return json({ offers: filteredOffers, wallet })
+		return json({
+			offers: filteredOffers,
+			wallet: wallet ? wallet[storeType] : null,
+		})
 	}
 
 	return json(EMPTY_RESULT)
@@ -420,16 +441,22 @@ export default function Exchange() {
 												className="flex flex-row items-center"
 											>
 												<div className="relative flex aspect-square w-16 shrink-0 flex-row items-center">
-													<Img
-														className="aspect-square rounded invert"
-														alt={`Tier ${blessing.rarity} ${blessing.displayName}`}
-														title={`Tier ${blessing.rarity} ${blessing.displayName}`}
-														src={blessing.icon}
-														width="128"
-													/>
+													{blessing.icon ? (
+														<Img
+															className="aspect-square rounded invert"
+															alt={`Tier ${blessing.rarity} ${blessing.displayName}`}
+															title={`Tier ${blessing.rarity} ${blessing.displayName}`}
+															src={blessing.icon}
+															width="128"
+														/>
+													) : null}
 													<div
 														aria-hidden
-														className="absolute left-0 top-0 text-center leading-none"
+														className={classnames(
+															"text-center leading-none",
+															!blessing.icon && "w-[128px]",
+															blessing.icon && "absolute left-0 top-0"
+														)}
 													>
 														{raritySymbol[blessing.rarity]}
 													</div>
@@ -471,11 +498,10 @@ export default function Exchange() {
 			</RemixForm>
 
 			<div className="p-4">
-				{wallet && wallet.credits && wallet.credits.balance ? (
+				{wallet && wallet.balance ? (
 					<div className="mb-4 flex items-center font-bold leading-none text-amber-500">
 						<CircleStackIcon className="mr-1 h-4 w-4" aria-hidden="true" />
-						{wallet.credits.balance.amount.toLocaleString()}{" "}
-						{wallet.credits.balance.type}
+						{wallet.balance.amount.toLocaleString()} {wallet.balance.type}
 					</div>
 				) : null}
 
