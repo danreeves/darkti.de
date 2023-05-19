@@ -258,6 +258,8 @@ let LatenciesSchema = z.object({
 		z.object({
 			region: z.string(),
 			httpLatencyUrl: z.string(),
+			pingTarget: z.string(),
+			fastPingTarget: z.string(),
 		})
 	),
 })
