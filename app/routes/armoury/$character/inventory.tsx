@@ -38,75 +38,74 @@ export async function loader({ request, params }: LoaderArgs) {
 
 	let auth = await getAuthToken(user.id)
 
-	if (auth) {
-		let gear = await getAccountGear(auth)
-		if (gear) {
-			let weapons = await getItems(WeaponSchema)
-			let blessings = await getItems(BlessingSchema)
-			let characterGear = Object.entries(gear)
-				.filter(([, item]) => {
-					return !item.characterId || item.characterId === character
-				})
-				.map(([id, item]) => {
-					let weapon = weapons.find(
-						(wep) => wep.id === item.masterDataInstance.id
-					)
-					if (!weapon) return undefined
+	let gear = await getAccountGear(auth)
+	if (gear) {
+		let weapons = await getItems(WeaponSchema)
+		let blessings = await getItems(BlessingSchema)
+		let characterGear = Object.entries(gear)
+			.filter(([, item]) => {
+				return !item.characterId || item.characterId === character
+			})
+			.map(([id, item]) => {
+				let weapon = weapons.find(
+					(wep) => wep.id === item.masterDataInstance.id
+				)
+				if (!weapon) return undefined
 
-					let rarity = item.masterDataInstance.overrides?.rarity ?? 1
-					let baseItemLevel = item.masterDataInstance.overrides?.baseItemLevel
-					let itemLevel = item.masterDataInstance.overrides?.itemLevel
-					let previewImage = `${weapon.preview_image}.png`
-					let displayName = weapon.display_name
-					let traits =
-						item.masterDataInstance.overrides?.traits
-							?.map((t) => {
-								let blessing = blessings.find((b) => b.id === t.id)
-								if (!blessing) return undefined
-								let [baseName] = t.id.match(/\w+$/) ?? []
-								return {
-									baseName,
-									rarity: t.rarity,
-									displayName: blessing.display_name,
-									icon: `${blessing.icon}.png`,
-								}
-							})
-							.filter(Boolean) ?? []
-					return {
-						id,
-						rarity,
-						baseItemLevel,
-						itemLevel,
-						previewImage,
-						displayName,
-						traits,
-						itemType: weapon.item_type,
-					}
-				})
-				.filter(Boolean)
-
-			let items = characterGear.filter(
-				(item) =>
-					filterItemTypes.includes(item.itemType) &&
-					item.displayName.toLowerCase().includes(searchName.toLowerCase()) &&
-					(searchBlessing
-						? item.traits.some((trait) => trait.baseName === searchBlessing)
-						: true)
-			)
-
-			let traitTable: Record<string, string> = {}
-			for (let item of characterGear) {
-				for (let trait of item.traits) {
-					traitTable[trait.baseName] = trait.displayName
+				let rarity = item.masterDataInstance.overrides?.rarity ?? 1
+				let baseItemLevel = item.masterDataInstance.overrides?.baseItemLevel
+				let itemLevel = item.masterDataInstance.overrides?.itemLevel
+				let previewImage = `${weapon.preview_image}.png`
+				let displayName = weapon.display_name
+				let traits =
+					item.masterDataInstance.overrides?.traits
+						?.map((t) => {
+							let blessing = blessings.find((b) => b.id === t.id)
+							if (!blessing) return undefined
+							let [baseName] = t.id.match(/\w+$/) ?? []
+							return {
+								baseName,
+								rarity: t.rarity,
+								displayName: blessing.display_name,
+								icon: `${blessing.icon}.png`,
+							}
+						})
+						.filter(Boolean) ?? []
+				return {
+					id,
+					rarity,
+					baseItemLevel,
+					itemLevel,
+					previewImage,
+					displayName,
+					traits,
+					itemType: weapon.item_type,
 				}
+			})
+			.filter(Boolean)
+
+		let items = characterGear.filter(
+			(item) =>
+				filterItemTypes.includes(item.itemType) &&
+				item.displayName.toLowerCase().includes(searchName.toLowerCase()) &&
+				(searchBlessing
+					? item.traits.some((trait) => trait.baseName === searchBlessing)
+					: true)
+		)
+
+		let traitTable: Record<string, string> = {}
+		for (let item of characterGear) {
+			for (let trait of item.traits) {
+				traitTable[trait.baseName] = trait.displayName
 			}
-
-			let traits = Object.entries(traitTable).map(
-				([baseName, displayName]) => ({ baseName, displayName })
-			)
-
-			return json({ items, traits })
 		}
+
+		let traits = Object.entries(traitTable).map(([baseName, displayName]) => ({
+			baseName,
+			displayName,
+		}))
+
+		return json({ items, traits })
 	}
 
 	return json({ items: [], traits: [] })

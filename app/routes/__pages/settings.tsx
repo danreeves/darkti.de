@@ -11,9 +11,14 @@ export async function loader({ request }: LoaderArgs) {
 		failureRedirect: "/login",
 	})
 
-	let auth = await getAuthToken(user.id)
+	let hasAuthToken = false
 
-	let hasAuthToken = !!auth
+	try {
+		await getAuthToken(user.id)
+		hasAuthToken = true
+	} catch (e) {
+		hasAuthToken = false
+	}
 
 	return json({ title: "Settings", hasAuthToken })
 }

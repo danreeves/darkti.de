@@ -1,5 +1,6 @@
 import type { AuthToken } from "@prisma/client"
 import memoizee from "memoizee"
+import { json } from "react-router"
 import { prisma } from "~/data/db.server"
 
 type UpdateArgs = Omit<AuthToken, "id">
@@ -28,7 +29,9 @@ async function _getAuthToken(userId: number) {
 			where: { userId },
 		})
 
-		if (!auth) return null
+		if (!auth) {
+			throw json({ error: "No auth token" })
+		}
 
 		if (auth.expiresAt <= new Date()) {
 			try {
@@ -36,13 +39,13 @@ async function _getAuthToken(userId: number) {
 					where: { userId },
 				})
 			} catch (e) {}
-			return null
+			throw json({ error: "No auth token" })
 		}
 
 		return auth
 	} catch (e) {
 		console.log(e)
-		return null
+		throw json({ error: "No auth token" })
 	}
 }
 

@@ -15,25 +15,21 @@ export let loader = async ({ request }: LoaderArgs) => {
 	})
 
 	let auth = await getAuthToken(user.id)
-	if (auth) {
-		let traits = await getItems(BlessingSchema)
-		let traitCategories = traits
-			.map((trait) => {
-				let match = trait.id.match(/^content\/items\/traits\/([\w_]+)\//)
-				if (match) {
-					return match[1]
-				}
-				return undefined
-			})
-			.filter(Boolean)
-			.map((category) =>
-				// ! because TypeScript is confused??? we're in an if (auth) check...
-				getAccountTrait(auth!, category)
-			)
-		return defer({ traitCategories: Promise.all(traitCategories) })
-	}
-
-	return defer({ traitCategories: new Promise((_, rej) => rej()) })
+	let traits = await getItems(BlessingSchema)
+	let traitCategories = traits
+		.map((trait) => {
+			let match = trait.id.match(/^content\/items\/traits\/([\w_]+)\//)
+			if (match) {
+				return match[1]
+			}
+			return undefined
+		})
+		.filter(Boolean)
+		.map((category) =>
+			// ! because TypeScript is confused??? we're in an if (auth) check...
+			getAccountTrait(auth!, category)
+		)
+	return defer({ traitCategories: Promise.all(traitCategories) })
 }
 
 export default function Traits() {

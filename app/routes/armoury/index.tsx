@@ -11,15 +11,11 @@ export let loader = async ({ request }: LoaderArgs) => {
 	})
 
 	let auth = await getAuthToken(user.id)
-	if (auth) {
-		let account = await getAccountSummary(auth)
-		let firstCharId = account?.summary.characters[0].id
-		if (firstCharId) {
-			return redirect(`/armoury/${firstCharId}/inventory`)
-		}
+	let account = await getAccountSummary(auth)
+	let firstCharId = account?.summary.characters[0].id
+	if (firstCharId) {
+		return redirect(`/armoury/${firstCharId}/inventory`)
 	}
-
-	return null
 }
 
 export default function ArmouryIndex() {
@@ -42,3 +38,5 @@ export default function ArmouryIndex() {
 		</div>
 	)
 }
+
+export const CatchBoundary = ArmouryIndex
