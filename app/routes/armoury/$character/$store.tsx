@@ -51,12 +51,12 @@ export async function action({ params, request }: ActionArgs) {
 	})
 
 	let auth = await getAuthToken(user.id)
-	if (!auth) return json({ error: "No auth" })
 
 	let accountSummary = await getAccountSummary(auth)
 	if (!accountSummary) {
 		return json({ error: "Couldn't fetch account" })
 	}
+
 	let currentCharacter = accountSummary.summary.characters.find(
 		(c) => c.id == characterId
 	)
@@ -131,176 +131,172 @@ export async function loader({ request, params }: LoaderArgs) {
 	})
 	let auth = await getAuthToken(user.id)
 
-	if (auth) {
-		let accountSummary = await getAccountSummary(auth)
-		if (!accountSummary) {
-			redirect("/armoury")
-			return json(EMPTY_RESULT)
-		}
-		let currentCharacter = accountSummary.summary.characters.find(
-			(c) => c.id == character
-		)
-		if (!currentCharacter) {
-			redirect("/armoury")
-			return json(EMPTY_RESULT)
-		}
-
-		let [currentShop, weapons, curios, allTraits, wallet] = await Promise.all([
-			getCharacterStore(
-				auth,
-				currentCharacter.archetype,
-				currentCharacter.id,
-				storeType
-			),
-			getItems(WeaponSchema),
-			getItems(CurioSchema),
-			getItems(TraitSchema),
-			getCharacterWallet(auth, currentCharacter.id),
-		])
-
-		if (!currentShop) {
-			return json(EMPTY_RESULT)
-		}
-
-		let offers = currentShop.personal
-			.map((item) => {
-				let weapon = weapons.find((wep) => wep.id === item?.description.id)
-				let curio = curios.find((cur) => cur.id === item?.description.id)
-				let shopItem = weapon || curio
-
-				if (!weapon && !curio) return undefined
-				if (!item) return undefined
-				if (!shopItem) return undefined
-
-				let itemPerks = item.description.overrides?.perks
-				let itemTraits = item.description.overrides?.traits
-
-				let perks =
-					itemPerks
-						?.map((perk) => {
-							let trait = allTraits.find((trait) => trait.id === perk.id)
-
-							if (!trait) {
-								return undefined
-							}
-
-							let description = "<No description>"
-							if (trait.description && trait.description_values) {
-								let values = trait.description_values.filter(
-									(value) => +value.rarity === perk.rarity
-								)
-								let replacement: { [key: string]: string } = {}
-								values.forEach(
-									(value) =>
-										(replacement["{" + value.string_key + ":%s}"] =
-											value.string_value)
-								)
-								description = replaceAll(trait.description, replacement)
-							} else if (trait.description) {
-								description = trait.description
-							}
-							return {
-								id: perk.id,
-								rarity: perk.rarity,
-								description,
-							}
-						})
-						.filter(Boolean) ?? []
-
-				let traits =
-					itemTraits
-						?.map((t) => {
-							let blessing = allTraits.find((b) => b.id === t.id)
-							if (!blessing) return undefined
-							let [baseName] = t.id.match(/\w+$/) ?? []
-
-							let description = "<No description>"
-							if (blessing.description && blessing.description_values) {
-								let values = blessing.description_values.filter(
-									(value) => +value.rarity === t.rarity
-								)
-								let replacement: { [key: string]: string } = {}
-								values.forEach(
-									(value) =>
-										(replacement["{" + value.string_key + ":%s}"] =
-											value.string_value)
-								)
-								description = replaceAll(blessing.description, replacement)
-							} else if (blessing.description) {
-								description = blessing.description
-							}
-							return {
-								baseName,
-								rarity: t.rarity,
-								displayName: blessing.display_name,
-								icon: blessing.icon ? `${blessing.icon}.png` : null,
-								description,
-							}
-						})
-						.filter(Boolean) ?? []
-
-				let rarity = item.description.overrides.rarity
-
-				let weaponTemplate = getWeaponTemplate(weapon?.baseName ?? "unknown")
-				let baseStats = (item.description.overrides?.base_stats ?? [])
-					.map((baseStat) => {
-						if (weaponTemplate) {
-							let baseStatConfig = weaponTemplate.base_stats[baseStat.name]
-							return {
-								displayName: t(baseStatConfig?.display_name ?? "unknown"),
-								value: baseStat.value,
-							}
-						}
-						return undefined
-					})
-					.filter(Boolean)
-
-				return {
-					id: item.offerId,
-					displayName: shopItem.display_name,
-					itemType: shopItem.item_type,
-					traits,
-					perks,
-					rarity,
-					itemLevel: item.description.overrides.itemLevel,
-					baseItemLevel: item.description.overrides.baseItemLevel,
-					price: item.price,
-					previewImage: shopItem.preview_image + ".png",
-					baseStats,
-					purchased: item.state === "completed",
-					// TODO: where to get level from? chrome extension uses /web/:sub/summary
-					// equippableAt: item.description.overrides.characterLevel,
-					// canEquip:
-					// 	item.description.overrides.characterLevel <=
-					// 	currentCharacter.level,
-				}
-			})
-			.filter(Boolean)
-
-		let filteredOffers = offers
-			.filter((item) => item && filterItemTypes.includes(item.itemType))
-			.sort((itemA, itemB) => {
-				let sortTypes: Record<
-					string,
-					(a: typeof itemA, b: typeof itemB) => number
-				> = {
-					baseItemLevel: (a, b) => sort(a.baseItemLevel, b.baseItemLevel),
-					itemLevel: (a, b) => sort(a.itemLevel, b.itemLevel),
-					price: (a, b) => sort(a.price.amount.amount, b.price.amount.amount),
-				}
-
-				if (sortBy && sortBy in sortTypes) {
-					return sortTypes[sortBy](itemA, itemB)
-				}
-				return 0
-			})
-		return json({
-			offers: filteredOffers,
-			wallet: wallet ? wallet[storeType] : null,
-		})
+	let accountSummary = await getAccountSummary(auth)
+	if (!accountSummary) {
+		redirect("/armoury")
+		return json(EMPTY_RESULT)
+	}
+	let currentCharacter = accountSummary.summary.characters.find(
+		(c) => c.id == character
+	)
+	if (!currentCharacter) {
+		redirect("/armoury")
+		return json(EMPTY_RESULT)
 	}
 
-	return json(EMPTY_RESULT)
+	let [currentShop, weapons, curios, allTraits, wallet] = await Promise.all([
+		getCharacterStore(
+			auth,
+			currentCharacter.archetype,
+			currentCharacter.id,
+			storeType
+		),
+		getItems(WeaponSchema),
+		getItems(CurioSchema),
+		getItems(TraitSchema),
+		getCharacterWallet(auth, currentCharacter.id),
+	])
+
+	if (!currentShop) {
+		return json(EMPTY_RESULT)
+	}
+
+	let offers = currentShop.personal
+		.map((item) => {
+			let weapon = weapons.find((wep) => wep.id === item?.description.id)
+			let curio = curios.find((cur) => cur.id === item?.description.id)
+			let shopItem = weapon || curio
+
+			if (!weapon && !curio) return undefined
+			if (!item) return undefined
+			if (!shopItem) return undefined
+
+			let itemPerks = item.description.overrides?.perks
+			let itemTraits = item.description.overrides?.traits
+
+			let perks =
+				itemPerks
+					?.map((perk) => {
+						let trait = allTraits.find((trait) => trait.id === perk.id)
+
+						if (!trait) {
+							return undefined
+						}
+
+						let description = "<No description>"
+						if (trait.description && trait.description_values) {
+							let values = trait.description_values.filter(
+								(value) => +value.rarity === perk.rarity
+							)
+							let replacement: { [key: string]: string } = {}
+							values.forEach(
+								(value) =>
+									(replacement["{" + value.string_key + ":%s}"] =
+										value.string_value)
+							)
+							description = replaceAll(trait.description, replacement)
+						} else if (trait.description) {
+							description = trait.description
+						}
+						return {
+							id: perk.id,
+							rarity: perk.rarity,
+							description,
+						}
+					})
+					.filter(Boolean) ?? []
+
+			let traits =
+				itemTraits
+					?.map((t) => {
+						let blessing = allTraits.find((b) => b.id === t.id)
+						if (!blessing) return undefined
+						let [baseName] = t.id.match(/\w+$/) ?? []
+
+						let description = "<No description>"
+						if (blessing.description && blessing.description_values) {
+							let values = blessing.description_values.filter(
+								(value) => +value.rarity === t.rarity
+							)
+							let replacement: { [key: string]: string } = {}
+							values.forEach(
+								(value) =>
+									(replacement["{" + value.string_key + ":%s}"] =
+										value.string_value)
+							)
+							description = replaceAll(blessing.description, replacement)
+						} else if (blessing.description) {
+							description = blessing.description
+						}
+						return {
+							baseName,
+							rarity: t.rarity,
+							displayName: blessing.display_name,
+							icon: blessing.icon ? `${blessing.icon}.png` : null,
+							description,
+						}
+					})
+					.filter(Boolean) ?? []
+
+			let rarity = item.description.overrides.rarity
+
+			let weaponTemplate = getWeaponTemplate(weapon?.baseName ?? "unknown")
+			let baseStats = (item.description.overrides?.base_stats ?? [])
+				.map((baseStat) => {
+					if (weaponTemplate) {
+						let baseStatConfig = weaponTemplate.base_stats[baseStat.name]
+						return {
+							displayName: t(baseStatConfig?.display_name ?? "unknown"),
+							value: baseStat.value,
+						}
+					}
+					return undefined
+				})
+				.filter(Boolean)
+
+			return {
+				id: item.offerId,
+				displayName: shopItem.display_name,
+				itemType: shopItem.item_type,
+				traits,
+				perks,
+				rarity,
+				itemLevel: item.description.overrides.itemLevel,
+				baseItemLevel: item.description.overrides.baseItemLevel,
+				price: item.price,
+				previewImage: shopItem.preview_image + ".png",
+				baseStats,
+				purchased: item.state === "completed",
+				// TODO: where to get level from? chrome extension uses /web/:sub/summary
+				// equippableAt: item.description.overrides.characterLevel,
+				// canEquip:
+				// 	item.description.overrides.characterLevel <=
+				// 	currentCharacter.level,
+			}
+		})
+		.filter(Boolean)
+
+	let filteredOffers = offers
+		.filter((item) => item && filterItemTypes.includes(item.itemType))
+		.sort((itemA, itemB) => {
+			let sortTypes: Record<
+				string,
+				(a: typeof itemA, b: typeof itemB) => number
+			> = {
+				baseItemLevel: (a, b) => sort(a.baseItemLevel, b.baseItemLevel),
+				itemLevel: (a, b) => sort(a.itemLevel, b.itemLevel),
+				price: (a, b) => sort(a.price.amount.amount, b.price.amount.amount),
+			}
+
+			if (sortBy && sortBy in sortTypes) {
+				return sortTypes[sortBy](itemA, itemB)
+			}
+			return 0
+		})
+	return json({
+		offers: filteredOffers,
+		wallet: wallet ? wallet[storeType] : null,
+	})
 }
 
 let rarityBorder: Record<string, string> = {

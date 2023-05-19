@@ -16,8 +16,6 @@ import { ChevronDoubleUpIcon } from "@heroicons/react/24/outline"
 import { t } from "~/data/localization.server"
 import { getWeaponTemplate } from "~/data/weaponTemplates.server"
 
-export let handle = "inventory"
-
 export async function loader({ request, params }: LoaderArgs) {
 	let { character: characterId, item: itemId } = zx.parseParams(params, {
 		character: z.string(),
@@ -27,80 +25,77 @@ export async function loader({ request, params }: LoaderArgs) {
 	let user = await authenticator.isAuthenticated(request, {
 		failureRedirect: "/login",
 	})
-
 	let auth = await getAuthToken(user.id)
+	let gear = await getAccountGear(auth)
 
-	if (auth) {
-		let gear = await getAccountGear(auth)
-		if (gear) {
-			let [weapons, blessings] = await Promise.all([
-				getItems(WeaponSchema),
-				getItems(BlessingSchema),
-			])
+	if (gear) {
+		let [weapons, blessings] = await Promise.all([
+			getItems(WeaponSchema),
+			getItems(BlessingSchema),
+		])
 
-			let [, item] =
-				Object.entries(gear)
-					.filter(([, item]) => {
-						return !item.characterId || item.characterId === characterId
-					})
-					.find(([id]) => {
-						return id === itemId
-					}) ?? []
-
-			let weapon = weapons.find(
-				(wep) => item && wep.id === item.masterDataInstance.id
-			)
-
-			let weaponTemplate = getWeaponTemplate(weapon?.baseName ?? "unknown")
-
-			if (!item || !weapon || !weaponTemplate) {
-				return redirect(`/armoury/${characterId}/inventory`)
-			}
-
-			let description = weapon.description
-			let rarity = item.masterDataInstance.overrides?.rarity ?? 1
-			let baseItemLevel = item.masterDataInstance.overrides?.baseItemLevel
-			let itemLevel = item.masterDataInstance.overrides?.itemLevel
-			let previewImage = `${weapon.preview_image}.png`
-			let displayName = weapon.display_name
-			let traits =
-				item.masterDataInstance.overrides?.traits
-					?.map((t) => {
-						let blessing = blessings.find((b) => b.id === t.id)
-						if (!blessing) return undefined
-						let [baseName] = t.id.match(/\w+$/) ?? []
-						return {
-							baseName,
-							rarity: t.rarity,
-							displayName: blessing.display_name,
-							icon: `${blessing.icon}.png`,
-						}
-					})
-					.filter(Boolean) ?? []
-			let baseStats = (item.masterDataInstance.overrides?.base_stats ?? [])
-				.map((baseStat) => {
-					if (weaponTemplate) {
-						let baseStatConfig = weaponTemplate.base_stats[baseStat.name]
-						return {
-							displayName: t(baseStatConfig?.display_name ?? "unknown"),
-							value: baseStat.value,
-						}
-					}
-					return undefined
+		let [, item] =
+			Object.entries(gear)
+				.filter(([, item]) => {
+					return !item.characterId || item.characterId === characterId
 				})
-				.filter(Boolean)
+				.find(([id]) => {
+					return id === itemId
+				}) ?? []
 
-			return json({
-				displayName,
-				rarity,
-				previewImage,
-				baseItemLevel,
-				traits,
-				baseStats,
-				itemLevel,
-				description,
-			})
+		let weapon = weapons.find(
+			(wep) => item && wep.id === item.masterDataInstance.id
+		)
+
+		let weaponTemplate = getWeaponTemplate(weapon?.baseName ?? "unknown")
+
+		if (!item || !weapon || !weaponTemplate) {
+			return redirect(`/armoury/${characterId}/inventory`)
 		}
+
+		let description = weapon.description
+		let rarity = item.masterDataInstance.overrides?.rarity ?? 1
+		let baseItemLevel = item.masterDataInstance.overrides?.baseItemLevel
+		let itemLevel = item.masterDataInstance.overrides?.itemLevel
+		let previewImage = `${weapon.preview_image}.png`
+		let displayName = weapon.display_name
+		let traits =
+			item.masterDataInstance.overrides?.traits
+				?.map((t) => {
+					let blessing = blessings.find((b) => b.id === t.id)
+					if (!blessing) return undefined
+					let [baseName] = t.id.match(/\w+$/) ?? []
+					return {
+						baseName,
+						rarity: t.rarity,
+						displayName: blessing.display_name,
+						icon: `${blessing.icon}.png`,
+					}
+				})
+				.filter(Boolean) ?? []
+		let baseStats = (item.masterDataInstance.overrides?.base_stats ?? [])
+			.map((baseStat) => {
+				if (weaponTemplate) {
+					let baseStatConfig = weaponTemplate.base_stats[baseStat.name]
+					return {
+						displayName: t(baseStatConfig?.display_name ?? "unknown"),
+						value: baseStat.value,
+					}
+				}
+				return undefined
+			})
+			.filter(Boolean)
+
+		return json({
+			displayName,
+			rarity,
+			previewImage,
+			baseItemLevel,
+			traits,
+			baseStats,
+			itemLevel,
+			description,
+		})
 	}
 
 	return json(null)
