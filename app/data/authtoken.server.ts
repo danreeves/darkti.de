@@ -63,3 +63,15 @@ export async function getExpiringTokens(inNextMinutes: number) {
 		},
 	})
 }
+
+export async function getAuthTokenBySteamId(steamId: string) {
+	let user = await prisma.user.findUnique({
+		where: { steamId },
+	})
+	if (!user) {
+		return null
+	}
+	return await prisma.authToken.findUnique({
+		where: { userId: user.id },
+	})
+}
