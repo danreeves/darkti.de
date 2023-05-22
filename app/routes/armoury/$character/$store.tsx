@@ -315,7 +315,7 @@ let rarityColor: Record<string, string> = {
 	5: "text-orange-800",
 }
 
-export const raritySymbol = ["0", "Ⅰ", "Ⅱ", "Ⅲ", "Ⅳ", "Ⅴ"]
+const raritySymbol = ["0", "Ⅰ", "Ⅱ", "Ⅲ", "Ⅳ", "Ⅴ"]
 
 export default function Exchange() {
 	let navigation = useNavigation()
