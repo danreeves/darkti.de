@@ -1,5 +1,5 @@
-import type { LoaderArgs } from "@remix-run/server-runtime"
-import { json } from "@remix-run/server-runtime"
+import type { LoaderArgs } from "@remix-run/node"
+import { json } from "@remix-run/node"
 import { getAuthTokenBySteamId } from "~/data/authtoken.server"
 
 export async function loader({ params }: LoaderArgs) {

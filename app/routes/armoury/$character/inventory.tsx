@@ -7,8 +7,8 @@ import {
 	useParams,
 	useSearchParams,
 } from "@remix-run/react"
-import type { LoaderArgs } from "@remix-run/server-runtime"
-import { json } from "@remix-run/server-runtime"
+import type { LoaderArgs } from "@remix-run/node"
+import { json } from "@remix-run/node"
 import { AnimatePresence } from "framer-motion"
 import { z } from "zod"
 import { zx } from "zodix"
