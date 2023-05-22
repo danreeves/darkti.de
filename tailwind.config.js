@@ -11,5 +11,8 @@ module.exports = {
 			roman: "upper-roman",
 		},
 	},
-	plugins: [require("@tailwindcss/forms")],
+	plugins: [
+		require("@tailwindcss/forms"),
+		require("@thoughtbot/tailwindcss-aria-attributes"),
+	],
 }

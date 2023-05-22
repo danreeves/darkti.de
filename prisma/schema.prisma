@@ -13,6 +13,7 @@ model User {
   publicId String @unique
   steamId String @unique
   auth AuthToken?
+	ownedTraits OwnedTraits?
 }
 
 model AuthToken {
@@ -22,4 +23,11 @@ model AuthToken {
 	refreshToken String @db.VarChar(600)
 	sub String
 	expiresAt DateTime
+}
+
+model OwnedTraits {
+	userId Int @unique
+	user User @relation(fields: [userId], references: [id])
+	lastUpdated DateTime?
+	traits Json?
 }

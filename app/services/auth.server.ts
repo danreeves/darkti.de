@@ -13,6 +13,7 @@ export type User = {
 	publicId: string
 	avatar: string
 	accountType: "steam"
+	ownedTraitsSyncedAt?: Date
 }
 
 export let authenticator = new Authenticator<User>(sessionStorage)
@@ -35,11 +36,8 @@ authenticator.use(
 				publicId: user.publicId,
 				avatar: steamUser.avatar.medium,
 				accountType: "steam",
+				ownedTraitsSyncedAt: user.ownedTraitsSyncedAt ?? undefined,
 			}
 		}
 	)
 )
-
-
-
-
