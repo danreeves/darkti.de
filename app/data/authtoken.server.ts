@@ -1,6 +1,6 @@
 import type { AuthToken } from "@prisma/client"
 import memoizee from "memoizee"
-import { json } from "react-router"
+import { json } from "@remix-run/node"
 import { prisma } from "~/data/db.server"
 
 type UpdateArgs = Omit<AuthToken, "id">
@@ -25,26 +25,19 @@ export async function deleteAuthToken(userId: number) {
 
 async function _getAuthToken(userId: number) {
 	try {
-		let auth = await prisma.authToken.findUnique({
+		let auth = await prisma.authToken.findUniqueOrThrow({
 			where: { userId },
 		})
 
-		if (!auth) {
-			throw json({ error: "No auth token" })
-		}
-
 		if (auth.expiresAt <= new Date()) {
-			try {
-				await prisma.authToken.delete({
-					where: { userId },
-				})
-			} catch (e) {}
+			await prisma.authToken.delete({
+				where: { userId },
+			})
 			throw json({ error: "No auth token" })
 		}
 
 		return auth
 	} catch (e) {
-		console.log(e)
 		throw json({ error: "No auth token" })
 	}
 }
