@@ -26,7 +26,7 @@ let OwnedTraitsSchema = z.array(
 type OwnedTraits = z.infer<typeof OwnedTraitsSchema>
 
 export async function getUserOwnedTraits(userId: number) {
-	let data = await prisma.ownedTraits.findFirst({ where: { userId } })
+	let data = await prisma.ownedTraits.findUnique({ where: { userId } })
 	if (!data) {
 		return
 	}
