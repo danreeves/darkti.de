@@ -32,7 +32,7 @@ function mod.authenticate_steam()
 			})
 			:next(function(data)
 				if data.body.ok then
-					mod:info("Done.")
+					mod:echo("Done.")
 				end
 			end)
 			:catch(function(e)
@@ -46,7 +46,7 @@ function mod.authenticate_steam()
 
 	getHasToken():next(function(data)
 		if data and data.body and data.body.hasToken == false then
-			mod:info("Authenticating...")
+			mod:echo("Authenticating...")
 			local id = Steam.retrieve_auth_session_ticket()
 			mod.update = function()
 				local app_ticket = Steam.poll_auth_session_ticket(id)
