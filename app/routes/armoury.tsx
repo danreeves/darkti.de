@@ -20,10 +20,15 @@ export let loader = async ({ request, params }: LoaderArgs) => {
 	let auth = await getAuthToken(user.id)
 	let account = await getAccountSummary(auth)
 
-	// let firstCharId = account?.summary.characters[0].id
-	// if (firstCharId && !params.character) {
-	// 	return redirect(`/armoury/${firstCharId}/inventory`)
-	// }
+	let firstCharId = account?.summary?.characters[0]?.id
+	if (
+		firstCharId &&
+		!params.character &&
+		!request.url.includes("traits") &&
+		!request.url.includes("mission-board")
+	) {
+		return redirect(`/armoury/${firstCharId}/inventory`)
+	}
 
 	return json({ characters: account?.summary.characters ?? [] })
 }
@@ -47,6 +52,10 @@ export default function Armoury() {
 
 							for (const [key, value] of Object.entries(params)) {
 								route = route.replace(`$${key}`, value)
+							}
+
+							if (!route.includes(char.id)) {
+								route = `/armoury/${char.id}/inventory`
 							}
 
 							return (
@@ -85,7 +94,7 @@ export default function Armoury() {
 
 export function CatchBoundary() {
 	return (
-		<div className="sm:px-8 lg:px-10 mx-auto flex max-w-7xl place-content-center px-4 pb-4 pt-6">
+		<div className="mx-auto flex max-w-7xl place-content-center px-4 pb-4 pt-6 sm:px-8 lg:px-10">
 			<div
 				className="flex rounded-lg bg-yellow-100 p-4 text-sm text-yellow-700"
 				role="alert"
