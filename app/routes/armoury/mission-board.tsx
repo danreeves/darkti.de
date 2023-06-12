@@ -10,6 +10,7 @@ import {
 	getMissionTemplate,
 	CircumstanceTemplates,
 	MissionTypes,
+	Zones,
 } from "~/data/missionTemplates.server"
 import { t } from "~/data/localization.server"
 import { Img, imgUrl } from "~/components/Img"
@@ -51,6 +52,7 @@ export async function loader({ request }: LoaderArgs) {
 
 			let circumstance = CircumstanceTemplates[mission.circumstance]
 			let missionType = MissionTypes[template.type]
+			let zone = Zones[template.zone_id]
 
 			return {
 				id: mission.id,
@@ -58,7 +60,7 @@ export async function loader({ request }: LoaderArgs) {
 				type: t(MissionTypes[template.type]?.name ?? "unknown"),
 				challenge: mission.challenge,
 				name: t(template.display_name),
-				zone: template.zone_id, // translate this
+				zone: t(zone?.name_short || zone?.name || "unknown"),
 				description: t(template.description),
 				circumstance: circumstance
 					? {
@@ -115,11 +117,19 @@ export default function Missions() {
 										<div className="uppercase">{mission.type}</div>
 
 										<div className="mr-2 mt-2 flex h-6 w-full justify-end gap-[2px]">
-											{Array(mission.challenge).fill(
-												<span className="h-full w-2 bg-green-100"></span>
-											)}
-											{Array(5 - mission.challenge).fill(
-												<span className="h-full w-2 border border-green-100"></span>
+											{Array.from({ length: mission.challenge }).map((_, i) => (
+												<span
+													key={i}
+													className="h-full w-2 bg-green-100"
+												></span>
+											))}
+											{Array.from({ length: 5 - mission.challenge }).map(
+												(_, i) => (
+													<span
+														key={i}
+														className="h-full w-2 border border-green-100"
+													></span>
+												)
 											)}
 										</div>
 									</div>

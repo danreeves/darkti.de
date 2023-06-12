@@ -3,6 +3,7 @@ import { z } from "zod"
 import RAW_MISSION_TEMPLATES from "./exported/mission_templates.json"
 import RAW_MISSION_TYPES from "./exported/mission_types.json"
 import RAW_CIRCUMSTANCE_TEMPLATES from "./exported/circumstance_templates.json"
+import RAW_ZONES from "./exported/zones.json"
 
 let MissionTemplateSchema = z.object({
 	name: z.string(),
@@ -51,3 +52,21 @@ let MissionTypeSchema = z.record(
 )
 
 export let MissionTypes = MissionTypeSchema.parse(RAW_MISSION_TYPES)
+
+let ZonesSchema = z.record(
+	z.string(),
+	z.object({
+		name: z.string(),
+		name_short: z.string().optional(),
+		map_node: z.string().optional(),
+		images: z
+			.object({
+				mission_vote: z.string(),
+				default: z.string(),
+				mission_board_details: z.string(),
+			})
+			.optional(),
+	})
+)
+
+export let Zones = ZonesSchema.parse(RAW_ZONES)
