@@ -90,11 +90,12 @@ export default function Missions() {
 	return (
 		<>
 			<h1 className="sr-only">Missions</h1>
-			<div className="xl:px-48 flex h-full w-full justify-center overflow-y-scroll p-12">
-				<div className="flex w-full flex-wrap justify-evenly gap-10">
+			<div className="justify-center overflow-y-scroll">
+				<div className="my-12 flex flex-wrap justify-evenly gap-10">
 					{missions.map((mission) => (
 						<div
 							key={mission.id}
+							data-id={mission.id}
 							className="relative h-56 w-96 rounded font-montserrat text-green-100 drop-shadow-lg"
 						>
 							<Img
@@ -138,7 +139,7 @@ export default function Missions() {
 										<h2 className="font-bold !opacity-100">{mission.name}</h2>
 										<div className="-mt-1 text-xs">{mission.zone}</div>
 
-										<p className="invisible relative mt-2 text-xs xs:visible">
+										<p className="relative mt-2 text-xs">
 											{mission.description}
 										</p>
 									</div>
