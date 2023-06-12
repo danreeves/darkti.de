@@ -1,4 +1,5 @@
 import type { LinksFunction, LoaderArgs, MetaFunction } from "@remix-run/node"
+import { SSRProvider } from "react-aria"
 import { json } from "@remix-run/node"
 import {
 	Links,
@@ -12,8 +13,10 @@ import Layout from "~/layout"
 import tailwind from "~/tailwind.css"
 import { authenticator } from "~/services/auth.server"
 
-// Sets up Cron singletons to perform timed jobs on the server
 import { initJobs } from "~/jobs/index.server"
+import { useRevalidateOnFocus } from "~/hooks/revalidateOnFocus"
+
+// Sets up Cron singletons to perform timed jobs on the server
 initJobs && initJobs()
 
 export const links: LinksFunction = () => [
@@ -42,6 +45,8 @@ export let loader = async ({ request }: LoaderArgs) => {
 export default function App() {
 	const { user } = useLoaderData<typeof loader>()
 
+	useRevalidateOnFocus()
+
 	return (
 		<html lang="en" className="h-screen bg-gray-100">
 			<head>
@@ -49,7 +54,9 @@ export default function App() {
 				<Links />
 			</head>
 			<body className="h-screen">
-				<Layout user={user} />
+				<SSRProvider>
+					<Layout user={user} />
+				</SSRProvider>
 				<Scripts />
 				<LiveReload />
 			</body>

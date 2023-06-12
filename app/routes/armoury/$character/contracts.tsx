@@ -1,7 +1,7 @@
 import { CircleStackIcon, Square2StackIcon } from "@heroicons/react/24/outline"
 import { Form, useLoaderData, useNavigation } from "@remix-run/react"
-import type { ActionArgs, LoaderArgs } from "@remix-run/server-runtime"
-import { json } from "@remix-run/server-runtime"
+import type { ActionArgs, LoaderArgs } from "@remix-run/node"
+import { json } from "@remix-run/node"
 import { useEffect, useState } from "react"
 import { z } from "zod"
 import { zx } from "zodix"
@@ -15,8 +15,6 @@ import {
 } from "~/services/darktide.server"
 import { classnames } from "~/utils/classnames"
 
-export let handle = "contracts"
-
 export async function action({ params, request }: ActionArgs) {
 	let { character: characterId } = zx.parseParams(params, {
 		character: z.string(),
@@ -26,7 +24,6 @@ export async function action({ params, request }: ActionArgs) {
 	})
 
 	let auth = await getAuthToken(user.id)
-	if (!auth) return json({ error: "No auth" })
 
 	let formData = await request.formData()
 	let taskId = formData.get("reroll-task")?.toString()
@@ -79,51 +76,47 @@ export async function loader({ params, request }: LoaderArgs) {
 
 	let auth = await getAuthToken(user.id)
 
-	if (auth) {
-		let [contract, wallet] = await Promise.all([
-			getCharacterContracts(auth, characterId, true),
-			getCharacterWallet(auth, characterId),
-		])
-		if (!contract) {
-			return json(null)
-		}
-
-		let tasks = contract.tasks.map((task) => {
-			let description = criteriaToDescription(task.criteria)
-			let reward = `${task.reward.amount} ${task.reward.type}`
-
-			return {
-				id: task.id,
-				description,
-				reward,
-				difficulty: task.criteria.complexity,
-				complete: task.fulfilled,
-				rewarded: task.rewarded,
-				current: task.criteria.value,
-				target: task.criteria.count,
-				percentage: (task.criteria.value / task.criteria.count) * 100,
-			}
-		})
-
-		let numComplete = tasks.reduce(
-			(sum, task) => sum + (task.complete ? 1 : 0),
-			0
-		)
-
-		return json({
-			tasks,
-			refreshTime: contract.refreshTime,
-			numComplete,
-			allComplete: numComplete === tasks.length,
-			percentage: (numComplete / tasks.length) * 100,
-			completionReward: `${contract.reward.amount} ${contract.reward.type}`,
-			rerollCost: `${contract.rerollCost.amount} ${contract.rerollCost.type}`,
-			contractRewarded: contract.fulfilled,
-			wallet,
-		})
+	let [contract, wallet] = await Promise.all([
+		getCharacterContracts(auth, characterId, true),
+		getCharacterWallet(auth, characterId),
+	])
+	if (!contract) {
+		return json(null)
 	}
 
-	return json(null)
+	let tasks = contract.tasks.map((task) => {
+		let description = criteriaToDescription(task.criteria)
+		let reward = `${task.reward.amount} ${task.reward.type}`
+
+		return {
+			id: task.id,
+			description,
+			reward,
+			difficulty: task.criteria.complexity,
+			complete: task.fulfilled,
+			rewarded: task.rewarded,
+			current: task.criteria.value,
+			target: task.criteria.count,
+			percentage: (task.criteria.value / task.criteria.count) * 100,
+		}
+	})
+
+	let numComplete = tasks.reduce(
+		(sum, task) => sum + (task.complete ? 1 : 0),
+		0
+	)
+
+	return json({
+		tasks,
+		refreshTime: contract.refreshTime,
+		numComplete,
+		allComplete: numComplete === tasks.length,
+		percentage: (numComplete / tasks.length) * 100,
+		completionReward: `${contract.reward.amount} ${contract.reward.type}`,
+		rerollCost: `${contract.rerollCost.amount} ${contract.rerollCost.type}`,
+		contractRewarded: contract.fulfilled,
+		wallet,
+	})
 }
 
 let difficultyBorder: Record<string, string> = {

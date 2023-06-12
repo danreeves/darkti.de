@@ -15,5 +15,8 @@ module.exports = {
 			xs: "400px",
 		},
 	},
-	plugins: [require("@tailwindcss/forms")],
+	plugins: [
+		require("@tailwindcss/forms"),
+		require("@thoughtbot/tailwindcss-aria-attributes"),
+	],
 }

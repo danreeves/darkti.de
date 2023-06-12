@@ -39,7 +39,3 @@ authenticator.use(
 		}
 	)
 )
-
-
-
-

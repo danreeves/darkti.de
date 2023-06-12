@@ -1,4 +1,4 @@
-import type { LoaderArgs } from "@remix-run/node"
+import { LoaderArgs, redirect } from "@remix-run/node"
 import { json } from "@remix-run/node"
 import { NavLink, Outlet, useLoaderData, useMatches } from "@remix-run/react"
 import { getAuthToken } from "~/data/authtoken.server"
@@ -10,65 +10,56 @@ import { getAccountSummary } from "~/services/darktide.server"
 let navLinks = [
 	{ label: "Trait collection", link: "traits" },
 	{ label: "Mission board", link: "mission-board" },
-	{ label: "Server Ping", link: "latencies" },
 ]
 
-export let loader = async ({ request }: LoaderArgs) => {
+export let loader = async ({ request, params }: LoaderArgs) => {
 	let user = await authenticator.isAuthenticated(request, {
 		failureRedirect: "/login",
 	})
-
 	let auth = await getAuthToken(user.id)
-	if (!auth) {
-		return json({ noAuth: true, characters: [] })
+	let account = await getAccountSummary(auth)
+
+	let firstCharId = account?.summary.characters[0].id
+	if (firstCharId && !params.character) {
+		return redirect(`/armoury/${firstCharId}/inventory`)
 	}
 
-	let account = await getAccountSummary(auth)
-	return json({ noAuth: false, characters: account?.summary.characters ?? [] })
+	return json({ characters: account?.summary.characters ?? [] })
 }
-export default function Codex() {
-	let { noAuth, characters } = useLoaderData<typeof loader>()
+
+export default function Armoury() {
+	let { characters } = useLoaderData<typeof loader>()
 
 	let matches = useMatches()
-	let pageHandle = matches.at(-1)?.handle ?? "inventory"
-
-	if (noAuth) {
-		return (
-			<div className="mx-auto flex max-w-7xl place-content-center px-4 pb-4 pt-6 sm:px-8 lg:px-10">
-				<div
-					className="flex rounded-lg bg-yellow-100 p-4 text-sm text-yellow-700"
-					role="alert"
-				>
-					<ExclamationCircleIcon
-						className="mr-3 inline h-5 w-5"
-						aria-hidden="true"
-					/>
-					<div>
-						<span className="font-medium">No Auth Token Found!</span> You need
-						to authorise your account with the game before you can access this
-						interface.
-					</div>
-				</div>
-			</div>
-		)
-	}
+	let currentPage = matches.at(-1)
+	let currentRoute = currentPage?.id.replace("routes", "") ?? ""
+	let currentRouteParams = currentPage?.params
 
 	return (
 		<>
 			<div className="relative z-40 w-full bg-white p-4 shadow">
 				<div className="mx-auto flex max-w-7xl justify-between">
 					<nav>
-						{characters.map((char) => (
-							<NavLink
-								key={char.id}
-								to={`${char.id}/${pageHandle}`}
-								className={({ isActive }) =>
-									classnames("p-4 ", isActive ? "font-bold" : "")
-								}
-							>
-								{char.name}
-							</NavLink>
-						))}
+						{characters.map((char) => {
+							let route = currentRoute
+							let params = { ...currentRouteParams, character: char.id }
+
+							for (const [key, value] of Object.entries(params)) {
+								route = route.replace(`$${key}`, value)
+							}
+
+							return (
+								<NavLink
+									key={char.id}
+									to={route}
+									className={({ isActive }) =>
+										classnames("p-4 ", isActive ? "font-bold" : "")
+									}
+								>
+									{char.name}
+								</NavLink>
+							)
+						})}
 					</nav>
 
 					<nav>
@@ -88,5 +79,26 @@ export default function Codex() {
 			</div>
 			<Outlet />
 		</>
+	)
+}
+
+export function CatchBoundary() {
+	return (
+		<div className="mx-auto flex max-w-7xl place-content-center px-4 pb-4 pt-6 sm:px-8 lg:px-10">
+			<div
+				className="flex rounded-lg bg-yellow-100 p-4 text-sm text-yellow-700"
+				role="alert"
+			>
+				<ExclamationCircleIcon
+					className="mr-3 inline h-5 w-5"
+					aria-hidden="true"
+				/>
+				<div>
+					<span className="font-medium">No Auth Token Found!</span> You need to
+					authorise your account with the game before you can access this
+					interface.
+				</div>
+			</div>
+		</div>
 	)
 }

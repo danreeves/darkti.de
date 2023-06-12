@@ -274,6 +274,8 @@ let LatenciesSchema = z.object({
 		z.object({
 			region: z.string(),
 			httpLatencyUrl: z.string(),
+			pingTarget: z.string(),
+			fastPingTarget: z.string(),
 		})
 	),
 })
@@ -434,20 +436,20 @@ export async function getAccountTrait(auth: AuthToken, traitCategory: string) {
 		let result = AccountTraitSchema.safeParse(data)
 		if (result.success) {
 			let { numRanks, stickerBook } = result.data
-			return Object.entries(stickerBook).map(([trait, bitmask]) => {
-				let ranks: ("seen" | "unseen" | "invalid")[] = []
+			return Object.entries(stickerBook).map(([name, bitmask]) => {
+				let tiers: ("OWNED" | "UNOWNED" | "INVALID")[] = []
 				for (let i = 0; i <= numRanks - 1; i++) {
-					if (((bitmask >> (i + 1 + 3)) & 1) === 0) {
-						ranks[i] = "invalid"
-					} else if (((bitmask >> (i + 1 - 1)) & 1) === 1) {
-						ranks[i] = "seen"
+					if (((bitmask >> (i + 4)) & 1) === 0) {
+						tiers[i] = "INVALID"
+					} else if (((bitmask >> i) & 1) === 1) {
+						tiers[i] = "OWNED"
 					} else {
-						ranks[i] = "unseen"
+						tiers[i] = "UNOWNED"
 					}
 				}
 				return {
-					trait,
-					ranks,
+					name,
+					tiers,
 				}
 			})
 		}
@@ -510,7 +512,7 @@ export async function getCharacterStore(
 	auth: AuthToken,
 	characterArchetype: string,
 	characterId: string,
-	storeType = "credits"
+	storeType: "credits" | "marks"
 ) {
 	let url = `https://bsp-td-prod.atoma.cloud/store/storefront/${storeType}_store_${characterArchetype}?accountId=${auth.sub}&characterId=${characterId}&personal=true`
 	let response = await fetch(url, {
