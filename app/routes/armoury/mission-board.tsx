@@ -14,6 +14,7 @@ import {
 } from "~/data/missionTemplates.server"
 import { t } from "~/data/localization.server"
 import { Img, imgUrl } from "~/components/Img"
+import type { AuthToken } from "@prisma/client"
 
 function sideObjectiveToType(sideObjectiveName: string) {
 	if (sideObjectiveName === "side_mission_grimoire") {
@@ -32,13 +33,7 @@ function sideObjectiveToType(sideObjectiveName: string) {
 	return "unknown"
 }
 
-export async function loader({ request }: LoaderArgs) {
-	let user = await authenticator.isAuthenticated(request, {
-		failureRedirect: "/login",
-	})
-
-	let auth = await getAuthToken(user.id)
-
+export async function getMissionBoardResponse(auth: AuthToken) {
 	let data = await getMissions(auth)
 	if (!data) {
 		return redirect("/armoury")
@@ -82,6 +77,16 @@ export async function loader({ request }: LoaderArgs) {
 		.filter(Boolean)
 
 	return json({ missions })
+}
+
+export async function loader({ request }: LoaderArgs) {
+	let user = await authenticator.isAuthenticated(request, {
+		failureRedirect: "/login",
+	})
+
+	let auth = await getAuthToken(user.id)
+
+	return getMissionBoardResponse(auth)
 }
 
 export default function Missions() {
