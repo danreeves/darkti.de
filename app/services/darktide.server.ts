@@ -213,7 +213,7 @@ export async function getCharacterWallet(auth: AuthToken, characterId: string) {
 	}
 }
 
-export let MissionBoardSchema = z.object({
+let MissionBoardSchema = z.object({
 	missions: z.array(
 		z.object({
 			id: z.string(),
@@ -226,7 +226,7 @@ export let MissionBoardSchema = z.object({
 			credits: z.number(),
 			xp: z.number(),
 			extraRewards: z.object({
-				circumstances: z
+				circumstance: z
 					.object({
 						credits: z.number(),
 						xp: z.number(),
@@ -246,6 +246,7 @@ export let MissionBoardSchema = z.object({
 			requiredLevel: z.number(),
 			missionGiver: z.string(),
 			displayIndex: z.number(),
+			sideMission: z.string().optional(),
 		})
 	),
 	refreshAt: z.string(),
@@ -265,6 +266,8 @@ export async function getMissions(auth: AuthToken) {
 		let result = MissionBoardSchema.safeParse(data)
 		if (result.success) {
 			return result.data
+		} else {
+			console.log(result.error)
 		}
 	}
 }

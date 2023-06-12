@@ -1,55 +1,85 @@
 import type { LoaderArgs } from "@remix-run/node"
-import type { z } from "zod"
-import type { MissionBoardSchema } from "~/services/darktide.server"
-import { json } from "@remix-run/node"
+import { json, redirect } from "@remix-run/node"
 import { useLoaderData } from "@remix-run/react"
 import { reverse, sortBy } from "lodash-es"
 import { getAuthToken } from "~/data/authtoken.server"
 import { authenticator } from "~/services/auth.server"
 import { getMissions } from "~/services/darktide.server"
 import { MissionTimer } from "~/components/MissionTimer"
-import missionLoc from "~/data/exported/mission_localization_en.json"
-import missionInfo from "~/data/exported/mission_info.json"
-import circumstanceInfo from "~/data/exported/circumstance_info.json"
+import {
+	getMissionTemplate,
+	CircumstanceTemplates,
+	MissionTypes,
+} from "~/data/missionTemplates.server"
+import { t } from "~/data/localization.server"
+import { Img, imgUrl } from "~/components/Img"
 
-const img_url = (src: string): string => {
-	return `https://darktide-images.vercel.app/_vercel/image?q=100&url=pngs/${src}.png&w=512`
-}
-
-const loc = (key: string): string => {
-	return missionLoc[key as keyof typeof missionLoc] || ""
-}
-
-const determineSecondary = (
-	mission: z.infer<typeof MissionBoardSchema>["missions"][number]
-): string => {
-	if (!mission.extraRewards.sideMission) {
-		return "none"
+function sideObjectiveToType(sideObjectiveName: string) {
+	if (sideObjectiveName === "side_mission_grimoire") {
+		return "grimoire"
 	}
 
-	const rewardRatio = mission.extraRewards.sideMission.credits / mission.credits
-	const SCRIPTURE_RATIO = 0.2
-	const GRIMOIRE_RATIO = 0.6
+	if (sideObjectiveName === "side_mission_tome") {
+		return "scripture"
+		// return "tome"
+	}
 
-	return rewardRatio > (SCRIPTURE_RATIO + GRIMOIRE_RATIO) / 2
-		? "grimoire"
-		: "scripture"
+	if (sideObjectiveName === "side_mission_consumable") {
+		return "relic"
+	}
+
+	return "unknown"
 }
 
-export let loader = async ({ request }: LoaderArgs) => {
+export async function loader({ request }: LoaderArgs) {
 	let user = await authenticator.isAuthenticated(request, {
 		failureRedirect: "/login",
 	})
 
 	let auth = await getAuthToken(user.id)
 
-	if (auth) {
-		let { missions } = (await getMissions(auth)) || { missions: [] }
-		let sortedMissions = reverse(sortBy(missions, ["challenge", "resistance"]))
-		return json({ missions: sortedMissions })
+	let data = await getMissions(auth)
+	if (!data) {
+		return redirect("/armoury")
 	}
+	let { missions: rawMissions } = data
+	let sortedMissions = reverse(sortBy(rawMissions, ["challenge", "resistance"]))
+	let missions = sortedMissions
+		.map((mission) => {
+			let template = getMissionTemplate(mission.map)
+			if (!template) return undefined
 
-	return json({ missions: [] })
+			let circumstance = CircumstanceTemplates[mission.circumstance]
+			let missionType = MissionTypes[template.type]
+
+			return {
+				id: mission.id,
+				texture: template.texture_medium + ".png",
+				type: t(MissionTypes[template.type]?.name ?? "unknown"),
+				challenge: mission.challenge,
+				name: t(template.display_name),
+				zone: template.zone_id, // translate this
+				description: t(template.description),
+				circumstance: circumstance
+					? {
+							name: t(circumstance.display_name),
+							icon: circumstance.icon.replace("materials", "textures") + ".png", // TODO: move replace to Exporter
+					  }
+					: null,
+				credits: mission.credits,
+				extraRewards: mission.extraRewards,
+				xp: mission.xp,
+				start: parseInt(mission.start, 10),
+				end: parseInt(mission.expiry, 10),
+				missionType: {
+					icon: missionType?.icon.replace("materials", "textures"), // TODO: move replace to Exporter
+				},
+				sideMission: mission.sideMission,
+			}
+		})
+		.filter(Boolean)
+
+	return json({ missions })
 }
 
 export default function Missions() {
@@ -65,15 +95,13 @@ export default function Missions() {
 							key={mission.id}
 							className="relative h-56 w-96 rounded font-montserrat text-green-100 drop-shadow-lg"
 						>
-							<img
-								src={img_url(
-									`content/ui/textures/missions/${mission.map}_medium`
-								)}
-								alt=""
+							<Img
+								width={512}
+								src={mission.texture}
 								className="absolute left-0 top-0 h-full w-full rounded object-cover"
 							/>
 
-							<div className="h-full transition-opacity hover:opacity-20">
+							<div className="h-full transition-opacity">
 								<div
 									className="relative h-full w-full pb-2 pl-9"
 									style={{
@@ -84,14 +112,7 @@ export default function Missions() {
 									}}
 								>
 									<div className="flex h-8 flex-row items-center justify-between text-sm">
-										<div className="uppercase">
-											{loc(
-												`loc_mission_type_${
-													missionInfo[mission.map as keyof typeof missionInfo]
-														.mission_type
-												}_name`
-											)}
-										</div>
+										<div className="uppercase">{mission.type}</div>
 
 										<div className="mr-2 mt-2 flex h-6 w-full justify-end gap-[2px]">
 											{Array(mission.challenge).fill(
@@ -104,49 +125,25 @@ export default function Missions() {
 									</div>
 
 									<div className="-mt-1 pr-4">
-										<h2 className="font-bold !opacity-100">
-											{loc(`loc_mission_name_${mission.map}`)}
-										</h2>
-										<div className="-mt-1 text-xs">
-											{loc(
-												`loc_zone_${
-													missionInfo[mission.map as keyof typeof missionInfo]
-														.zone_id
-												}`
-											)}
-										</div>
+										<h2 className="font-bold !opacity-100">{mission.name}</h2>
+										<div className="-mt-1 text-xs">{mission.zone}</div>
 
 										<p className="invisible relative mt-2 text-xs xs:visible">
-											{loc(
-												missionInfo[mission.map as keyof typeof missionInfo]
-													.mission_description
-											)}
+											{mission.description}
 										</p>
 									</div>
 								</div>
 
 								<div className="absolute left-9 top-32 text-xs">
-									{mission.circumstance !== "default" ? (
+									{mission.circumstance != null ? (
 										<div className="align-text-middle relative pt-[0.375rem] text-sm text-yellow-400">
-											{loc(
-												circumstanceInfo[
-													mission.circumstance as keyof typeof circumstanceInfo
-												].display_name
-											)}
+											{mission.circumstance.name}
 											<div className="absolute -left-12 -top-1 h-10 w-10 border border-yellow-400 bg-gray-900 ">
 												<div
 													className="absolute left-0 top-0 h-[124px] w-[124px] bg-yellow-400"
 													style={{
-														WebkitMaskImage: `url(${img_url(
-															circumstanceInfo[
-																mission.circumstance as keyof typeof circumstanceInfo
-															].icon.replace("materials", "textures")
-														)})`,
-														maskImage: `url(${img_url(
-															circumstanceInfo[
-																mission.circumstance as keyof typeof circumstanceInfo
-															].icon.replace("materials", "textures")
-														)})`,
+														WebkitMaskImage: `url(https://darktide-images.vercel.app/_vercel/image?q=100&w=128&url=pngs/${mission.circumstance.icon})`,
+														maskImage: `url(https://darktide-images.vercel.app/_vercel/image?q=100&w=128&url=pngs/${mission.circumstance.icon})`,
 														transformOrigin: "top left",
 														transform:
 															"scale(calc(40 / 124 * 0.8)) translate(10%, 10%)",
@@ -170,11 +167,13 @@ export default function Missions() {
 													aria-label="Credits"
 													className="absolute top-1 h-16 w-16 bg-green-100"
 													style={{
-														WebkitMaskImage: `url(${img_url(
-															"glyphs/objective_credits"
+														WebkitMaskImage: `url(${imgUrl(
+															"glyphs/objective_credits.png",
+															128
 														)})`,
-														maskImage: `url(${img_url(
-															"glyphs/objective_credits"
+														maskImage: `url(${imgUrl(
+															"glyphs/objective_credits.png",
+															128
 														)})`,
 														transformOrigin: "top left",
 														transform: "scale(calc(16 / 64))",
@@ -182,7 +181,7 @@ export default function Missions() {
 												/>
 												<span className="ml-6 inline-block">
 													{mission.credits +
-														(mission.extraRewards?.circumstances?.credits || 0)}
+														(mission.extraRewards?.circumstance?.credits || 0)}
 												</span>
 
 												{mission.extraRewards?.sideMission && (
@@ -196,17 +195,21 @@ export default function Missions() {
 													aria-label="Experience"
 													className="absolute top-1 h-16 w-16 bg-green-100"
 													style={{
-														WebkitMaskImage: `url(${img_url(
-															"glyphs/objective_xp"
+														WebkitMaskImage: `url(${imgUrl(
+															"glyphs/objective_xp.png",
+															128
 														)})`,
-														maskImage: `url(${img_url("glyphs/objective_xp")})`,
+														maskImage: `url(${imgUrl(
+															"glyphs/objective_xp.png",
+															128
+														)})`,
 														transformOrigin: "top left",
 														transform: "scale(calc(16 / 64))",
 													}}
 												/>
 												<span className="ml-5 inline-block">
 													{mission.xp +
-														(mission.extraRewards?.circumstances?.xp || 0)}
+														(mission.extraRewards?.circumstance?.xp || 0)}
 												</span>
 												{mission.extraRewards?.sideMission && (
 													<div className="relative -mt-1 ml-5 text-xs">
@@ -215,40 +218,34 @@ export default function Missions() {
 												)}
 											</li>
 										</ul>
-										{mission?.extraRewards?.sideMission && (
+										{mission.sideMission ? (
 											<div className="absolute -left-12 -top-1 h-10 w-10 bg-gray-900 p-[2px]">
-												<img
-													src={img_url(
-														`content/ui/textures/icons/pocketables/hud/small/party_${determineSecondary(
-															mission
-														)}`
-													)}
-													alt={loc(
-														`loc_objective_side_mission_${determineSecondary(
-															mission
-														)}_header`
-													)}
+												<Img
+													src={`content/ui/textures/icons/pocketables/hud/small/party_${sideObjectiveToType(
+														mission.sideMission
+													)}.png`}
+													width={128}
+													// TODO: scripts\settings\mission_objective\templates\side_mission_objective_template.lua
+													// alt={loc(
+													// 	`loc_objective_side_mission_${sideObjectiveToType(
+													// 		mission.sideMission
+													// 	)}_header`
+													// )}
 													className="border border-solid border-gray-300 p-1"
 												/>
 											</div>
-										)}
+										) : null}
 									</div>
 								</div>
-								<MissionTimer
-									start={parseInt(mission.start, 10)}
-									end={parseInt(mission.expiry, 10)}
-								/>
+								<MissionTimer start={mission.start} end={mission.end} />
 								<div className="absolute -left-3 -top-2 h-10 w-10 bg-gray-900 p-[2px]">
-									<img
-										src={img_url(
-											`content/ui/textures/icons/mission_types/mission_type_${
-												missionInfo[mission.map as keyof typeof missionInfo]
-													.mission_type
-											}`
-										)}
-										alt=""
-										className="border border-solid border-gray-300 p-1"
-									/>
+									{mission.missionType ? (
+										<Img
+											width={128}
+											src={mission.missionType.icon + ".png"}
+											className="border border-solid border-gray-300 p-1"
+										/>
+									) : null}
 								</div>
 							</div>
 						</div>

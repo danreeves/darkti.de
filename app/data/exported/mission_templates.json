@@ -1,0 +1,230 @@
+[
+	{
+		"zone_id": "dust",
+		"texture_big": "content/ui/textures/missions/dm_propaganda_big",
+		"description": "loc_mission_board_main_objective_propaganda_description",
+		"type": "04",
+		"objectives": "dm_propaganda",
+		"texture_small": "content/ui/textures/missions/dm_propaganda_small",
+		"coordinates": "loc_mission_coordinates_dm_propaganda",
+		"display_name": "loc_mission_name_dm_propaganda",
+		"name": "dm_propaganda",
+		"texture_medium": "content/ui/textures/missions/dm_propaganda_medium"
+	},
+	{
+		"zone_id": "watertown",
+		"texture_big": "content/ui/textures/missions/hm_cartel_big",
+		"description": "loc_mission_board_main_objective_cartel_description",
+		"type": "06",
+		"objectives": "hm_cartel",
+		"texture_small": "content/ui/textures/missions/hm_cartel_small",
+		"coordinates": "loc_mission_coordinates_hm_cartel",
+		"display_name": "loc_mission_name_hm_cartel",
+		"name": "hm_cartel",
+		"texture_medium": "content/ui/textures/missions/hm_cartel_medium"
+	},
+	{
+		"zone_id": "tank_foundry",
+		"texture_big": "content/ui/textures/missions/dm_forge_big",
+		"description": "loc_mission_board_main_objective_darkforge_description",
+		"type": "05",
+		"objectives": "dm_forge",
+		"texture_small": "content/ui/textures/missions/dm_forge_small",
+		"coordinates": "loc_mission_coordinates_dm_forge",
+		"display_name": "loc_mission_name_dm_forge",
+		"name": "dm_forge",
+		"texture_medium": "content/ui/textures/missions/dm_forge_medium"
+	},
+	{
+		"zone_id": "throneside",
+		"texture_big": "content/ui/textures/missions/cm_archives_big",
+		"description": "loc_mission_board_main_objective_archives_description",
+		"type": "06",
+		"objectives": "cm_archives",
+		"texture_small": "content/ui/textures/missions/cm_archives_small",
+		"coordinates": "loc_mission_coordinates_cm_archives",
+		"display_name": "loc_mission_name_cm_archives",
+		"name": "cm_archives",
+		"texture_medium": "content/ui/textures/missions/cm_archives_medium"
+	},
+	{
+		"zone_id": "throneside",
+		"texture_big": "content/ui/textures/missions/hm_complex_big",
+		"description": "loc_mission_board_main_objective_complex_description",
+		"type": "06",
+		"objectives": "hm_complex",
+		"texture_small": "content/ui/textures/missions/hm_complex_small",
+		"coordinates": "loc_mission_coordinates_hm_complex",
+		"display_name": "loc_mission_name_hm_complex",
+		"name": "hm_complex",
+		"texture_medium": "content/ui/textures/missions/hm_complex_medium"
+	},
+	{
+		"zone_id": "transit",
+		"texture_big": "content/ui/textures/missions/km_station_big",
+		"description": "loc_mission_board_main_objective_trainstation_description",
+		"type": "02",
+		"objectives": "km_station",
+		"texture_small": "content/ui/textures/missions/km_station_small",
+		"coordinates": "loc_mission_coordinates_km_station",
+		"display_name": "loc_mission_name_km_station",
+		"name": "km_station",
+		"texture_medium": "content/ui/textures/missions/km_station_medium"
+	},
+	{
+		"zone_id": "throneside",
+		"texture_big": "content/ui/textures/missions/fm_resurgence_big",
+		"description": "loc_mission_board_main_objective_resurgence_description",
+		"type": "05",
+		"objectives": "fm_resurgence",
+		"texture_small": "content/ui/textures/missions/fm_resurgence_small",
+		"coordinates": "loc_mission_coordinates_fm_resurgence",
+		"display_name": "loc_mission_name_fm_resurgence",
+		"name": "fm_resurgence",
+		"texture_medium": "content/ui/textures/missions/fm_resurgence_medium"
+	},
+	{
+		"zone_id": "training_grounds",
+		"objectives": "training_grounds",
+		"display_name": "loc_mission_name_tg_basic_combat_01",
+		"name": "om_basic_combat_01"
+	},
+	{
+		"zone_id": "watertown",
+		"texture_big": "content/ui/textures/missions/dm_stockpile_big",
+		"description": "loc_mission_board_main_objective_waterstockpile_description",
+		"type": "05",
+		"objectives": "dm_stockpile",
+		"texture_small": "content/ui/textures/missions/dm_stockpile_small",
+		"coordinates": "loc_mission_coordinates_dm_stockpile",
+		"display_name": "loc_mission_name_dm_stockpile",
+		"name": "dm_stockpile",
+		"texture_medium": "content/ui/textures/missions/dm_stockpile_medium"
+	},
+	{
+		"zone_id": "watertown",
+		"texture_big": "content/ui/textures/missions/km_enforcer_big",
+		"description": "loc_mission_board_main_objective_enforcer_description",
+		"type": "02",
+		"objectives": "km_enforcer",
+		"texture_small": "content/ui/textures/missions/km_enforcer_small",
+		"coordinates": "loc_mission_coordinates_km_enforcer",
+		"display_name": "loc_mission_name_km_enforcer",
+		"name": "km_enforcer",
+		"texture_medium": "content/ui/textures/missions/km_enforcer_medium"
+	},
+	{
+		"zone_id": "transit",
+		"texture_big": "content/ui/textures/missions/cm_habs_big",
+		"description": "loc_mission_board_main_objective_habblock_description",
+		"type": "03",
+		"objectives": "cm_habs",
+		"texture_small": "content/ui/textures/missions/cm_habs_small",
+		"coordinates": "loc_mission_coordinates_cm_habs",
+		"display_name": "loc_mission_name_cm_habs",
+		"name": "cm_habs",
+		"texture_medium": "content/ui/textures/missions/cm_habs_medium"
+	},
+	{
+		"zone_id": "prologue",
+		"objectives": "prologue",
+		"display_name": "loc_mission_name_prologue",
+		"name": "prologue"
+	},
+	{
+		"zone_id": "hub",
+		"objectives": "hub",
+		"display_name": "loc_mission_name_hub_ship",
+		"name": "hub_ship"
+	},
+	{
+		"zone_id": "tank_foundry",
+		"texture_big": "content/ui/textures/missions/fm_cargo_big",
+		"description": "loc_mission_board_main_objective_cargo_description",
+		"type": "01",
+		"objectives": "fm_cargo",
+		"texture_small": "content/ui/textures/missions/fm_cargo_small",
+		"coordinates": "loc_mission_coordinates_fm_cargo",
+		"display_name": "loc_mission_name_fm_cargo",
+		"name": "fm_cargo",
+		"texture_medium": "content/ui/textures/missions/fm_cargo_medium"
+	},
+	{
+		"zone_id": "dust",
+		"texture_big": "content/ui/textures/missions/hm_strain_big",
+		"description": "loc_mission_board_main_objective_strain_description",
+		"type": "04",
+		"objectives": "hm_strain",
+		"texture_small": "content/ui/textures/missions/hm_strain_small",
+		"coordinates": "loc_mission_coordinates_hm_strain",
+		"display_name": "loc_mission_name_hm_strain",
+		"name": "hm_strain",
+		"texture_medium": "content/ui/textures/missions/hm_strain_medium"
+	},
+	{
+		"zone_id": "hub",
+		"objectives": "onboarding",
+		"display_name": "loc_mission_name_om_hub_01",
+		"name": "om_hub_01"
+	},
+	{
+		"zone_id": "training_grounds",
+		"objectives": "training_grounds",
+		"display_name": "loc_sg_enter_sg",
+		"name": "tg_shooting_range"
+	},
+	{
+		"zone_id": "hub",
+		"objectives": "onboarding",
+		"display_name": "loc_mission_name_om_hub_02",
+		"name": "om_hub_02"
+	},
+	{
+		"zone_id": "transit",
+		"texture_big": "content/ui/textures/missions/lm_rails_big",
+		"description": "loc_mission_board_main_objective_rails_description",
+		"type": "01",
+		"objectives": "lm_rails",
+		"texture_small": "content/ui/textures/missions/lm_rails_small",
+		"coordinates": "loc_mission_coordinates_lm_rails",
+		"display_name": "loc_mission_name_lm_rails",
+		"name": "lm_rails",
+		"texture_medium": "content/ui/textures/missions/lm_rails_medium"
+	},
+	{
+		"zone_id": "dust",
+		"texture_big": "content/ui/textures/missions/lm_scavenge_big",
+		"description": "loc_mission_board_main_objective_scavenge_description",
+		"type": "01",
+		"objectives": "lm_scavenge",
+		"texture_small": "content/ui/textures/missions/lm_scavenge_small",
+		"coordinates": "loc_mission_coordinates_lm_scavenge",
+		"display_name": "loc_mission_name_lm_scavenge",
+		"name": "lm_scavenge",
+		"texture_medium": "content/ui/textures/missions/lm_scavenge_medium"
+	},
+	{
+		"zone_id": "tank_foundry",
+		"texture_big": "content/ui/textures/missions/lm_cooling_big",
+		"description": "loc_mission_board_main_objective_cooling_description",
+		"type": "07",
+		"objectives": "lm_cooling",
+		"texture_small": "content/ui/textures/missions/lm_cooling_small",
+		"coordinates": "loc_mission_coordinates_lm_cooling",
+		"display_name": "loc_mission_name_lm_cooling",
+		"name": "lm_cooling",
+		"texture_medium": "content/ui/textures/missions/lm_cooling_medium"
+	},
+	{
+		"zone_id": "transit",
+		"texture_big": "content/ui/textures/missions/dm_rise_big",
+		"description": "loc_mission_board_main_objective_rise_description",
+		"type": "01",
+		"objectives": "dm_rise",
+		"texture_small": "content/ui/textures/missions/dm_rise_small",
+		"coordinates": "loc_mission_coordinates_dm_rise",
+		"display_name": "loc_mission_name_dm_rise",
+		"name": "dm_rise",
+		"texture_medium": "content/ui/textures/missions/dm_rise_medium"
+	}
+]

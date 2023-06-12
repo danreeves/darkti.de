@@ -31,10 +31,12 @@ export const filterBySchema = memoize(_filterBySchema)
  * @param wordsToReplace - Object with keys of the tokens and the replacement values {replacekey: replacevalue, replacekey2: replacevalue2}
  * @returns  the processed string
  */
-export function replaceAll(sentence : string, wordsToReplace : {[key:string]: string} ) {
+export function replaceAll(
+	sentence: string,
+	wordsToReplace: { [key: string]: string }
+) {
 	return Object.keys(wordsToReplace).reduce(
-	  (f, s, i) =>
-		`${f}`.replace(new RegExp(s, 'ig'), wordsToReplace[s]),
+		(f, s, i) => `${f}`.replace(new RegExp(s, "ig"), wordsToReplace[s]),
 		sentence
 	)
-  }
+}

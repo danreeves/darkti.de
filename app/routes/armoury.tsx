@@ -1,4 +1,5 @@
-import { LoaderArgs, redirect } from "@remix-run/node"
+import type { LoaderArgs } from "@remix-run/node"
+import { redirect } from "@remix-run/node"
 import { json } from "@remix-run/node"
 import { NavLink, Outlet, useLoaderData, useMatches } from "@remix-run/react"
 import { getAuthToken } from "~/data/authtoken.server"
@@ -19,10 +20,10 @@ export let loader = async ({ request, params }: LoaderArgs) => {
 	let auth = await getAuthToken(user.id)
 	let account = await getAccountSummary(auth)
 
-	let firstCharId = account?.summary.characters[0].id
-	if (firstCharId && !params.character) {
-		return redirect(`/armoury/${firstCharId}/inventory`)
-	}
+	// let firstCharId = account?.summary.characters[0].id
+	// if (firstCharId && !params.character) {
+	// 	return redirect(`/armoury/${firstCharId}/inventory`)
+	// }
 
 	return json({ characters: account?.summary.characters ?? [] })
 }
@@ -84,7 +85,7 @@ export default function Armoury() {
 
 export function CatchBoundary() {
 	return (
-		<div className="mx-auto flex max-w-7xl place-content-center px-4 pb-4 pt-6 sm:px-8 lg:px-10">
+		<div className="sm:px-8 lg:px-10 mx-auto flex max-w-7xl place-content-center px-4 pb-4 pt-6">
 			<div
 				className="flex rounded-lg bg-yellow-100 p-4 text-sm text-yellow-700"
 				role="alert"
