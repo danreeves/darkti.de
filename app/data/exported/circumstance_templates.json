@@ -1,0 +1,244 @@
+{
+	"hunting_grounds_less_resistance_01": {
+		"happening_display_name": "loc_happening_hunting_grounds",
+		"display_name": "loc_circumstance_hunting_grounds_less_resistance_title",
+		"icon": "content/ui/materials/icons/circumstances/hunting_grounds_03",
+		"description": "loc_circumstance_hunting_grounds_less_resistance_description"
+	},
+	"assault_01": {
+		"icon": "content/ui/materials/icons/circumstances/assault_01",
+		"favourable_to_players": true,
+		"display_name": "loc_circumstance_assault_title",
+		"happening_display_name": "loc_happening_assault",
+		"description": "loc_circumstance_assault_description"
+	},
+	"speedrun_challenge_01": {
+		"display_name": "loc_circumstance_dummy_more_resistance_title",
+		"icon": "content/ui/materials/icons/circumstances/more_resistance_01",
+		"description": "loc_circumstance_dummy_more_resistance_description"
+	},
+	"more_hordes_01": {
+		"display_name": "loc_circumstance_more_hordes_title",
+		"icon": "content/ui/materials/icons/circumstances/placeholder",
+		"description": "loc_circumstance_more_hordes_description"
+	},
+	"solo_mode_01": {
+		"display_name": "loc_circumstance_dummy_more_resistance_title",
+		"icon": "content/ui/materials/icons/circumstances/more_resistance_01",
+		"description": "loc_circumstance_dummy_more_resistance_description"
+	},
+	"dummy_less_resistance_01": {
+		"display_name": "loc_circumstance_dummy_less_resistance_title",
+		"icon": "content/ui/materials/icons/circumstances/less_resistance_01",
+		"description": "loc_circumstance_dummy_less_resistance_description"
+	},
+	"toxic_gas_01": {
+		"happening_display_name": "loc_happening_ventilation_purge",
+		"display_name": "loc_circumstance_toxic_gas_title",
+		"icon": "content/ui/materials/icons/circumstances/ventilation_purge_01",
+		"description": "loc_circumstance_toxic_gas_description"
+	},
+	"darkness_01": {
+		"happening_display_name": "loc_happening_darkness",
+		"display_name": "loc_circumstance_darkness_title",
+		"icon": "content/ui/materials/icons/circumstances/darkness_01",
+		"description": "loc_circumstance_darkness_description"
+	},
+	"poxwalker_bombers_01": {
+		"happening_display_name": "loc_happening_hunting_grounds",
+		"display_name": "loc_circumstance_hunting_grounds_title",
+		"icon": "content/ui/materials/icons/circumstances/hunting_grounds_01",
+		"description": "loc_circumstance_hunting_grounds_description"
+	},
+	"snipers_01": {
+		"happening_display_name": "loc_happening_hunting_grounds",
+		"display_name": "loc_circumstance_hunting_grounds_title",
+		"icon": "content/ui/materials/icons/circumstances/hunting_grounds_01",
+		"description": "loc_circumstance_hunting_grounds_description"
+	},
+	"waves_of_specials_more_resistance_01": {
+		"display_name": "loc_circumstance_waves_of_specials_more_resistance_title",
+		"icon": "content/ui/materials/icons/circumstances/special_waves_02",
+		"description": "loc_circumstance_waves_of_specials_more_resistance_description"
+	},
+	"only_melee_01": {
+		"display_name": "loc_circumstance_dummy_only_melee_title",
+		"icon": "content/ui/materials/icons/circumstances/more_resistance_01",
+		"description": "loc_circumstance_dummy_only_melee_description"
+	},
+	"stimmed_minions_01": {
+		"happening_display_name": "loc_happening_nurgle_manifestation",
+		"display_name": "loc_circumstance_nurgle_manifestation_title",
+		"icon": "content/ui/materials/icons/circumstances/nurgle_manifestation_01",
+		"description": "loc_circumstance_nurgle_manifestation_description"
+	},
+	"exploration_mode_01": {
+		"display_name": "loc_circumstance_exploration_mode_title",
+		"icon": "content/ui/materials/icons/circumstances/less_resistance_01",
+		"description": "loc_circumstance_exploration_mode_description"
+	},
+	"nurgle_manifestation_01": {
+		"happening_display_name": "loc_happening_nurgle_manifestation",
+		"display_name": "loc_circumstance_nurgle_manifestation_title",
+		"icon": "content/ui/materials/icons/circumstances/nurgle_manifestation_01",
+		"description": "loc_circumstance_nurgle_manifestation_description"
+	},
+	"ventilation_purge_01": {
+		"happening_display_name": "loc_happening_ventilation_purge",
+		"display_name": "loc_circumstance_ventilation_purge_title",
+		"icon": "content/ui/materials/icons/circumstances/ventilation_purge_01",
+		"description": "loc_circumstance_ventilation_purge_description"
+	},
+	"toxic_gas_volumes_01": {
+		"happening_display_name": "loc_happening_ventilation_purge",
+		"display_name": "loc_circumstance_toxic_gas_title",
+		"icon": "content/ui/materials/icons/circumstances/ventilation_purge_01",
+		"description": "loc_circumstance_toxic_gas_description"
+	},
+	"ventilation_purge_with_snipers_more_resistance_01": {
+		"happening_display_name": "loc_happening_ventilation_purge",
+		"display_name": "loc_circumstance_ventilation_purge_with_snipers_more_resistance_title",
+		"icon": "content/ui/materials/icons/circumstances/ventilation_purge_03",
+		"description": "loc_circumstance_ventilation_purge_with_snipers_more_resistance_description"
+	},
+	"less_resistance_01": {
+		"display_name": "loc_circumstance_dummy_less_resistance_title",
+		"icon": "content/ui/materials/icons/circumstances/less_resistance_01",
+		"description": "loc_circumstance_dummy_less_resistance_description"
+	},
+	"hunting_grounds_01": {
+		"happening_display_name": "loc_happening_hunting_grounds",
+		"display_name": "loc_circumstance_hunting_grounds_title",
+		"icon": "content/ui/materials/icons/circumstances/hunting_grounds_01",
+		"description": "loc_circumstance_hunting_grounds_description"
+	},
+	"mutants_01": {
+		"happening_display_name": "loc_happening_hunting_grounds",
+		"display_name": "loc_circumstance_hunting_grounds_title",
+		"icon": "content/ui/materials/icons/circumstances/hunting_grounds_01",
+		"description": "loc_circumstance_hunting_grounds_description"
+	},
+	"darkness_less_resistance_01": {
+		"happening_display_name": "loc_happening_darkness",
+		"display_name": "loc_circumstance_darkness_less_resistance_title",
+		"icon": "content/ui/materials/icons/circumstances/darkness_04",
+		"description": "loc_circumstance_darkness_less_resistance_description"
+	},
+	"hunting_grounds_more_resistance_01": {
+		"happening_display_name": "loc_happening_hunting_grounds",
+		"display_name": "loc_circumstance_hunting_grounds_more_resistance_title",
+		"icon": "content/ui/materials/icons/circumstances/hunting_grounds_02",
+		"description": "loc_circumstance_hunting_grounds_more_resistance_description"
+	},
+	"waves_of_specials_01": {
+		"display_name": "loc_circumstance_waves_of_specials_title",
+		"icon": "content/ui/materials/icons/circumstances/special_waves_01",
+		"description": "loc_circumstance_waves_of_specials_description"
+	},
+	"ember_01": {
+		"happening_display_name": "loc_happening_ventilation_purge",
+		"display_name": "loc_circumstance_ember_title",
+		"icon": "content/ui/materials/icons/circumstances/ventilation_purge_01",
+		"description": "loc_circumstance_ember_description"
+	},
+	"only_ranged_01": {
+		"display_name": "loc_circumstance_dummy_only_ranged_title",
+		"icon": "content/ui/materials/icons/circumstances/more_resistance_01",
+		"description": "loc_circumstance_dummy_only_ranged_description"
+	},
+	"only_melee_no_ammo_01": {
+		"display_name": "loc_circumstance_dummy_only_melee_title",
+		"icon": "content/ui/materials/icons/circumstances/more_resistance_01",
+		"description": "loc_circumstance_dummy_only_melee_description"
+	},
+	"more_witches_01": {
+		"display_name": "loc_circumstance_more_witches_title",
+		"icon": "content/ui/materials/icons/circumstances/placeholder",
+		"description": "loc_circumstance_more_witches_description"
+	},
+	"flash_mission_02": {
+		"display_name": "loc_circumstance_flash_mission_01_title",
+		"icon": "content/ui/materials/icons/circumstances/hunting_grounds_01",
+		"description": "loc_circumstance_flash_mission_01_description"
+	},
+	"min_challenge_max_resistance_01": {
+		"display_name": "loc_circumstance_dummy_more_resistance_title",
+		"icon": "content/ui/materials/icons/circumstances/more_resistance_01",
+		"description": "loc_circumstance_dummy_more_resistance_description"
+	},
+	"more_monsters_01": {
+		"display_name": "loc_circumstance_more_monsters_title",
+		"icon": "content/ui/materials/icons/circumstances/placeholder",
+		"description": "loc_circumstance_more_monsters_description"
+	},
+	"darkness_more_resistance_01": {
+		"happening_display_name": "loc_happening_darkness",
+		"display_name": "loc_circumstance_darkness_more_resistance_title",
+		"icon": "content/ui/materials/icons/circumstances/darkness_03",
+		"description": "loc_circumstance_darkness_more_resistance_description"
+	},
+	"six_one_01": {
+		"display_name": "loc_circumstance_min_resistance_max_challenge_title",
+		"icon": "content/ui/materials/icons/circumstances/more_resistance_01",
+		"description": "loc_circumstance_min_resistance_max_challenge_description"
+	},
+	"flash_mission_01": {
+		"display_name": "loc_circumstance_flash_mission_01_title",
+		"icon": "content/ui/materials/icons/circumstances/hunting_grounds_01",
+		"description": "loc_circumstance_flash_mission_01_description"
+	},
+	"waves_of_specials_less_resistance_01": {
+		"display_name": "loc_circumstance_waves_of_specials_less_resistance_title",
+		"icon": "content/ui/materials/icons/circumstances/special_waves_03",
+		"description": "loc_circumstance_waves_of_specials_less_resistance_description"
+	},
+	"heretical_disruption_01": {
+		"happening_display_name": "loc_happening_nurgle_manifestation",
+		"display_name": "loc_circumstance_nurgle_manifestation_title",
+		"icon": "content/ui/materials/icons/circumstances/nurgle_manifestation_01",
+		"description": "loc_circumstance_nurgle_manifestation_description"
+	},
+	"more_resistance_01": {
+		"display_name": "loc_circumstance_dummy_more_resistance_title",
+		"icon": "content/ui/materials/icons/circumstances/more_resistance_01",
+		"description": "loc_circumstance_dummy_more_resistance_description"
+	},
+	"darkness_hunting_grounds_01": {
+		"happening_display_name": "loc_happening_darkness",
+		"display_name": "loc_circumstance_darkness_hunting_grounds_title",
+		"icon": "content/ui/materials/icons/circumstances/darkness_02",
+		"description": "loc_circumstance_darkness_hunting_grounds_description"
+	},
+	"more_specials_01": {
+		"display_name": "loc_circumstance_more_specials_title",
+		"icon": "content/ui/materials/icons/circumstances/placeholder",
+		"description": "loc_circumstance_more_specials_description"
+	},
+	"min_resistance_max_challenge_01": {
+		"display_name": "loc_circumstance_dummy_more_resistance_title",
+		"icon": "content/ui/materials/icons/circumstances/more_resistance_01",
+		"description": "loc_circumstance_dummy_more_resistance_description"
+	},
+	"flash_mission_03": {
+		"display_name": "loc_circumstance_flash_mission_01_title",
+		"icon": "content/ui/materials/icons/circumstances/hunting_grounds_01",
+		"description": "loc_circumstance_flash_mission_01_description"
+	},
+	"ventilation_purge_with_snipers_less_resistance_01": {
+		"happening_display_name": "loc_happening_ventilation_purge",
+		"display_name": "loc_circumstance_ventilation_purge_with_snipers_less_resistance_title",
+		"icon": "content/ui/materials/icons/circumstances/ventilation_purge_04",
+		"description": "loc_circumstance_ventilation_purge_with_snipers_less_resistance_description"
+	},
+	"ventilation_purge_with_snipers_01": {
+		"happening_display_name": "loc_happening_ventilation_purge",
+		"display_name": "loc_circumstance_ventilation_purge_with_snipers_title",
+		"icon": "content/ui/materials/icons/circumstances/ventilation_purge_02",
+		"description": "loc_circumstance_ventilation_purge_with_snipers_description"
+	},
+	"dummy_more_resistance_01": {
+		"display_name": "loc_circumstance_dummy_more_resistance_title",
+		"icon": "content/ui/materials/icons/circumstances/more_resistance_01",
+		"description": "loc_circumstance_dummy_more_resistance_description"
+	}
+}

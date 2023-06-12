@@ -1,4 +1,5 @@
-import { LoaderArgs, redirect } from "@remix-run/node"
+import type { LoaderArgs } from "@remix-run/node"
+import { redirect } from "@remix-run/node"
 import { json } from "@remix-run/node"
 import { NavLink, Outlet, useLoaderData, useMatches } from "@remix-run/react"
 import { getAuthToken } from "~/data/authtoken.server"
@@ -19,8 +20,13 @@ export let loader = async ({ request, params }: LoaderArgs) => {
 	let auth = await getAuthToken(user.id)
 	let account = await getAccountSummary(auth)
 
-	let firstCharId = account?.summary.characters[0].id
-	if (firstCharId && !params.character) {
+	let firstCharId = account?.summary?.characters[0]?.id
+	if (
+		firstCharId &&
+		!params.character &&
+		!request.url.includes("traits") &&
+		!request.url.includes("mission-board")
+	) {
 		return redirect(`/armoury/${firstCharId}/inventory`)
 	}
 
@@ -46,6 +52,10 @@ export default function Armoury() {
 
 							for (const [key, value] of Object.entries(params)) {
 								route = route.replace(`$${key}`, value)
+							}
+
+							if (!route.includes(char.id)) {
+								route = `/armoury/${char.id}/inventory`
 							}
 
 							return (

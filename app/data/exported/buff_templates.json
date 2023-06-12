@@ -83,7 +83,11 @@
 	{
 		"class_name": "buff",
 		"lerped_stat_buffs": {
-			"medical_crate_healing_modifier": { "max": 0.25, "min": 0.05 }
+			"medical_crate_healing_modifier": {
+				"max": 0.25,
+				"lerp_value_func": "",
+				"min": 0.05
+			}
 		},
 		"predicted": false,
 		"localization_info": { "medical_crate_healing_modifier": "percentage" },
@@ -172,52 +176,53 @@
 		"proc_events": { "on_block": 1 }
 	},
 	{
-		"is_negative": true,
 		"class_name": "interval_buff",
+		"duration": 1,
+		"max_stacks": 10,
+		"damage_type": "burning",
+		"predicted": false,
+		"interval": [0.5, 1.5],
 		"keywords": ["burning"],
-		"max_stacks": 1,
-		"forbidden_keywords": ["cultist_flamer_liquid_immunity"],
-		"hud_icon": "content/ui/textures/icons/buffs/hud/states_fire_buff_hud",
-		"hud_priority": 1,
-		"predicted": true,
+		"name": "fire_burninating",
 		"damage_template": {
-			"disorientation_type": "burninating",
-			"cleave_distribution": { "impact": 0, "attack": 0.125 },
-			"ogryn_disorientation_type": "burninating",
+			"on_kill_area_suppression": {
+				"suppression_value": [1, 2],
+				"distance": [3, 5]
+			},
+			"stagger_category": "melee",
+			"targets": { "default_target": { "boost_curve": [0, 0.3, 0.6, 0.8, 1] } },
+			"ignore_toughness": true,
 			"armor_damage_modifier": {
-				"impact": {
-					"armored": [0.67, 1.33],
-					"unarmored": [0.67, 1.33],
-					"berserker": [0.67, 1.33],
-					"prop_armor": [0.67, 1.33],
-					"player": [0.67, 1.33],
-					"resistant": [0.67, 1.33],
-					"void_shield": [0.67, 1.33],
-					"super_armor": [0.67, 1.33],
-					"disgustingly_resilient": [0.67, 1.33]
-				},
 				"attack": {
-					"armored": [0.67, 1.33],
-					"unarmored": [0.67, 1.33],
-					"berserker": [0.67, 1.33],
-					"prop_armor": [0.67, 1.33],
-					"player": [0.67, 1.33],
-					"resistant": [0.67, 1.33],
-					"void_shield": [0.67, 1.33],
-					"super_armor": [0.67, 1.33],
-					"disgustingly_resilient": [0.67, 1.33]
+					"armored": 1,
+					"unarmored": 1.5,
+					"berserker": 1,
+					"prop_armor": 0.75,
+					"super_armor": 0.1,
+					"resistant": 1.5,
+					"void_shield": 1,
+					"player": 0.125,
+					"disgustingly_resilient": 1.25
+				},
+				"impact": {
+					"armored": 1,
+					"unarmored": 1.5,
+					"berserker": 1,
+					"prop_armor": 0.75,
+					"super_armor": 0.1,
+					"resistant": 1.5,
+					"void_shield": 1,
+					"player": 0.125,
+					"disgustingly_resilient": 1.25
 				}
 			},
-			"targets": { "default_target": { "boost_curve": [0, 0.3, 0.6, 0.8, 1] } },
+			"cleave_distribution": { "attack": 0.125, "impact": 0 },
 			"ignore_shield": true,
-			"stagger_category": "melee",
-			"toughness_multiplier": 3,
-			"name": "cultist_flamer_liquid_fire_burning",
-			"power_distribution": { "impact": 0, "attack": 20 }
-		},
-		"damage_type": "burning",
-		"name": "cultist_flamer_in_fire_liquid",
-		"interval": 0.25
+			"power_distribution": { "attack": 40, "impact": 0 },
+			"override_allow_friendly_fire": true,
+			"name": "liquid_area_fire_burning",
+			"suppression_value": [100, 100]
+		}
 	},
 	{
 		"class_name": "proc_buff",
@@ -257,7 +262,7 @@
 		"class_name": "proc_buff",
 		"predicted": true,
 		"name": "weapon_trait_reload_speed_on_quad_sweep",
-		"proc_events": { "on_reload": 1, "on_sweep_finish": 1 }
+		"proc_events": { "on_sweep_finish": 1, "on_reload": 1 }
 	},
 	{
 		"class_name": "proc_buff",
@@ -307,8 +312,8 @@
 		"localization_info": { "toughness_regen_delay_multiplier": "percentage" },
 		"name": "gadget_toughness_regen_delay",
 		"stat_buffs": {
-			"toughness_regen_rate_modifier": 0.3,
-			"toughness_regen_delay_multiplier": 0.7
+			"toughness_regen_delay_multiplier": 0.7,
+			"toughness_regen_rate_modifier": 0.3
 		}
 	},
 	{
@@ -367,39 +372,39 @@
 				"distance": [3, 5]
 			},
 			"disorientation_type": "burninating",
-			"cleave_distribution": { "impact": 0, "attack": 0.125 },
-			"ogryn_disorientation_type": "burninating",
+			"suppression_value": [5, 10],
+			"power_distribution": { "attack": 20, "impact": 0 },
 			"targets": { "default_target": { "boost_curve": [0, 0.3, 0.6, 0.8, 1] } },
 			"armor_damage_modifier": {
-				"impact": {
-					"armored": [0.67, 1.33],
-					"unarmored": [0.67, 1.33],
-					"berserker": [0.67, 1.33],
-					"prop_armor": [0.67, 1.33],
-					"player": [0.67, 1.33],
-					"resistant": [0.67, 1.33],
-					"void_shield": [0.67, 1.33],
-					"super_armor": [0.67, 1.33],
-					"disgustingly_resilient": [0.67, 1.33]
-				},
 				"attack": {
 					"armored": [0.67, 1.33],
 					"unarmored": [0.67, 1.33],
 					"berserker": [0.67, 1.33],
 					"prop_armor": [0.67, 1.33],
-					"player": [0.67, 1.33],
+					"super_armor": [0.67, 1.33],
 					"resistant": [0.67, 1.33],
 					"void_shield": [0.67, 1.33],
+					"player": [0.67, 1.33],
+					"disgustingly_resilient": [0.67, 1.33]
+				},
+				"impact": {
+					"armored": [0.67, 1.33],
+					"unarmored": [0.67, 1.33],
+					"berserker": [0.67, 1.33],
+					"prop_armor": [0.67, 1.33],
 					"super_armor": [0.67, 1.33],
+					"resistant": [0.67, 1.33],
+					"void_shield": [0.67, 1.33],
+					"player": [0.67, 1.33],
 					"disgustingly_resilient": [0.67, 1.33]
 				}
 			},
-			"suppression_value": [5, 10],
+			"ogryn_disorientation_type": "burninating",
 			"ignore_shield": true,
 			"stagger_category": "melee",
 			"toughness_multiplier": 3,
 			"name": "grenadier_liquid_fire_burning",
-			"power_distribution": { "impact": 0, "attack": 20 }
+			"cleave_distribution": { "attack": 0.125, "impact": 0 }
 		},
 		"hud_priority": 1,
 		"predicted": true,
@@ -478,17 +483,10 @@
 		"stat_buffs": { "damage_taken_by_renegade_sniper_multiplier": 0.8 }
 	},
 	{
-		"class_name": "stepped_stat_buff",
-		"keywords": {},
-		"max_stacks": 4,
-		"stepped_stat_buffs": [
-			{ "permanent_damage_converter": 0.1 },
-			{ "permanent_damage_converter": 0.25 },
-			{ "permanent_damage_converter": 0.5 },
-			{ "permanent_damage_converter": 0.75 }
-		],
-		"name": "grimoire_pickup",
-		"predicted": true
+		"class_name": "proc_buff",
+		"predicted": true,
+		"name": "weapon_trait_bash_refunds_warpcharge",
+		"proc_events": { "on_hit": 1 }
 	},
 	{
 		"class_name": "buff",
@@ -758,9 +756,21 @@
 	{
 		"class_name": "buff",
 		"lerped_stat_buffs": {
-			"inner_push_angle_modifier": { "max": 0.15, "min": 0.02 },
-			"outer_push_angle_modifier": { "max": 0.25, "min": 0.03 },
-			"block_angle_modifier": { "max": 0.25, "min": 0.03 }
+			"inner_push_angle_modifier": {
+				"max": 0.15,
+				"lerp_value_func": "",
+				"min": 0.02
+			},
+			"outer_push_angle_modifier": {
+				"max": 0.25,
+				"lerp_value_func": "",
+				"min": 0.03
+			},
+			"block_angle_modifier": {
+				"max": 0.25,
+				"lerp_value_func": "",
+				"min": 0.03
+			}
 		},
 		"predicted": false,
 		"localization_info": {
@@ -787,12 +797,6 @@
 	},
 	{
 		"class_name": "buff",
-		"predicted": false,
-		"name": "zelaot_maniac_melee_critical_strike_chance_increased",
-		"stat_buffs": { "melee_critical_strike_chance": 0.1 }
-	},
-	{
-		"class_name": "buff",
 		"duration": 5,
 		"predicted": false,
 		"max_stacks": 1,
@@ -801,16 +805,16 @@
 		"stat_buffs": { "damage_vs_chaos_ogryn_bulwark": 0.2 }
 	},
 	{
-		"class_name": "weapon_trait_parent_proc_buff",
+		"class_name": "buff",
 		"predicted": false,
-		"name": "weapon_trait_bespoke_autogun_p1_increase_power_on_close_kill_parent",
-		"proc_events": { "on_kill": 1 }
+		"name": "zelaot_maniac_melee_critical_strike_chance_increased",
+		"stat_buffs": { "melee_critical_strike_chance": 0.1 }
 	},
 	{
-		"class_name": "buff",
-		"max_stacks": 5,
-		"name": "weapon_trait_bespoke_lasgun_p3_consecutive_hits_increases_close_damage_child",
-		"predicted": false
+		"class_name": "proc_buff",
+		"predicted": false,
+		"name": "weapon_trait_bespoke_autogun_p1_reload_speed_on_slide",
+		"proc_events": { "on_slide_start": 1 }
 	},
 	{
 		"class_name": "buff",
@@ -839,11 +843,10 @@
 		"proc_events": { "on_hit": 1 }
 	},
 	{
-		"class_name": "proc_buff",
+		"class_name": "weapon_trait_parent_proc_buff",
 		"predicted": false,
-		"hud_icon": "content/ui/textures/icons/talents/zealot_2/hud/zealot_2_tier_4_3_b",
-		"name": "zealot_maniac_recuperate_a_portion_of_damage_taken",
-		"proc_events": { "on_damage_taken": 1 }
+		"name": "weapon_trait_bespoke_lasgun_p3_stacking_crit_chance_on_weakspot_parent",
+		"proc_events": { "on_hit": 1, "on_critical_strike": 1 }
 	},
 	{
 		"class_name": "buff",
@@ -852,15 +855,16 @@
 		"predicted": false
 	},
 	{
+		"class_name": "proc_buff",
+		"predicted": false,
+		"hud_icon": "content/ui/textures/icons/talents/zealot_2/hud/zealot_2_tier_4_3_b",
+		"name": "zealot_maniac_recuperate_a_portion_of_damage_taken",
+		"proc_events": { "on_damage_taken": 1 }
+	},
+	{
 		"class_name": "conditional_switch_stat_buff",
 		"name": "zealot_maniac_attack_speed_low_health",
 		"predicted": false
-	},
-	{
-		"class_name": "proc_buff",
-		"predicted": false,
-		"name": "zealot_maniac_combat_ability_crits_reduce_cooldown",
-		"proc_events": { "on_hit": 1 }
 	},
 	{
 		"class_name": "buff",
@@ -870,7 +874,7 @@
 	},
 	{
 		"class_name": "buff",
-		"name": "weapon_trait_ranged_aimed_wield_while_aiming_increased_impact_buff",
+		"name": "weapon_trait_ranged_aimed_wield_while_aiming_increased_attack_buff",
 		"predicted": false
 	},
 	{
@@ -906,6 +910,12 @@
 		"proc_events": { "on_hit": 1 }
 	},
 	{
+		"class_name": "proc_buff",
+		"predicted": false,
+		"name": "zealot_maniac_combat_ability_crits_reduce_cooldown",
+		"proc_events": { "on_hit": 1 }
+	},
+	{
 		"class_name": "buff",
 		"name": "zealot_maniac_close_ranged_damage",
 		"predicted": false
@@ -917,23 +927,15 @@
 		"proc_events": { "on_combat_ability": 1 }
 	},
 	{
-		"class_name": "proc_buff",
-		"hud_priority": 2,
-		"predicted": false,
-		"hud_icon": "content/ui/textures/icons/talents/zealot_2/hud/zealot_2_base_2",
-		"name": "zealot_maniac_resist_death_improved_with_leech",
-		"proc_events": { "on_damage_taken": 1 }
-	},
-	{
 		"stat_buffs": {
+			"ranged_weakspot_damage": 0.25,
 			"ranged_impact_modifier": 1,
+			"fov_multiplier": 0.85,
+			"sway_modifier": 0.4,
+			"recoil_modifier": -0.24,
 			"ranged_damage": 0.5,
 			"push_speed_modifier": -0.5,
-			"fov_multiplier": 0.85,
-			"recoil_modifier": -0.24,
-			"spread_modifier": -0.38,
-			"sway_modifier": 0.4,
-			"ranged_weakspot_damage": 0.25
+			"spread_modifier": -0.38
 		},
 		"duration": 5,
 		"max_stacks": 1,
@@ -955,6 +957,14 @@
 	},
 	{
 		"class_name": "proc_buff",
+		"hud_priority": 2,
+		"predicted": false,
+		"hud_icon": "content/ui/textures/icons/talents/zealot_2/hud/zealot_2_base_2",
+		"name": "zealot_maniac_resist_death_improved_with_leech",
+		"proc_events": { "on_damage_taken": 1 }
+	},
+	{
+		"class_name": "proc_buff",
 		"hud_priority": 4,
 		"predicted": true,
 		"keywords": ["slowdown_immune", "stun_immune"],
@@ -963,14 +973,8 @@
 		"proc_events": { "on_damage_taken": 1 }
 	},
 	{
-		"class_name": "proc_buff",
-		"predicted": false,
-		"name": "zealot_maniac_bleeding_crits",
-		"proc_events": { "on_hit": 1 }
-	},
-	{
 		"class_name": "buff",
-		"name": "weapon_trait_ranged_aimed_wield_while_aiming_increased_unarmored_damage_buff",
+		"name": "weapon_trait_ranged_aimed_wield_while_aiming_increased_resistant_damage_buff",
 		"predicted": false
 	},
 	{
@@ -983,6 +987,12 @@
 		"class_name": "proc_buff",
 		"predicted": false,
 		"name": "weapon_trait_melee_common_wield_on_heavy_hit_increased_disgustingly_resilient_damage_buff",
+		"proc_events": { "on_hit": 1 }
+	},
+	{
+		"class_name": "proc_buff",
+		"predicted": false,
+		"name": "zealot_maniac_bleeding_crits",
 		"proc_events": { "on_hit": 1 }
 	},
 	{
@@ -1004,16 +1014,11 @@
 		"name": "zealot_maniac_dash_buff"
 	},
 	{
-		"class_name": "proc_buff",
+		"class_name": "weapon_trait_activated_parent_proc_buff",
+		"max_stacks": 1,
 		"predicted": false,
-		"name": "weapon_trait_bespoke_ogryn_combatblade_p1_increased_power_on_weapon_special_follow_up_hits",
-		"proc_events": { "on_hit": 1, "on_sweep_finish": 1 }
-	},
-	{
-		"class_name": "proc_buff",
-		"predicted": false,
-		"name": "ogryn_bonebreaker_charge_grants_allied_movement_speed",
-		"proc_events": { "on_lunge_start": 1 }
+		"name": "weapon_trait_bespoke_stubrevolver_p1_chained_weakspot_hits_increases_power_parent",
+		"proc_events": { "on_shoot": 1 }
 	},
 	{
 		"class_name": "weapon_trait_parent_proc_buff",
@@ -1022,10 +1027,22 @@
 		"proc_events": { "on_kill": 1 }
 	},
 	{
-		"class_name": "buff",
+		"class_name": "proc_buff",
 		"predicted": false,
-		"name": "weapon_trait_ranged_common_equip_decrease_damage_taken_buff",
-		"stat_buffs": { "damage_taken_multiplier": 0.92 }
+		"name": "ogryn_bonebreaker_take_ally_damage",
+		"proc_events": { "on_damage_taken": 1 }
+	},
+	{
+		"class_name": "proc_buff",
+		"predicted": false,
+		"name": "veteran_ranger_frag_grenade_bleed",
+		"proc_events": { "on_hit": 1 }
+	},
+	{
+		"class_name": "buff",
+		"max_stacks": 5,
+		"name": "weapon_trait_bespoke_combataxe_p3_consecutive_hits_increases_stagger_child",
+		"predicted": false
 	},
 	{
 		"class_name": "buff",
@@ -1039,23 +1056,11 @@
 		"stat_buffs": { "melee_critical_strike_chance": 0.1 }
 	},
 	{
-		"class_name": "buff",
-		"max_stacks": 5,
-		"name": "weapon_trait_bespoke_combataxe_p3_consecutive_hits_increases_stagger_child",
-		"predicted": false
-	},
-	{
 		"stat_buffs": { "toughness_damage_taken_multiplier": 0.925 },
 		"predicted": false,
 		"max_stacks": 1,
 		"name": "zealot_maniac_coherency_toughness_damage_resistance",
 		"class_name": "buff"
-	},
-	{
-		"class_name": "proc_buff",
-		"predicted": false,
-		"name": "zealot_maniac_multi_hits_increase_impact",
-		"proc_events": { "on_sweep_finish": 1 }
 	},
 	{
 		"class_name": "buff",
@@ -1071,15 +1076,10 @@
 		"proc_events": { "on_alternative_fire_start": 1 }
 	},
 	{
-		"class_name": "buff",
-		"duration": 5,
-		"max_stacks": 5,
-		"hud_icon": "content/ui/textures/icons/talents/zealot_2/hud/zealot_2_tier_5_1",
-		"refresh_duration_on_stack": true,
+		"class_name": "proc_buff",
 		"predicted": false,
-		"hud_priority": 4,
-		"name": "zealot_maniac_stacking_melee_damage_buff",
-		"stat_buffs": { "melee_damage": 0.04 }
+		"name": "zealot_maniac_multi_hits_increase_impact",
+		"proc_events": { "on_sweep_finish": 1 }
 	},
 	{
 		"stat_buffs": { "vent_warp_charge_decrease_movement_reduction": 0 },
@@ -1100,6 +1100,17 @@
 	},
 	{
 		"class_name": "buff",
+		"duration": 5,
+		"max_stacks": 5,
+		"hud_icon": "content/ui/textures/icons/talents/zealot_2/hud/zealot_2_tier_5_1",
+		"refresh_duration_on_stack": true,
+		"predicted": false,
+		"hud_priority": 4,
+		"name": "zealot_maniac_stacking_melee_damage_buff",
+		"stat_buffs": { "melee_damage": 0.04 }
+	},
+	{
+		"class_name": "buff",
 		"duration": 4,
 		"max_stacks": 1,
 		"hud_icon": "content/ui/textures/icons/talents/zealot_2/hud/zealot_2_tier_5_3",
@@ -1111,14 +1122,6 @@
 	},
 	{
 		"class_name": "buff",
-		"duration": 5,
-		"predicted": false,
-		"refresh_duration_on_stack": true,
-		"name": "veteran_ranger_ranged_stance_outline_units_short",
-		"max_stacks": 1
-	},
-	{
-		"class_name": "buff",
 		"duration": 2,
 		"predicted": false,
 		"max_stacks": 1,
@@ -1127,10 +1130,10 @@
 		"keywords": ["electrocuted"]
 	},
 	{
-		"class_name": "buff",
+		"class_name": "proc_buff",
 		"predicted": false,
-		"name": "zealot_maniac_increased_damage_vs_shocked",
-		"stat_buffs": { "damage_vs_electrocuted": 0.2 }
+		"name": "weapon_trait_melee_activated_wield_on_weapon_special_increase_impact_of_next_attack",
+		"proc_events": { "on_weapon_special": 1 }
 	},
 	{
 		"class_name": "proc_buff",
@@ -1156,38 +1159,38 @@
 		"predicted": true,
 		"damage_template": {
 			"disorientation_type": "burninating",
-			"cleave_distribution": { "impact": 0, "attack": 0.125 },
-			"ogryn_disorientation_type": "burninating",
+			"targets": { "default_target": { "boost_curve": [0, 0.3, 0.6, 0.8, 1] } },
+			"power_distribution": { "attack": 20, "impact": 0 },
 			"armor_damage_modifier": {
-				"impact": {
-					"armored": [0.67, 1.33],
-					"unarmored": [0.67, 1.33],
-					"berserker": [0.67, 1.33],
-					"prop_armor": [0.67, 1.33],
-					"player": [0.67, 1.33],
-					"resistant": [0.67, 1.33],
-					"void_shield": [0.67, 1.33],
-					"super_armor": [0.67, 1.33],
-					"disgustingly_resilient": [0.67, 1.33]
-				},
 				"attack": {
 					"armored": [0.67, 1.33],
 					"unarmored": [0.67, 1.33],
 					"berserker": [0.67, 1.33],
 					"prop_armor": [0.67, 1.33],
-					"player": [0.67, 1.33],
+					"super_armor": [0.67, 1.33],
 					"resistant": [0.67, 1.33],
 					"void_shield": [0.67, 1.33],
+					"player": [0.67, 1.33],
+					"disgustingly_resilient": [0.67, 1.33]
+				},
+				"impact": {
+					"armored": [0.67, 1.33],
+					"unarmored": [0.67, 1.33],
+					"berserker": [0.67, 1.33],
+					"prop_armor": [0.67, 1.33],
 					"super_armor": [0.67, 1.33],
+					"resistant": [0.67, 1.33],
+					"void_shield": [0.67, 1.33],
+					"player": [0.67, 1.33],
 					"disgustingly_resilient": [0.67, 1.33]
 				}
 			},
-			"targets": { "default_target": { "boost_curve": [0, 0.3, 0.6, 0.8, 1] } },
+			"cleave_distribution": { "attack": 0.125, "impact": 0 },
 			"ignore_shield": true,
-			"stagger_category": "melee",
+			"ogryn_disorientation_type": "burninating",
 			"toughness_multiplier": 3,
 			"name": "renegade_flamer_liquid_fire_burning",
-			"power_distribution": { "impact": 0, "attack": 20 }
+			"stagger_category": "melee"
 		},
 		"damage_type": "burning",
 		"name": "renegade_flamer_in_fire_liquid",
@@ -1195,15 +1198,15 @@
 	},
 	{
 		"class_name": "buff",
+		"predicted": false,
+		"name": "zealot_maniac_increased_damage_vs_shocked",
+		"stat_buffs": { "damage_vs_electrocuted": 0.2 }
+	},
+	{
+		"class_name": "buff",
 		"keywords": ["zealot_toughness"],
 		"predicted": false,
 		"name": "zealot_maniac_melee_toughness_defense"
-	},
-	{
-		"class_name": "proc_buff",
-		"predicted": false,
-		"name": "zealot_maniac_stacking_melee_damage",
-		"proc_events": { "on_hit": 1 }
 	},
 	{
 		"class_name": "proc_buff",
@@ -1224,16 +1227,15 @@
 		"proc_events": { "on_minion_death": 0.05 }
 	},
 	{
+		"class_name": "proc_buff",
+		"predicted": false,
+		"name": "zealot_maniac_stacking_melee_damage",
+		"proc_events": { "on_hit": 1 }
+	},
+	{
 		"class_name": "buff",
 		"name": "weapon_trait_ranged_common_wield_increase_crit_chance_buff",
 		"predicted": false
-	},
-	{
-		"class_name": "proc_buff",
-		"max_stacks": 1,
-		"predicted": false,
-		"name": "zealot_maniac_critical_strike_toughness_defense",
-		"proc_events": { "on_hit": 1 }
 	},
 	{
 		"class_name": "proc_buff",
@@ -1242,6 +1244,13 @@
 		"localization_info": { "proc_buff_name": "gadget_health_buff" },
 		"name": "gadget_mission_objective_complete_buff",
 		"proc_events": { "on_side_mission_objective_complete": 1 }
+	},
+	{
+		"class_name": "proc_buff",
+		"max_stacks": 1,
+		"predicted": false,
+		"name": "zealot_maniac_critical_strike_toughness_defense",
+		"proc_events": { "on_hit": 1 }
 	},
 	{
 		"class_name": "proc_buff",
@@ -1254,12 +1263,6 @@
 		"predicted": false,
 		"name": "veteran_ranger_ranged_weakspot_toughness_recovery",
 		"proc_events": { "on_hit": 1 }
-	},
-	{
-		"class_name": "buff",
-		"predicted": false,
-		"name": "veteran_ranger_increased_ammo_reserve",
-		"stat_buffs": { "ammo_reserve_capacity": 0.4 }
 	},
 	{
 		"class_name": "buff",
@@ -1279,10 +1282,10 @@
 		"proc_events": { "on_hit": 1 }
 	},
 	{
-		"class_name": "proc_buff",
+		"class_name": "buff",
 		"predicted": false,
-		"name": "veteran_ranger_frag_grenade_bleed",
-		"proc_events": { "on_hit": 1 }
+		"name": "veteran_ranger_increased_ammo_reserve",
+		"stat_buffs": { "ammo_reserve_capacity": 0.4 }
 	},
 	{
 		"class_name": "interval_buff",
@@ -1370,17 +1373,17 @@
 		"predicted": false
 	},
 	{
+		"class_name": "weapon_trait_parent_proc_buff",
+		"predicted": false,
+		"name": "weapon_trait_bespoke_ogryn_rippergun_p1_increase_close_damage_on_close_kill_parent",
+		"proc_events": { "on_kill": 1 }
+	},
+	{
 		"class_name": "proc_buff",
 		"max_stacks": 1,
 		"predicted": false,
 		"name": "veteran_ranger_elites_replenish_grenades",
 		"proc_events": { "on_kill": 0.05 }
-	},
-	{
-		"class_name": "proc_buff",
-		"predicted": false,
-		"name": "weapon_trait_bespoke_ogryn_thumper_p1_suppression_on_close_kill",
-		"proc_events": { "on_hit": 1 }
 	},
 	{
 		"class_name": "buff",
@@ -1390,9 +1393,12 @@
 	},
 	{
 		"class_name": "buff",
+		"duration": 5,
 		"predicted": false,
-		"name": "veteran_ranger_increase_ranged_far_damage",
-		"stat_buffs": { "damage_far": 0.2 }
+		"max_stacks": 1,
+		"refresh_duration_on_stack": true,
+		"name": "ogryn_bonebreaker_revenge_damage_vs_renegade_shocktrooper",
+		"stat_buffs": { "damage_vs_renegade_shocktrooper": 0.2 }
 	},
 	{
 		"class_name": "buff",
@@ -1429,28 +1435,33 @@
 	},
 	{
 		"class_name": "buff",
+		"predicted": false,
+		"name": "veteran_ranger_increase_ranged_far_damage",
+		"stat_buffs": { "damage_far": 0.2 }
+	},
+	{
+		"class_name": "buff",
 		"hud_priority": 4,
 		"predicted": false,
 		"hud_icon": "content/ui/textures/icons/talents/veteran_2/hud/veteran_2_tier_1_3",
 		"name": "veteran_ranger_reduced_threat_gain"
 	},
 	{
-		"class_name": "proc_buff",
-		"predicted": false,
-		"name": "weapon_trait_bespoke_autogun_p1_reload_speed_on_slide",
-		"proc_events": { "on_slide_start": 1 }
-	},
-	{
 		"class_name": "buff",
-		"predicted": false,
-		"name": "veteran_ranger_increase_weakspot_damage",
-		"stat_buffs": { "weakspot_damage": 0.15 }
+		"name": "braced_damage_reduction",
+		"predicted": true
 	},
 	{
 		"class_name": "proc_buff",
 		"predicted": false,
 		"name": "weapon_trait_bespoke_thunderhammer_2h_p1_targets_receive_rending_debuff",
 		"proc_events": { "on_hit": 1 }
+	},
+	{
+		"class_name": "buff",
+		"predicted": false,
+		"name": "veteran_ranger_increase_weakspot_damage",
+		"stat_buffs": { "weakspot_damage": 0.15 }
 	},
 	{
 		"class_name": "buff",
@@ -1462,20 +1473,15 @@
 	},
 	{
 		"class_name": "buff",
-		"max_stacks": 5,
-		"name": "weapon_trait_bespoke_ogryn_thumper_p1_pass_trough_armor_on_weapon_special",
-		"predicted": false
-	},
-	{
-		"class_name": "buff",
 		"name": "weapon_trait_ranged_common_wield_suppression_immune_while_sprinting_buff",
 		"predicted": false
 	},
 	{
-		"class_name": "weapon_trait_target_number_parent_proc_buff",
+		"class_name": "proc_buff",
+		"max_stacks": 1,
 		"predicted": false,
-		"name": "weapon_trait_bespoke_combatsword_p1_consecutive_hits_increases_stagger_parent",
-		"proc_events": { "on_hit": 1 }
+		"name": "weapon_trait_bespoke_ogryn_thumper_p1_weapon_special_power_bonus_after_one_shots",
+		"proc_events": { "on_shoot": 1 }
 	},
 	{
 		"class_name": "proc_buff",
@@ -1521,30 +1527,12 @@
 		"predicted": false
 	},
 	{
-		"stat_buffs": {
-			"ranged_weakspot_damage": 0.25,
-			"ranged_impact_modifier": 1,
-			"fov_multiplier": 0.85,
-			"ranged_damage": 0.5,
-			"push_speed_modifier": -0.5
-		},
+		"class_name": "buff",
 		"duration": 5,
-		"max_stacks": 1,
-		"proc_events": { "on_hit": 1 },
-		"refresh_duration_on_stack": true,
 		"predicted": false,
-		"keywords": [
-			"stun_immune",
-			"slowdown_immune",
-			"suppression_immune",
-			"ranged_alternate_fire_interrupt_immune",
-			"uninterruptible",
-			"deterministic_recoil",
-			"veteran_ranger_combat_ability"
-		],
-		"class_name": "proc_buff",
-		"name": "veteran_ranger_ranged_stance_weapon_handling_improved",
-		"buff_id": "veteran_ranger_combat_ability"
+		"refresh_duration_on_stack": true,
+		"name": "veteran_ranger_ranged_stance_outline_units_short",
+		"max_stacks": 1
 	},
 	{
 		"class_name": "stepped_stat_buff",
@@ -1569,6 +1557,42 @@
 		"unique_buff_id": "hit_reaction_movement_slow"
 	},
 	{
+		"stat_buffs": {
+			"ranged_impact_modifier": 1,
+			"ranged_damage": 0.5,
+			"push_speed_modifier": -0.5,
+			"fov_multiplier": 0.85,
+			"ranged_weakspot_damage": 0.25
+		},
+		"duration": 5,
+		"max_stacks": 1,
+		"proc_events": { "on_hit": 1 },
+		"refresh_duration_on_stack": true,
+		"predicted": false,
+		"keywords": [
+			"stun_immune",
+			"slowdown_immune",
+			"suppression_immune",
+			"ranged_alternate_fire_interrupt_immune",
+			"uninterruptible",
+			"deterministic_recoil",
+			"veteran_ranger_combat_ability"
+		],
+		"class_name": "proc_buff",
+		"name": "veteran_ranger_ranged_stance_weapon_handling_improved",
+		"buff_id": "veteran_ranger_combat_ability"
+	},
+	{
+		"class_name": "buff",
+		"name": "weapon_trait_ranged_common_wield_decrease_damage_taken_buff",
+		"predicted": false
+	},
+	{
+		"class_name": "buff",
+		"name": "weapon_trait_bespoke_forcesword_p1_can_block_ranged",
+		"predicted": false
+	},
+	{
 		"class_name": "proc_buff",
 		"max_stacks": 1,
 		"hud_icon": "content/ui/textures/icons/talents/veteran_2/hud/veteran_2_tier_5_3",
@@ -1580,13 +1604,20 @@
 	},
 	{
 		"class_name": "buff",
-		"name": "weapon_trait_ranged_common_wield_increased_attack_buff",
+		"name": "weapon_trait_reduce_sprint_cost",
 		"predicted": false
 	},
 	{
 		"class_name": "buff",
-		"name": "weapon_trait_bespoke_forcesword_p1_can_block_ranged",
-		"predicted": false
+		"predicted": true,
+		"name": "tg_increased_coherency_ogryn_2",
+		"stat_buffs": { "toughness_regen_rate_modifier": 12 }
+	},
+	{
+		"class_name": "proc_buff",
+		"predicted": false,
+		"name": "weapon_trait_melee_common_wield_on_hit_damage_bonus_buff",
+		"proc_events": { "on_hit": 0.05 }
 	},
 	{
 		"class_name": "buff",
@@ -1598,24 +1629,6 @@
 		"hud_priority": 4,
 		"name": "veteran_ranger_reload_speed_buff",
 		"stat_buffs": { "reload_speed": 0.3 }
-	},
-	{
-		"class_name": "buff",
-		"name": "weapon_trait_reduced_block_cost",
-		"predicted": false
-	},
-	{
-		"class_name": "buff",
-		"keywords": {},
-		"predicted": true,
-		"name": "spread_reduction",
-		"stat_buffs": { "spread_modifier": -0.15 }
-	},
-	{
-		"class_name": "proc_buff",
-		"predicted": false,
-		"name": "weapon_trait_melee_common_wield_on_hit_damage_bonus_buff",
-		"proc_events": { "on_hit": 0.05 }
 	},
 	{
 		"class_name": "buff",
@@ -1637,19 +1650,31 @@
 	{
 		"class_name": "stepped_stat_buff",
 		"max_stacks": 1,
-		"name": "weapon_trait_bespoke_ogryn_thumper_p2_power_bonus_on_continuous_fire",
+		"name": "weapon_trait_bespoke_ogryn_thumper_p1_toughness_on_continuous_fire",
 		"predicted": false
 	},
 	{
+		"class_name": "buff",
+		"keywords": ["allow_hipfire_during_sprint"],
+		"predicted": false,
+		"name": "weapon_trait_bespoke_laspistol_p1_hipfire_while_sprinting"
+	},
+	{
+		"class_name": "buff",
+		"predicted": false,
+		"localization_info": { "max_health_modifier": "percentage" },
+		"name": "gadget_play_with_only_bots_buff"
+	},
+	{
 		"stat_buffs": {
-			"ranged_weakspot_damage": 0.5,
+			"spread_modifier": -0.38,
 			"ranged_impact_modifier": 1,
-			"fov_multiplier": 0.85,
 			"ranged_damage": 0.5,
+			"push_speed_modifier": -0.5,
 			"recoil_modifier": -0.24,
 			"sway_modifier": 0.4,
-			"push_speed_modifier": -0.5,
-			"spread_modifier": -0.38
+			"fov_multiplier": 0.85,
+			"ranged_weakspot_damage": 0.5
 		},
 		"duration": 5,
 		"max_stacks": 1,
@@ -1670,86 +1695,59 @@
 		"buff_id": "veteran_ranger_combat_ability"
 	},
 	{
-		"class_name": "buff",
-		"keywords": ["allow_hipfire_during_sprint"],
-		"predicted": false,
-		"name": "weapon_trait_bespoke_laspistol_p1_hipfire_while_sprinting"
-	},
-	{
-		"class_name": "buff",
-		"predicted": false,
-		"localization_info": { "max_health_modifier": "percentage" },
-		"name": "gadget_play_with_only_bots_buff"
-	},
-	{
 		"is_negative": true,
 		"class_name": "interval_buff",
-		"keywords": ["concealed", "hud_nameplates_disabled"],
+		"keywords": ["burning"],
 		"max_stacks": 1,
-		"damage_type": "corruption",
-		"hud_icon": "content/ui/textures/icons/buffs/hud/states_knocked_down_buff_hud",
-		"interval": 0.5,
-		"target": "player_only",
+		"forbidden_keywords": ["cultist_flamer_liquid_immunity"],
+		"hud_icon": "content/ui/textures/icons/buffs/hud/states_fire_buff_hud",
 		"hud_priority": 1,
-		"predicted": false,
-		"stat_buffs": {
-			"toughness_regen_rate_multiplier": 0,
-			"dodge_speed_multiplier": 0.9,
-			"movement_speed": 0.9
-		},
-		"duration": 0.5,
-		"name": "left_toxic_gas",
+		"predicted": true,
 		"damage_template": {
-			"ignore_depleting_toughness": true,
-			"ogryn_disorientation_type": "corruption",
-			"cleave_distribution": { "impact": 0, "attack": 1 },
-			"disorientation_type": "corruption",
-			"ignore_mood_effects": true,
+			"disorientation_type": "burninating",
+			"targets": { "default_target": { "boost_curve": [0, 0.3, 0.6, 0.8, 1] } },
+			"power_distribution": { "attack": 20, "impact": 0 },
 			"armor_damage_modifier": {
-				"impact": {
-					"armored": 0,
-					"unarmored": 0,
-					"berserker": 0,
-					"prop_armor": 0,
-					"player": 1,
-					"resistant": 0,
-					"void_shield": 0,
-					"super_armor": 0,
-					"disgustingly_resilient": 0
-				},
 				"attack": {
-					"armored": 0,
-					"unarmored": 0,
-					"berserker": 0,
-					"prop_armor": 0,
-					"player": 1,
-					"resistant": 0,
-					"void_shield": 0,
-					"super_armor": 0,
-					"disgustingly_resilient": 0
+					"armored": [0.67, 1.33],
+					"unarmored": [0.67, 1.33],
+					"berserker": [0.67, 1.33],
+					"prop_armor": [0.67, 1.33],
+					"super_armor": [0.67, 1.33],
+					"resistant": [0.67, 1.33],
+					"void_shield": [0.67, 1.33],
+					"player": [0.67, 1.33],
+					"disgustingly_resilient": [0.67, 1.33]
+				},
+				"impact": {
+					"armored": [0.67, 1.33],
+					"unarmored": [0.67, 1.33],
+					"berserker": [0.67, 1.33],
+					"prop_armor": [0.67, 1.33],
+					"super_armor": [0.67, 1.33],
+					"resistant": [0.67, 1.33],
+					"void_shield": [0.67, 1.33],
+					"player": [0.67, 1.33],
+					"disgustingly_resilient": [0.67, 1.33]
 				}
 			},
-			"targets": { "default_target": { "boost_curve": [0, 0.3, 0.6, 0.8, 1] } },
-			"power_distribution": { "impact": 0, "attack": 1 },
-			"permanent_damage_ratio": 1,
+			"cleave_distribution": { "attack": 0.125, "impact": 0 },
+			"ignore_shield": true,
+			"ogryn_disorientation_type": "burninating",
 			"toughness_multiplier": 3,
-			"name": "toxic_gas_mutator",
+			"name": "cultist_flamer_liquid_fire_burning",
 			"stagger_category": "melee"
-		}
+		},
+		"damage_type": "burning",
+		"name": "cultist_flamer_in_fire_liquid",
+		"interval": 0.25
 	},
 	{
-		"class_name": "proc_buff",
-		"max_stacks": 1,
-		"predicted": false,
-		"name": "veteran_ranger_toughness_on_elite_kill",
-		"proc_events": { "on_kill": 1 }
-	},
-	{
-		"class_name": "proc_buff",
-		"max_stacks": 1,
+		"class_name": "buff",
+		"keywords": {},
 		"predicted": true,
-		"name": "weapon_trait_melee_attack_speed_on_special_smite_kill",
-		"proc_events": { "on_kill": 1 }
+		"name": "alternate_fire_movement_speed",
+		"stat_buffs": { "alternate_fire_movement_speed_reduction_modifier": 0.3 }
 	},
 	{
 		"class_name": "proc_buff",
@@ -1758,10 +1756,9 @@
 		"proc_events": { "on_player_toughness_broken": 1 }
 	},
 	{
-		"class_name": "proc_buff",
-		"predicted": false,
-		"name": "tg_player_on_dodge_tutorial",
-		"proc_events": { "on_successful_dodge": 1 }
+		"class_name": "buff",
+		"name": "example_weapon_trait_ranged_buff_stat_2",
+		"predicted": false
 	},
 	{
 		"class_name": "buff",
@@ -1774,14 +1771,15 @@
 		"class_name": "proc_buff",
 		"max_stacks": 1,
 		"predicted": false,
-		"name": "veteran_ranger_elites_replenish_ammo",
+		"name": "veteran_ranger_toughness_on_elite_kill",
 		"proc_events": { "on_kill": 1 }
 	},
 	{
 		"class_name": "proc_buff",
+		"max_stacks": 1,
 		"predicted": false,
-		"name": "weapon_trait_bespoke_autogun_p1_suppression_on_close_kill",
-		"proc_events": { "on_hit": 1 }
+		"name": "veteran_ranger_elites_replenish_ammo",
+		"proc_events": { "on_kill": 1 }
 	},
 	{
 		"class_name": "proc_buff",
@@ -1802,26 +1800,21 @@
 	},
 	{
 		"class_name": "proc_buff",
-		"duration": 25,
-		"max_stacks": 6,
-		"hud_icon": "content/ui/textures/icons/talents/psyker_2/hud/psyker_2_base_1",
-		"proc_events": { "on_combat_ability": 1 },
-		"refresh_duration_on_stack": true,
 		"predicted": false,
-		"name": "psyker_biomancer_souls_increased_max_stacks",
-		"hud_priority": 1
+		"name": "weapon_trait_melee_common_wield_on_hit_increased_resistant_damage_buff",
+		"proc_events": { "on_hit": 0.05 }
 	},
 	{
-		"class_name": "buff",
+		"class_name": "proc_buff",
 		"predicted": false,
-		"name": "weapon_trait_ranged_common_equip_increase_movement_speed_buff",
-		"stat_buffs": { "movement_speed": 1.1 }
+		"name": "weapon_trait_bespoke_combatsword_p2_increased_melee_damage_on_multiple_hits",
+		"proc_events": { "on_hit": 1 }
 	},
 	{
-		"class_name": "buff",
-		"lerped_stat_buffs": { "damage": { "min": 0.1, "max": 0.25 } },
+		"class_name": "proc_buff",
 		"predicted": false,
-		"name": "psyker_biomancer_warp_charge_increase_force_weapon_damage"
+		"name": "weapon_trait_ranged_common_wield_on_hit_increased_disgustingly_resilient_damage_buff",
+		"proc_events": { "on_hit": 0.05 }
 	},
 	{
 		"class_name": "proc_buff",
@@ -1836,10 +1829,10 @@
 		"predicted": false
 	},
 	{
-		"class_name": "stepped_stat_buff",
-		"max_stacks": 1,
-		"name": "weapon_trait_bespoke_forcestaff_p1_warp_charge_critical_strike_chance_bonus",
-		"predicted": false
+		"class_name": "buff",
+		"lerped_stat_buffs": { "damage": { "min": 0.1, "max": 0.25 } },
+		"predicted": false,
+		"name": "psyker_biomancer_warp_charge_increase_force_weapon_damage"
 	},
 	{
 		"class_name": "proc_buff",
@@ -1883,6 +1876,17 @@
 		"stat_buffs": { "damage_vs_renegade_executor": 0.2 }
 	},
 	{
+		"class_name": "buff",
+		"predicted": false,
+		"name": "weapon_trait_ranged_common_equip_increase_movement_speed_buff",
+		"stat_buffs": { "movement_speed": 1.1 }
+	},
+	{
+		"class_name": "buff",
+		"name": "weapon_trait_bespoke_lasgun_p1_negate_stagger_reduction_on_weakspot",
+		"predicted": false
+	},
+	{
 		"class_name": "proc_buff",
 		"duration": 25,
 		"max_stacks": 4,
@@ -1894,9 +1898,10 @@
 		"hud_priority": 1
 	},
 	{
-		"class_name": "buff",
-		"name": "weapon_trait_bespoke_lasgun_p1_negate_stagger_reduction_on_weakspot",
-		"predicted": false
+		"class_name": "proc_buff",
+		"predicted": false,
+		"name": "weapon_trait_bespoke_combatsword_p1_staggered_targets_receive_increased_damage_debuff",
+		"proc_events": { "on_hit": 1 }
 	},
 	{
 		"class_name": "interval_buff",
@@ -1911,24 +1916,9 @@
 	{
 		"class_name": "proc_buff",
 		"predicted": false,
-		"name": "weapon_trait_bespoke_combatsword_p1_staggered_targets_receive_increased_damage_debuff",
-		"proc_events": { "on_hit": 1 }
-	},
-	{
-		"class_name": "proc_buff",
-		"predicted": false,
 		"stat_buffs": {},
 		"name": "psyker_biomancer_cooldown_reduction_on_elite_kill_for_coherency",
 		"proc_events": { "on_kill": 1 }
-	},
-	{
-		"class_name": "buff",
-		"duration": 5,
-		"predicted": false,
-		"max_stacks": 1,
-		"refresh_duration_on_stack": true,
-		"name": "ogryn_bonebreaker_revenge_damage_vs_renegade_flamer_mutator",
-		"stat_buffs": { "damage_vs_renegade_flamer_mutator": 0.2 }
 	},
 	{
 		"class_name": "proc_buff",
@@ -1966,10 +1956,16 @@
 		"predicted": false
 	},
 	{
-		"class_name": "buff",
-		"max_stacks": 5,
-		"name": "weapon_trait_bespoke_powersword_p1_increase_power_on_kill_child",
-		"predicted": false
+		"stat_buffs": { "movement_speed": 1.25 },
+		"keywords": ["stun_immune", "suppression_immune"],
+		"max_stacks": 1,
+		"hud_icon": "content/ui/textures/icons/talents/ogryn_2/hud/ogryn_2_tier_1_3",
+		"refresh_duration_on_stack": true,
+		"predicted": true,
+		"hud_priority": 4,
+		"duration": 4,
+		"name": "ogryn_bonebreaker_allied_movement_speed_buff",
+		"class_name": "buff"
 	},
 	{
 		"class_name": "proc_buff",
@@ -1980,8 +1976,19 @@
 	{
 		"class_name": "proc_buff",
 		"predicted": false,
+		"name": "weapon_trait_bespoke_powersword_p1_infinite_melee_cleave_on_weakspot_kill",
+		"proc_events": { "on_kill": 1 }
+	},
+	{
+		"class_name": "proc_buff",
+		"predicted": false,
 		"name": "psyker_biomancer_smite_on_hit",
 		"proc_events": { "on_hit": 0.1 }
+	},
+	{
+		"class_name": "stepped_stat_buff",
+		"name": "weapon_trait_bespoke_stubrevolver_p1_crit_chance_based_on_ammo_left",
+		"predicted": false
 	},
 	{
 		"stat_buffs": { "damage_vs_elites": 0.1 },
@@ -1991,22 +1998,10 @@
 		"class_name": "buff"
 	},
 	{
-		"class_name": "stepped_stat_buff",
-		"name": "weapon_trait_bespoke_stubrevolver_p1_crit_chance_based_on_ammo_left",
-		"predicted": false
-	},
-	{
 		"class_name": "proc_buff",
-		"max_stacks": 1,
 		"predicted": false,
-		"name": "weapon_trait_bespoke_shotgun_p1_power_bonus_on_hitting_single_enemy_with_all",
-		"proc_events": { "on_shoot": 1 }
-	},
-	{
-		"class_name": "buff",
-		"max_stacks": 3,
-		"name": "weapon_trait_bespoke_ogryn_combatblade_p1_windup_increases_power_child",
-		"predicted": false
+		"name": "weapon_trait_bespoke_shotgun_p1_bleed_on_crit",
+		"proc_events": { "on_pellet_hits": 1 }
 	},
 	{
 		"class_name": "buff",
@@ -2018,11 +2013,10 @@
 		"stat_buffs": { "damage_vs_chaos_ogryn_executor": 0.2 }
 	},
 	{
-		"class_name": "weapon_trait_activated_parent_proc_buff",
+		"class_name": "buff",
 		"max_stacks": 5,
-		"predicted": false,
-		"name": "weapon_trait_bespoke_combatsword_p3_chained_hits_increases_crit_chance_parent",
-		"proc_events": { "on_sweep_start": 1, "on_sweep_finish": 1, "on_hit": 1 }
+		"name": "weapon_trait_bespoke_ogryn_combatblade_p1_increase_power_on_kill_child",
+		"predicted": false
 	},
 	{
 		"class_name": "buff",
@@ -2057,14 +2051,25 @@
 	},
 	{
 		"class_name": "proc_buff",
+		"duration": 25,
+		"max_stacks": 6,
+		"hud_icon": "content/ui/textures/icons/talents/psyker_2/hud/psyker_2_base_1",
+		"proc_events": { "on_combat_ability": 1 },
+		"refresh_duration_on_stack": true,
 		"predicted": false,
-		"name": "psyker_biomancer_smite_makes_victim_vulnerable",
-		"proc_events": { "on_hit": 1 }
+		"name": "psyker_biomancer_souls_increased_max_stacks",
+		"hud_priority": 1
 	},
 	{
 		"class_name": "weapon_trait_parent_proc_buff",
 		"predicted": false,
 		"name": "weapon_trait_bespoke_bolter_p1_stacking_power_bonus_on_staggering_enemies_parent",
+		"proc_events": { "on_hit": 1 }
+	},
+	{
+		"class_name": "proc_buff",
+		"predicted": false,
+		"name": "psyker_biomancer_smite_makes_victim_vulnerable",
 		"proc_events": { "on_hit": 1 }
 	},
 	{
@@ -2077,17 +2082,18 @@
 		"proc_events": { "on_hit": 1, "on_combat_ability": 1 }
 	},
 	{
-		"class_name": "weapon_trait_activated_parent_proc_buff",
-		"max_stacks": 5,
+		"class_name": "proc_buff",
+		"max_stacks": 1,
 		"predicted": false,
-		"name": "weapon_trait_bespoke_combatsword_p1_chained_hits_increases_crit_chance_parent",
-		"proc_events": { "on_sweep_start": 1, "on_sweep_finish": 1, "on_hit": 1 }
+		"name": "weapon_trait_bespoke_plasmagun_p1_toughness_on_elite_kills",
+		"proc_events": { "on_kill": 1 }
 	},
 	{
-		"class_name": "proc_buff",
+		"stat_buffs": { "damage_taken_multiplier": 0.5 },
 		"predicted": false,
-		"name": "ogryn_bonebreaker_take_ally_damage",
-		"proc_events": { "on_damage_taken": 1 }
+		"max_stacks": 1,
+		"name": "ogryn_bonebreaker_ally_damage_reduction",
+		"class_name": "buff"
 	},
 	{
 		"class_name": "buff",
@@ -2099,16 +2105,10 @@
 		"stat_buffs": { "damage_vs_cultist_shocktrooper": 0.2 }
 	},
 	{
-		"stat_buffs": { "movement_speed": 1.25 },
-		"keywords": ["stun_immune", "suppression_immune"],
-		"max_stacks": 1,
-		"hud_icon": "content/ui/textures/icons/talents/ogryn_2/hud/ogryn_2_tier_1_3",
-		"refresh_duration_on_stack": true,
-		"predicted": true,
-		"hud_priority": 4,
-		"duration": 4,
-		"name": "ogryn_bonebreaker_allied_movement_speed_buff",
-		"class_name": "buff"
+		"class_name": "proc_buff",
+		"predicted": false,
+		"name": "weapon_trait_bespoke_ogryn_rippergun_p1_bleed_on_crit",
+		"proc_events": { "on_pellet_hits": 1 }
 	},
 	{
 		"class_name": "buff",
@@ -2133,17 +2133,12 @@
 	},
 	{
 		"class_name": "buff",
-		"keywords": {},
+		"duration": 5,
 		"predicted": false,
 		"max_stacks": 1,
-		"name": "ogryn_bonebreaker_coherency_increased_melee_damage",
-		"stat_buffs": { "melee_heavy_damage": 0.1 }
-	},
-	{
-		"class_name": "buff",
-		"predicted": false,
-		"name": "ogryn_bonebreaker_bigger_coherency_radius",
-		"stat_buffs": { "coherency_radius_modifier": 0.5 }
+		"refresh_duration_on_stack": true,
+		"name": "ogryn_bonebreaker_revenge_damage_vs_renegade_netgunner",
+		"stat_buffs": { "damage_vs_renegade_netgunner": 0.2 }
 	},
 	{
 		"class_name": "proc_buff",
@@ -2154,22 +2149,19 @@
 	{
 		"class_name": "proc_buff",
 		"predicted": false,
-		"name": "weapon_trait_ranged_aimed_wield_on_enter_ads_increased_unarmored_damage_buff",
+		"name": "weapon_trait_ranged_aimed_wield_on_enter_ads_increased_berserker_damage_buff",
 		"proc_events": { "on_alternative_fire_start": 1 }
-	},
-	{
-		"class_name": "buff",
-		"duration": 5,
-		"predicted": false,
-		"max_stacks": 1,
-		"refresh_duration_on_stack": true,
-		"name": "ogryn_bonebreaker_revenge_damage_vs_cultist_assault",
-		"stat_buffs": { "damage_vs_cultist_assault": 0.2 }
 	},
 	{
 		"class_name": "proc_buff",
 		"predicted": false,
-		"name": "weapon_trait_ranged_aimed_wield_on_weakspot_hit_increase_damage_buff",
+		"name": "weapon_trait_bespoke_forcesword_p1_dodge_grants_finesse_bonus",
+		"proc_events": { "on_successful_dodge": 1 }
+	},
+	{
+		"class_name": "proc_buff",
+		"predicted": false,
+		"name": "weapon_trait_ranged_aimed_wield_on_weakspot_hit_increase_impact_buff",
 		"proc_events": { "on_hit": 0.05 }
 	},
 	{
@@ -2205,49 +2197,52 @@
 		"damage_template": {
 			"ignore_depleting_toughness": true,
 			"ogryn_disorientation_type": "corruption",
-			"cleave_distribution": { "impact": 0, "attack": 1 },
-			"disorientation_type": "corruption",
+			"targets": { "default_target": { "boost_curve": [0, 0.3, 0.6, 0.8, 1] } },
+			"stagger_category": "melee",
 			"ignore_mood_effects": true,
+			"power_distribution": { "attack": 1, "impact": 0 },
 			"armor_damage_modifier": {
-				"impact": {
-					"armored": 0,
-					"unarmored": 0,
-					"berserker": 0,
-					"prop_armor": 0,
-					"player": 1,
-					"resistant": 0,
-					"void_shield": 0,
-					"super_armor": 0,
-					"disgustingly_resilient": 0
-				},
 				"attack": {
 					"armored": 0,
 					"unarmored": 0,
 					"berserker": 0,
 					"prop_armor": 0,
-					"player": 1,
+					"super_armor": 0,
 					"resistant": 0,
 					"void_shield": 0,
+					"player": 1,
+					"disgustingly_resilient": 0
+				},
+				"impact": {
+					"armored": 0,
+					"unarmored": 0,
+					"berserker": 0,
+					"prop_armor": 0,
 					"super_armor": 0,
+					"resistant": 0,
+					"void_shield": 0,
+					"player": 1,
 					"disgustingly_resilient": 0
 				}
 			},
-			"targets": { "default_target": { "boost_curve": [0, 0.3, 0.6, 0.8, 1] } },
-			"power_distribution": { "impact": 0, "attack": 1 },
+			"disorientation_type": "corruption",
 			"permanent_damage_ratio": 1,
 			"toughness_multiplier": 3,
 			"name": "toxic_gas_mutator",
-			"stagger_category": "melee"
+			"cleave_distribution": { "attack": 1, "impact": 0 }
 		},
 		"class_name": "interval_buff",
 		"name": "in_toxic_gas",
 		"interval": 0.5
 	},
 	{
-		"class_name": "weapon_trait_parent_proc_buff",
+		"class_name": "buff",
+		"duration": 5,
 		"predicted": false,
-		"name": "weapon_trait_bespoke_autopistol_p1_stacking_power_bonus_on_staggering_enemies_parent",
-		"proc_events": { "on_hit": 1 }
+		"max_stacks": 1,
+		"refresh_duration_on_stack": true,
+		"name": "ogryn_bonebreaker_revenge_damage_vs_cultist_berzerker",
+		"stat_buffs": { "damage_vs_cultist_berzerker": 0.2 }
 	},
 	{
 		"class_name": "buff",
@@ -2256,16 +2251,14 @@
 		"stat_buffs": { "critical_strike_rending_multiplier": 1 }
 	},
 	{
-		"class_name": "weapon_trait_parent_proc_buff",
-		"max_stacks": 3,
+		"class_name": "buff",
+		"lerped_stat_buffs": {
+			"toughness_bonus": { "max": 0.2, "lerp_value_func": "", "min": 0.05 }
+		},
 		"predicted": false,
-		"name": "weapon_trait_bespoke_ogryn_club_p2_windup_increases_power_parent",
-		"proc_events": {
-			"on_windup_trigger": 1,
-			"on_sweep_finish": 1,
-			"on_action_start": 1,
-			"on_wield": 1
-		}
+		"localization_info": { "toughness_bonus": "percentage" },
+		"name": "gadget_inate_toughness_increase",
+		"keywords": {}
 	},
 	{
 		"class_name": "buff",
@@ -2273,13 +2266,11 @@
 		"predicted": false
 	},
 	{
-		"class_name": "buff",
-		"duration": 5,
-		"predicted": false,
+		"class_name": "proc_buff",
 		"max_stacks": 1,
-		"refresh_duration_on_stack": true,
-		"name": "ogryn_bonebreaker_revenge_damage_vs_cultist_melee",
-		"stat_buffs": { "damage_vs_cultist_melee": 0.2 }
+		"predicted": false,
+		"name": "weapon_trait_bespoke_ogryn_club_p2_toughness_recovery_on_chained_attacks",
+		"proc_events": { "on_sweep_finish": 1 }
 	},
 	{
 		"class_name": "proc_buff",
@@ -2309,8 +2300,8 @@
 		"predicted": false,
 		"max_stacks": 1,
 		"refresh_duration_on_stack": true,
-		"name": "ogryn_bonebreaker_revenge_damage_vs_renegade_shocktrooper",
-		"stat_buffs": { "damage_vs_renegade_shocktrooper": 0.2 }
+		"name": "ogryn_bonebreaker_revenge_damage_vs_cultist_melee",
+		"stat_buffs": { "damage_vs_cultist_melee": 0.2 }
 	},
 	{
 		"class_name": "proc_buff",
@@ -2329,8 +2320,8 @@
 		"predicted": false,
 		"max_stacks": 1,
 		"refresh_duration_on_stack": true,
-		"name": "ogryn_bonebreaker_revenge_damage_vs_chaos_ogryn_gunner",
-		"stat_buffs": { "damage_vs_chaos_ogryn_gunner": 0.2 }
+		"name": "ogryn_bonebreaker_revenge_damage_vs_chaos_beast_of_nurgle",
+		"stat_buffs": { "damage_vs_chaos_beast_of_nurgle": 0.2 }
 	},
 	{
 		"class_name": "buff",
@@ -2351,8 +2342,8 @@
 	{
 		"class_name": "proc_buff",
 		"predicted": false,
-		"name": "weapon_trait_melee_common_wield_on_block_impact_bonus_buff",
-		"proc_events": { "on_block": 0.05 }
+		"name": "weapon_trait_melee_common_wield_on_hit_impact_bonus_buff",
+		"proc_events": { "on_hit": 0.05 }
 	},
 	{
 		"class_name": "buff",
@@ -2360,8 +2351,8 @@
 		"predicted": false,
 		"max_stacks": 1,
 		"refresh_duration_on_stack": true,
-		"name": "ogryn_bonebreaker_revenge_damage_vs_renegade_captain",
-		"stat_buffs": { "damage_vs_renegade_captain": 0.2 }
+		"name": "ogryn_bonebreaker_revenge_damage_vs_chaos_ogryn_gunner",
+		"stat_buffs": { "damage_vs_chaos_ogryn_gunner": 0.2 }
 	},
 	{
 		"class_name": "buff",
@@ -2369,8 +2360,8 @@
 		"predicted": false,
 		"max_stacks": 1,
 		"refresh_duration_on_stack": true,
-		"name": "ogryn_bonebreaker_revenge_damage_vs_chaos_newly_infected",
-		"stat_buffs": { "damage_vs_chaos_newly_infected": 0.2 }
+		"name": "ogryn_bonebreaker_revenge_damage_vs_cultist_assault",
+		"stat_buffs": { "damage_vs_cultist_assault": 0.2 }
 	},
 	{
 		"class_name": "weapon_trait_parent_proc_buff",
@@ -2384,8 +2375,8 @@
 		"predicted": false,
 		"max_stacks": 1,
 		"refresh_duration_on_stack": true,
-		"name": "ogryn_bonebreaker_revenge_damage_vs_renegade_flamer",
-		"stat_buffs": { "damage_vs_renegade_flamer": 0.2 }
+		"name": "ogryn_bonebreaker_revenge_damage_vs_renegade_captain",
+		"stat_buffs": { "damage_vs_renegade_captain": 0.2 }
 	},
 	{
 		"class_name": "proc_buff",
@@ -2396,9 +2387,12 @@
 	},
 	{
 		"class_name": "buff",
-		"max_stacks": 3,
-		"name": "weapon_trait_bespoke_thunderhammer_2h_p1_windup_increases_power_child",
-		"predicted": false
+		"duration": 5,
+		"predicted": false,
+		"max_stacks": 1,
+		"refresh_duration_on_stack": true,
+		"name": "ogryn_bonebreaker_revenge_damage_vs_chaos_newly_infected",
+		"stat_buffs": { "damage_vs_chaos_newly_infected": 0.2 }
 	},
 	{
 		"class_name": "proc_buff",
@@ -2423,8 +2417,8 @@
 		"predicted": false,
 		"max_stacks": 1,
 		"refresh_duration_on_stack": true,
-		"name": "ogryn_bonebreaker_revenge_damage_vs_renegade_sniper",
-		"stat_buffs": { "damage_vs_renegade_sniper": 0.2 }
+		"name": "ogryn_bonebreaker_revenge_damage_vs_renegade_flamer",
+		"stat_buffs": { "damage_vs_renegade_flamer": 0.2 }
 	},
 	{
 		"meta_stat_buffs": { "mission_reward_xp_modifier": 0.2 },
@@ -2449,8 +2443,8 @@
 		"predicted": false,
 		"max_stacks": 1,
 		"refresh_duration_on_stack": true,
-		"name": "ogryn_bonebreaker_revenge_damage_vs_renegade_netgunner",
-		"stat_buffs": { "damage_vs_renegade_netgunner": 0.2 }
+		"name": "ogryn_bonebreaker_revenge_damage_vs_renegade_sniper",
+		"stat_buffs": { "damage_vs_renegade_sniper": 0.2 }
 	},
 	{
 		"class_name": "buff",
@@ -2468,12 +2462,11 @@
 	},
 	{
 		"class_name": "buff",
-		"duration": 5,
+		"keywords": {},
 		"predicted": false,
 		"max_stacks": 1,
-		"refresh_duration_on_stack": true,
-		"name": "ogryn_bonebreaker_revenge_damage_vs_chaos_beast_of_nurgle",
-		"stat_buffs": { "damage_vs_chaos_beast_of_nurgle": 0.2 }
+		"name": "ogryn_bonebreaker_coherency_increased_melee_damage",
+		"stat_buffs": { "melee_heavy_damage": 0.1 }
 	},
 	{
 		"class_name": "buff",
@@ -2488,21 +2481,15 @@
 	},
 	{
 		"class_name": "buff",
-		"duration": 5,
-		"predicted": false,
-		"max_stacks": 1,
-		"refresh_duration_on_stack": true,
-		"name": "ogryn_bonebreaker_revenge_damage_vs_cultist_berzerker",
-		"stat_buffs": { "damage_vs_cultist_berzerker": 0.2 }
+		"max_stacks": 5,
+		"name": "weapon_trait_bespoke_combataxe_p3_stacking_rending_on_weakspot_child",
+		"predicted": false
 	},
 	{
 		"class_name": "buff",
-		"duration": 5,
+		"keywords": ["allow_hipfire_during_sprint"],
 		"predicted": false,
-		"max_stacks": 1,
-		"refresh_duration_on_stack": true,
-		"name": "ogryn_bonebreaker_revenge_damage_vs_chaos_plague_ogryn_sprayer",
-		"stat_buffs": { "damage_vs_chaos_plague_ogryn_sprayer": 0.2 }
+		"name": "weapon_trait_bespoke_forcestaff_p2_hipfire_while_sprinting"
 	},
 	{
 		"class_name": "proc_buff",
@@ -2514,12 +2501,12 @@
 	},
 	{
 		"class_name": "buff",
-		"duration": 5,
+		"keywords": [
+			"fully_charged_attacks_infinite_cleave",
+			"ignore_armor_aborts_attack"
+		],
 		"predicted": false,
-		"max_stacks": 1,
-		"refresh_duration_on_stack": true,
-		"name": "ogryn_bonebreaker_revenge_damage_vs_cultist_grenadier",
-		"stat_buffs": { "damage_vs_cultist_grenadier": 0.2 }
+		"name": "ogryn_bonebreaker_fully_charged_attacks_infinite_cleave"
 	},
 	{
 		"class_name": "stepped_stat_buff",
@@ -2535,12 +2522,9 @@
 	},
 	{
 		"class_name": "buff",
-		"duration": 5,
 		"predicted": false,
-		"max_stacks": 1,
-		"refresh_duration_on_stack": true,
-		"name": "ogryn_bonebreaker_revenge_damage_vs_chaos_plague_ogryn",
-		"stat_buffs": { "damage_vs_chaos_plague_ogryn": 0.2 }
+		"name": "ogryn_bonebreaker_bigger_coherency_radius",
+		"stat_buffs": { "coherency_radius_modifier": 0.5 }
 	},
 	{
 		"class_name": "buff",
@@ -2555,20 +2539,23 @@
 	{
 		"class_name": "proc_buff",
 		"predicted": false,
-		"name": "weapon_trait_melee_activated_wield_on_weapon_special_increase_impact_of_next_attack",
-		"proc_events": { "on_weapon_special": 1 }
+		"name": "weapon_trait_melee_activated_wield_on_weapon_special_kill_chance_to_increase_attack",
+		"proc_events": { "on_kill": 0.33 }
+	},
+	{
+		"class_name": "buff",
+		"duration": 5,
+		"predicted": false,
+		"max_stacks": 1,
+		"refresh_duration_on_stack": true,
+		"name": "ogryn_bonebreaker_revenge_damage_vs_chaos_plague_ogryn",
+		"stat_buffs": { "damage_vs_chaos_plague_ogryn": 0.2 }
 	},
 	{
 		"class_name": "proc_buff",
 		"predicted": false,
-		"name": "weapon_trait_bespoke_forcestaff_p2_suppression_on_close_kill",
-		"proc_events": { "on_hit": 1 }
-	},
-	{
-		"class_name": "weapon_trait_proc_conditional_switch_buff",
-		"predicted": false,
-		"name": "weapon_trait_bespoke_combataxe_p3_power_bonus_on_first_attack",
-		"proc_events": { "on_windup_start": 1, "on_sweep_start": 1 }
+		"name": "ogryn_bonebreaker_revenge_damage",
+		"proc_events": { "on_player_hit_recieved": 1 }
 	},
 	{
 		"class_name": "proc_buff",
@@ -2584,10 +2571,16 @@
 		"proc_events": { "on_hit": 1 }
 	},
 	{
-		"class_name": "proc_buff",
+		"stat_buffs": { "melee_heavy_damage": 0.02 },
+		"duration": 10,
+		"max_stacks": 25,
+		"hud_icon": "content/ui/textures/icons/talents/ogryn_2/hud/ogryn_2_tier_5_2",
+		"proc_events": { "on_sweep_start": 1, "on_sweep_finish": 1 },
+		"hud_priority": 3,
 		"predicted": false,
-		"name": "ogryn_bonebreaker_revenge_damage",
-		"proc_events": { "on_player_hit_recieved": 1 }
+		"refresh_duration_on_stack": true,
+		"name": "ogryn_bonebreaker_big_bully_heavy_hits_buff",
+		"class_name": "proc_buff"
 	},
 	{
 		"class_name": "buff",
@@ -2603,13 +2596,10 @@
 		"predicted": false
 	},
 	{
-		"class_name": "buff",
-		"keywords": [
-			"fully_charged_attacks_infinite_cleave",
-			"ignore_armor_aborts_attack"
-		],
+		"class_name": "proc_buff",
 		"predicted": false,
-		"name": "ogryn_bonebreaker_fully_charged_attacks_infinite_cleave"
+		"name": "weapon_trait_bespoke_thunderhammer_2h_p1_toughness_recovery_on_multiple_hits",
+		"proc_events": { "on_hit": 1 }
 	},
 	{
 		"class_name": "buff",
@@ -2639,22 +2629,18 @@
 		"proc_events": { "on_kill": 1 }
 	},
 	{
-		"class_name": "buff",
-		"max_stacks": 2,
-		"name": "weapon_trait_bespoke_ogryn_club_p2_increased_crit_chance_on_staggered_weapon_special_hit_child",
+		"class_name": "stepped_stat_buff",
+		"max_stacks": 1,
+		"name": "weapon_trait_bespoke_ogryn_heavystubber_p1_movement_speed_on_continous_fire",
 		"predicted": false
 	},
 	{
-		"stat_buffs": { "melee_heavy_damage": 0.02 },
-		"duration": 10,
-		"max_stacks": 25,
-		"hud_icon": "content/ui/textures/icons/talents/ogryn_2/hud/ogryn_2_tier_5_2",
-		"proc_events": { "on_sweep_start": 1, "on_sweep_finish": 1 },
-		"hud_priority": 3,
+		"class_name": "proc_buff",
+		"lerped_stat_buffs": { "melee_damage": { "min": 0, "max": 0.25 } },
 		"predicted": false,
-		"refresh_duration_on_stack": true,
-		"name": "ogryn_bonebreaker_big_bully_heavy_hits_buff",
-		"class_name": "proc_buff"
+		"hud_icon": "content/ui/textures/icons/talents/ogryn_2/hud/ogryn_2_tier_1_1",
+		"name": "ogryn_bonebreaker_hitting_multiple_with_melee_grants_melee_damage_bonus",
+		"proc_events": { "on_sweep_finish": 1 }
 	},
 	{
 		"class_name": "buff",
@@ -2719,10 +2705,10 @@
 		"stat_buffs": { "toughness_regen_rate_modifier": 25 }
 	},
 	{
-		"class_name": "proc_buff",
-		"predicted": false,
-		"name": "weapon_trait_bespoke_combatsword_p2_increased_attack_cleave_on_multiple_hits",
-		"proc_events": { "on_hit": 1 }
+		"class_name": "buff",
+		"max_stacks": 5,
+		"name": "weapon_trait_bespoke_combatsword_p1_chained_hits_increases_melee_cleave_child",
+		"predicted": false
 	},
 	{
 		"class_name": "proc_buff",
@@ -2731,12 +2717,9 @@
 		"proc_events": { "on_hit": 1 }
 	},
 	{
-		"class_name": "proc_buff",
-		"lerped_stat_buffs": { "melee_damage": { "min": 0, "max": 0.25 } },
-		"predicted": false,
-		"hud_icon": "content/ui/textures/icons/talents/ogryn_2/hud/ogryn_2_tier_1_1",
-		"name": "ogryn_bonebreaker_hitting_multiple_with_melee_grants_melee_damage_bonus",
-		"proc_events": { "on_sweep_finish": 1 }
+		"class_name": "buff",
+		"name": "ogryn_base_lunge_toughness_and_damage_resistance",
+		"predicted": false
 	},
 	{
 		"class_name": "proc_buff",
@@ -2754,11 +2737,6 @@
 		"unique_buff_id": "hit_reaction_movement_slow"
 	},
 	{
-		"class_name": "buff",
-		"name": "ogryn_base_lunge_toughness_and_damage_resistance",
-		"predicted": false
-	},
-	{
 		"class_name": "proc_buff",
 		"predicted": false,
 		"name": "ogryn_bonebreaker_multiple_enemy_heavy_hits_restore_toughness",
@@ -2767,14 +2745,13 @@
 	{
 		"class_name": "weapon_trait_parent_proc_buff",
 		"predicted": false,
-		"name": "weapon_trait_bespoke_combataxe_p1_increase_power_on_hit_parent",
-		"proc_events": { "on_hit": 1 }
+		"name": "weapon_trait_bespoke_autogun_p2_increase_close_damage_on_close_kill_parent",
+		"proc_events": { "on_kill": 1 }
 	},
 	{
-		"class_name": "proc_buff",
-		"duration": 3,
+		"class_name": "weapon_trait_parent_proc_buff",
 		"predicted": false,
-		"name": "weapon_trait_melee_common_wield_on_weakspot_grant_bleeding_temporary_buff",
+		"name": "weapon_trait_bespoke_combataxe_p1_increase_power_on_hit_parent",
 		"proc_events": { "on_hit": 1 }
 	},
 	{
@@ -2787,16 +2764,23 @@
 		"stat_buffs": { "damage_vs_chaos_spawn": 0.2 }
 	},
 	{
+		"class_name": "proc_buff",
+		"predicted": false,
+		"name": "ogryn_bonebreaker_charge_grants_allied_movement_speed",
+		"proc_events": { "on_lunge_start": 1 }
+	},
+	{
 		"class_name": "stepped_stat_buff",
 		"max_stacks": 1,
 		"name": "weapon_trait_bespoke_ogryn_heavystubber_p1_toughness_on_continuous_fire",
 		"predicted": false
 	},
 	{
-		"class_name": "buff",
-		"max_stacks": 3,
-		"name": "weapon_trait_bespoke_ogryn_club_p1_windup_increases_power_child",
-		"predicted": false
+		"class_name": "proc_buff",
+		"max_stacks": 1,
+		"predicted": false,
+		"name": "weapon_trait_bespoke_forcesword_p1_chained_hits_vents_warpcharge",
+		"proc_events": { "on_sweep_finish": 1 }
 	},
 	{
 		"class_name": "buff",
@@ -2865,11 +2849,9 @@
 		"buff_id": "flamer_assault"
 	},
 	{
-		"class_name": "proc_buff",
-		"max_stacks": 1,
-		"predicted": false,
-		"name": "weapon_trait_bespoke_forcesword_p1_warp_burninating_on_crit",
-		"proc_events": { "on_hit": 1 }
+		"class_name": "buff",
+		"name": "weapon_trait_melee_activated_wield_during_weapon_special_increase_damage_vs_disgustingly_resilient_damage",
+		"predicted": false
 	},
 	{
 		"class_name": "buff",
@@ -2893,25 +2875,6 @@
 		}
 	},
 	{
-		"stat_buffs": { "damage_taken_multiplier": 0.5 },
-		"predicted": false,
-		"max_stacks": 1,
-		"name": "ogryn_bonebreaker_ally_damage_reduction",
-		"class_name": "buff"
-	},
-	{
-		"class_name": "buff",
-		"max_stacks": 5,
-		"name": "weapon_trait_bespoke_forcesword_p1_increase_power_on_kill_child",
-		"predicted": false
-	},
-	{
-		"class_name": "stepped_stat_buff",
-		"max_stacks": 1,
-		"name": "weapon_trait_bespoke_ogryn_thumper_p1_power_bonus_on_continuous_fire",
-		"predicted": false
-	},
-	{
 		"class_name": "proc_buff",
 		"predicted": false,
 		"name": "ogryn_bonebreaker_big_bully_heavy_hits",
@@ -2919,12 +2882,14 @@
 	},
 	{
 		"class_name": "buff",
-		"name": "weapon_trait_ranged_aimed_wield_while_aiming_increased_berserker_damage_buff",
-		"predicted": false
+		"predicted": false,
+		"name": "weapon_trait_ranged_common_equip_decrease_corruption_damage_taken_buff",
+		"stat_buffs": { "corruption_taken_multiplier": 0.8 }
 	},
 	{
-		"class_name": "buff",
-		"name": "weapon_trait_ranged_common_wield_increased_super_armor_damage_buff",
+		"class_name": "stepped_stat_buff",
+		"max_stacks": 1,
+		"name": "weapon_trait_bespoke_ogryn_thumper_p1_power_bonus_on_continuous_fire",
 		"predicted": false
 	},
 	{
@@ -2943,6 +2908,11 @@
 			"toughness_damage_taken_multiplier": 0.8,
 			"damage_taken_multiplier": 0.8
 		}
+	},
+	{
+		"class_name": "buff",
+		"name": "weapon_trait_ranged_common_wield_increased_super_armor_damage_buff",
+		"predicted": false
 	},
 	{
 		"class_name": "buff",
@@ -2984,16 +2954,71 @@
 		}
 	},
 	{
-		"class_name": "buff",
+		"is_negative": true,
+		"stat_buffs": { "movement_speed": 0.6, "dodge_speed_multiplier": 0.9 },
+		"keywords": ["zero_slide_friction"],
+		"max_stacks": 1,
+		"forbidden_keywords": ["beast_of_nurgle_liquid_immunity"],
+		"hud_icon": "content/ui/textures/icons/buffs/hud/states_knocked_down_buff_hud",
+		"interval": 0.5,
 		"predicted": false,
-		"name": "weapon_trait_ranged_common_equip_decrease_corruption_damage_taken_buff",
-		"stat_buffs": { "corruption_taken_multiplier": 0.8 }
+		"damage_type": "minion_vomit",
+		"class_name": "interval_buff",
+		"name": "beast_of_nurgle_in_slime",
+		"damage_template": {
+			"ogryn_disorientation_type": "corruption",
+			"targets": { "default_target": { "boost_curve": [0, 0.3, 0.6, 0.8, 1] } },
+			"ignore_toughness": true,
+			"armor_damage_modifier": {
+				"attack": {
+					"armored": 0,
+					"unarmored": 0,
+					"berserker": 0,
+					"prop_armor": 0,
+					"super_armor": 0,
+					"resistant": 0,
+					"void_shield": 0,
+					"player": 0.1,
+					"disgustingly_resilient": 0
+				},
+				"impact": {
+					"armored": 0,
+					"unarmored": 0,
+					"berserker": 0,
+					"prop_armor": 0,
+					"super_armor": 0,
+					"resistant": 0,
+					"void_shield": 0,
+					"player": 0.1,
+					"disgustingly_resilient": 0
+				}
+			},
+			"power_distribution": { "attack": 1, "impact": 0 },
+			"cleave_distribution": { "attack": 1, "impact": 0 },
+			"stagger_category": "melee",
+			"permanent_damage_ratio": 1,
+			"toughness_multiplier": 2,
+			"name": "beast_of_nurgle_slime_liquid",
+			"disorientation_type": "corruption"
+		}
 	},
 	{
 		"class_name": "buff",
-		"predicted": true,
-		"name": "tg_increased_coherency_veteran_2",
-		"stat_buffs": { "toughness_regen_rate_modifier": 25 }
+		"max_stacks": 3,
+		"name": "weapon_trait_bespoke_thunderhammer_2h_p1_windup_increases_power_child",
+		"predicted": false
+	},
+	{
+		"class_name": "proc_buff",
+		"predicted": false,
+		"name": "weapon_trait_bespoke_lasgun_p3_burninating_on_crit",
+		"proc_events": { "on_hit": 1 }
+	},
+	{
+		"class_name": "proc_buff",
+		"predicted": false,
+		"name": "weapon_trait_ranged_common_wield_on_hit_increased_super_armor_damage_buff",
+		"proc_events": { "on_hit": 0.05 }
 	},
 	{
 		"class_name": "buff",
@@ -3003,16 +3028,16 @@
 		"name": "ogryn_bonebreaker_increased_toughness_at_low_health"
 	},
 	{
-		"class_name": "stepped_stat_buff",
-		"max_stacks": 1,
-		"name": "weapon_trait_bespoke_ogryn_gauntlet_p1_power_bonus_on_continuous_fire",
+		"class_name": "buff",
+		"max_stacks": 5,
+		"name": "weapon_trait_bespoke_thunderhammer_2h_p1_consecutive_hits_increases_stagger_child",
 		"predicted": false
 	},
 	{
-		"class_name": "proc_buff",
-		"predicted": false,
-		"name": "weapon_trait_bespoke_thunderhammer_2h_p1_toughness_recovery_on_multiple_hits",
-		"proc_events": { "on_hit": 1 }
+		"class_name": "buff",
+		"max_stacks": 5,
+		"name": "weapon_trait_bespoke_thunderhammer_2h_p1_increase_power_on_kill_child",
+		"predicted": false
 	},
 	{
 		"class_name": "buff",
@@ -3020,10 +3045,10 @@
 		"predicted": false
 	},
 	{
-		"class_name": "buff",
-		"max_stacks": 5,
-		"name": "weapon_trait_bespoke_thunderhammer_2h_p1_consecutive_hits_increases_stagger_child",
-		"predicted": false
+		"class_name": "weapon_trait_parent_proc_buff",
+		"predicted": false,
+		"name": "weapon_trait_bespoke_thunderhammer_2h_p1_increase_power_on_kill_parent",
+		"proc_events": { "on_kill": 1 }
 	},
 	{
 		"class_name": "buff",
@@ -3036,10 +3061,10 @@
 		"predicted": false
 	},
 	{
-		"class_name": "buff",
-		"max_stacks": 5,
-		"name": "weapon_trait_bespoke_thunderhammer_2h_p1_increase_power_on_kill_child",
-		"predicted": false
+		"class_name": "proc_buff",
+		"predicted": false,
+		"name": "weapon_trait_bespoke_thunderhammer_2h_p1_staggered_targets_receive_increased_stagger_debuff",
+		"proc_events": { "on_hit": 1 }
 	},
 	{
 		"class_name": "buff",
@@ -3053,19 +3078,20 @@
 	{
 		"class_name": "weapon_trait_parent_proc_buff",
 		"predicted": false,
-		"name": "weapon_trait_bespoke_thunderhammer_2h_p1_increase_power_on_kill_parent",
-		"proc_events": { "on_kill": 1 }
+		"name": "weapon_trait_bespoke_thunderhammer_2h_p1_increase_power_on_hit_parent",
+		"proc_events": { "on_hit": 1 }
+	},
+	{
+		"class_name": "weapon_trait_activated_parent_proc_buff",
+		"max_stacks": 1,
+		"predicted": false,
+		"name": "weapon_trait_bespoke_forcesword_p1_chained_weakspot_hits_increases_power_parent",
+		"proc_events": { "on_sweep_start": 1, "on_sweep_finish": 1, "on_hit": 1 }
 	},
 	{
 		"class_name": "proc_buff",
 		"predicted": false,
-		"name": "weapon_trait_bespoke_thunderhammer_2h_p1_staggered_targets_receive_increased_stagger_debuff",
-		"proc_events": { "on_hit": 1 }
-	},
-	{
-		"class_name": "weapon_trait_parent_proc_buff",
-		"predicted": false,
-		"name": "weapon_trait_bespoke_thunderhammer_2h_p1_increase_power_on_hit_parent",
+		"name": "weapon_trait_bespoke_stubrevolver_p1_suppression_on_close_kill",
 		"proc_events": { "on_hit": 1 }
 	},
 	{
@@ -3076,9 +3102,10 @@
 	},
 	{
 		"class_name": "proc_buff",
+		"max_stacks": 1,
 		"predicted": false,
-		"name": "weapon_trait_bespoke_stubrevolver_p1_suppression_on_close_kill",
-		"proc_events": { "on_hit": 1 }
+		"name": "weapon_trait_bespoke_stubrevolver_p1_toughness_on_elite_kills",
+		"proc_events": { "on_kill": 1 }
 	},
 	{
 		"class_name": "buff",
@@ -3087,11 +3114,11 @@
 		"predicted": false
 	},
 	{
-		"class_name": "weapon_trait_activated_parent_proc_buff",
-		"max_stacks": 1,
+		"class_name": "proc_buff",
+		"max_stacks": 5,
 		"predicted": false,
-		"name": "weapon_trait_bespoke_stubrevolver_p1_chained_weakspot_hits_increases_power_parent",
-		"proc_events": { "on_shoot": 1 }
+		"name": "weapon_trait_bespoke_ogryn_club_p2_heavy_chained_hits_increases_killing_blow_chance_child",
+		"proc_events": { "on_hit": 1 }
 	},
 	{
 		"class_name": "buff",
@@ -3115,11 +3142,10 @@
 		"proc_events": { "on_push_hit": 1 }
 	},
 	{
-		"class_name": "proc_buff",
+		"class_name": "buff",
 		"max_stacks": 1,
-		"predicted": false,
-		"name": "weapon_trait_bespoke_stubrevolver_p1_toughness_on_elite_kills",
-		"proc_events": { "on_kill": 1 }
+		"name": "weapon_trait_bespoke_powermaul_p1_taunt_target_on_hit_child",
+		"predicted": false
 	},
 	{
 		"class_name": "weapon_trait_activated_parent_proc_buff",
@@ -3155,8 +3181,8 @@
 	},
 	{
 		"class_name": "buff",
-		"max_stacks": 5,
-		"name": "weapon_trait_bespoke_ogryn_heavystubber_p1_increase_power_on_close_kill_child",
+		"max_stacks": 3,
+		"name": "weapon_trait_bespoke_combataxe_p3_windup_increases_power_child",
 		"predicted": false
 	},
 	{
@@ -3166,28 +3192,10 @@
 		"predicted": false
 	},
 	{
-		"class_name": "buff",
-		"max_stacks": 5,
-		"name": "weapon_trait_bespoke_powermaul_p1_consecutive_hits_increases_stagger_child",
-		"predicted": false
-	},
-	{
-		"class_name": "proc_buff",
-		"predicted": false,
-		"name": "weapon_trait_melee_common_wield_on_block_increased_resistant_damage_buff",
-		"proc_events": { "on_block": 0.05 }
-	},
-	{
 		"class_name": "proc_buff",
 		"predicted": false,
 		"name": "weapon_trait_bespoke_stubrevolver_p1_crit_chance_bonus_on_melee_kills",
 		"proc_events": { "on_kill": 1 }
-	},
-	{
-		"class_name": "buff",
-		"lerped_stat_buffs": { "elusiveness_modifier": { "max": 2.5, "min": 1 } },
-		"predicted": false,
-		"name": "weapon_trait_toughness_regen_near_burning_enemies"
 	},
 	{
 		"class_name": "proc_buff",
@@ -3201,6 +3209,12 @@
 		"predicted": false
 	},
 	{
+		"class_name": "buff",
+		"lerped_stat_buffs": { "elusiveness_modifier": { "max": 2.5, "min": 1 } },
+		"predicted": false,
+		"name": "weapon_trait_toughness_regen_near_burning_enemies"
+	},
+	{
 		"class_name": "weapon_trait_parent_proc_buff",
 		"predicted": false,
 		"name": "weapon_trait_bespoke_shotgun_p1_increase_close_damage_on_close_kill_parent",
@@ -3210,17 +3224,6 @@
 		"class_name": "buff",
 		"max_stacks": 5,
 		"name": "weapon_trait_bespoke_shotgun_p1_increase_power_on_close_kill_child",
-		"predicted": false
-	},
-	{
-		"class_name": "buff",
-		"lerped_stat_buffs": { "damage_vs_elites": { "min": 0.1, "max": 0.3 } },
-		"predicted": false,
-		"name": "example_weapon_trait_ranged_buff_lerp_2"
-	},
-	{
-		"class_name": "buff",
-		"name": "weapon_trait_bespoke_chainsword_2h_p1_pass_past_armor_on_crit",
 		"predicted": false
 	},
 	{
@@ -3237,9 +3240,14 @@
 	},
 	{
 		"class_name": "buff",
-		"lerped_stat_buffs": { "damage": { "max": 0.2, "min": 0 } },
+		"lerped_stat_buffs": { "damage_vs_elites": { "min": 0.1, "max": 0.3 } },
 		"predicted": false,
-		"name": "weapon_trait_melee_common_wield_low_health_grant_power_modifier_buff"
+		"name": "example_weapon_trait_ranged_buff_lerp_2"
+	},
+	{
+		"class_name": "buff",
+		"name": "weapon_trait_bespoke_chainsword_2h_p1_pass_past_armor_on_crit",
+		"predicted": false
 	},
 	{
 		"class_name": "proc_buff",
@@ -3251,8 +3259,14 @@
 		"class_name": "proc_buff",
 		"max_stacks": 1,
 		"predicted": false,
-		"name": "psyker_biomancer_smite_kills_add_warpfire",
-		"proc_events": { "on_hit": 1 }
+		"name": "weapon_trait_bespoke_shotgun_p1_power_bonus_on_hitting_single_enemy_with_all",
+		"proc_events": { "on_shoot": 1 }
+	},
+	{
+		"class_name": "buff",
+		"lerped_stat_buffs": { "damage": { "max": 0.2, "min": 0 } },
+		"predicted": false,
+		"name": "weapon_trait_melee_common_wield_low_health_grant_power_modifier_buff"
 	},
 	{
 		"class_name": "proc_buff",
@@ -3263,9 +3277,10 @@
 	},
 	{
 		"class_name": "proc_buff",
+		"max_stacks": 1,
 		"predicted": false,
-		"name": "weapon_trait_bespoke_shotgun_p1_bleed_on_crit",
-		"proc_events": { "on_pellet_hits": 1 }
+		"name": "psyker_biomancer_smite_kills_add_warpfire",
+		"proc_events": { "on_hit": 1 }
 	},
 	{
 		"class_name": "weapon_trait_parent_proc_buff",
@@ -3278,6 +3293,17 @@
 		"predicted": false,
 		"name": "weapon_trait_bespoke_powersword_p1_increase_power_on_kill_parent",
 		"proc_events": { "on_kill": 1 }
+	},
+	{
+		"class_name": "buff",
+		"max_stacks": 5,
+		"name": "weapon_trait_bespoke_powersword_p1_increase_power_on_kill_child",
+		"predicted": false
+	},
+	{
+		"class_name": "buff",
+		"name": "weapon_trait_bespoke_powersword_p1_pass_past_armor_on_weapon_special",
+		"predicted": false
 	},
 	{
 		"class_name": "buff",
@@ -3298,9 +3324,10 @@
 		"proc_events": { "on_block": 0.05 }
 	},
 	{
-		"class_name": "buff",
-		"name": "weapon_trait_bespoke_powersword_p1_pass_past_armor_on_weapon_special",
-		"predicted": false
+		"class_name": "weapon_trait_parent_proc_buff",
+		"predicted": false,
+		"name": "weapon_trait_bespoke_autogun_p3_stacking_crit_chance_on_weakspot_parent",
+		"proc_events": { "on_hit": 1, "on_critical_strike": 1 }
 	},
 	{
 		"class_name": "proc_buff",
@@ -3309,10 +3336,11 @@
 		"proc_events": { "on_kill": 1 }
 	},
 	{
-		"class_name": "proc_buff",
+		"class_name": "weapon_trait_activated_parent_proc_buff",
+		"max_stacks": 5,
 		"predicted": false,
-		"name": "weapon_trait_bespoke_powersword_p1_infinite_melee_cleave_on_weakspot_kill",
-		"proc_events": { "on_kill": 1 }
+		"name": "weapon_trait_bespoke_powersword_p1_chained_hits_increases_melee_cleave_parent",
+		"proc_events": { "on_sweep_start": 1, "on_sweep_finish": 1, "on_hit": 1 }
 	},
 	{
 		"class_name": "buff",
@@ -3336,22 +3364,22 @@
 		"name": "weapon_trait_bespoke_ogryn_thumper_p1_hipfire_while_sprinting"
 	},
 	{
-		"class_name": "stepped_stat_buff",
-		"name": "weapon_trait_bespoke_autogun_p3_crit_chance_based_on_ammo_left",
+		"class_name": "proc_buff",
+		"predicted": false,
+		"name": "weapon_trait_bespoke_powersword_p1_increased_melee_damage_on_multiple_hits",
+		"proc_events": { "on_hit": 1 }
+	},
+	{
+		"class_name": "buff",
+		"max_stacks": 5,
+		"name": "weapon_trait_bespoke_chainsword_2h_p1_chained_hits_increases_crit_chance_child",
 		"predicted": false
 	},
 	{
-		"class_name": "proc_buff",
-		"predicted": false,
-		"name": "weapon_trait_melee_common_wield_on_hit_increased_super_armor_damage_buff",
-		"proc_events": { "on_hit": 0.05 }
-	},
-	{
-		"class_name": "weapon_trait_activated_parent_proc_buff",
-		"max_stacks": 5,
-		"predicted": false,
-		"name": "weapon_trait_bespoke_powersword_p1_chained_hits_increases_melee_cleave_parent",
-		"proc_events": { "on_sweep_start": 1, "on_sweep_finish": 1, "on_hit": 1 }
+		"class_name": "stepped_stat_buff",
+		"max_stacks": 1,
+		"name": "weapon_trait_bespoke_ogryn_thumper_p2_power_bonus_on_continuous_fire",
+		"predicted": false
 	},
 	{
 		"class_name": "buff",
@@ -3359,10 +3387,10 @@
 		"predicted": false
 	},
 	{
-		"class_name": "proc_buff",
-		"predicted": false,
-		"name": "weapon_trait_bespoke_powersword_p1_increased_melee_damage_on_multiple_hits",
-		"proc_events": { "on_hit": 1 }
+		"class_name": "buff",
+		"max_stacks": 5,
+		"name": "weapon_trait_bespoke_powermaul_p1_consecutive_hits_increases_stagger_child",
+		"predicted": false
 	},
 	{
 		"class_name": "buff",
@@ -3375,10 +3403,10 @@
 		"stat_buffs": { "damage_taken_by_cultist_mutant_multiplier": 0.8 }
 	},
 	{
-		"class_name": "buff",
-		"keywords": ["sticky_projectiles"],
+		"class_name": "weapon_trait_parent_proc_buff",
 		"predicted": false,
-		"name": "weapon_trait_bespoke_ogryn_thumper_p2_grenades_stick_to_monsters"
+		"name": "weapon_trait_bespoke_powermaul_p1_stacking_increase_impact_on_hit_parent",
+		"proc_events": { "on_hit": 1 }
 	},
 	{
 		"class_name": "proc_buff",
@@ -3417,10 +3445,10 @@
 		}
 	},
 	{
-		"class_name": "weapon_trait_parent_proc_buff",
-		"predicted": false,
-		"name": "weapon_trait_bespoke_powermaul_p1_stacking_increase_impact_on_hit_parent",
-		"proc_events": { "on_hit": 1 }
+		"class_name": "buff",
+		"max_stacks": 5,
+		"name": "weapon_trait_bespoke_powermaul_p1_stacking_increase_impact_on_hit_child",
+		"predicted": false
 	},
 	{
 		"class_name": "buff",
@@ -3434,32 +3462,15 @@
 		"predicted": false
 	},
 	{
-		"class_name": "buff",
-		"max_stacks": 1,
-		"name": "weapon_trait_bespoke_powermaul_p1_taunt_target_on_hit_child",
-		"predicted": false
+		"class_name": "proc_buff",
+		"predicted": false,
+		"name": "weapon_trait_bespoke_powermaul_p1_staggered_targets_receive_increased_stagger_debuff",
+		"proc_events": { "on_hit": 1 }
 	},
 	{
 		"class_name": "buff",
 		"name": "weapon_trait_melee_activated_wield_during_weapon_special_finesse_bonus",
 		"predicted": false
-	},
-	{
-		"class_name": "buff",
-		"max_stacks": 5,
-		"name": "weapon_trait_bespoke_powermaul_p1_stacking_increase_impact_on_hit_child",
-		"predicted": false
-	},
-	{
-		"class_name": "buff",
-		"name": "weapon_trait_ranged_warp_charge_wield_reduced_warp_charge_generation_charging",
-		"predicted": false
-	},
-	{
-		"class_name": "proc_buff",
-		"predicted": false,
-		"name": "weapon_trait_bespoke_powermaul_p1_staggered_targets_receive_increased_stagger_debuff",
-		"proc_events": { "on_hit": 1 }
 	},
 	{
 		"class_name": "weapon_trait_target_number_parent_proc_buff",
@@ -3469,9 +3480,8 @@
 	},
 	{
 		"class_name": "buff",
-		"predicted": false,
-		"hud_icon": "content/ui/textures/icons/buffs/hud/states_sprint_buff_hud",
-		"name": "sprint_with_stamina_buff"
+		"name": "weapon_trait_ranged_warp_charge_wield_reduced_warp_charge_generation_charging",
+		"predicted": false
 	},
 	{
 		"class_name": "proc_buff",
@@ -3484,6 +3494,23 @@
 		"max_stacks": 5,
 		"name": "weapon_trait_bespoke_powermaul_2h_p1_stacking_increase_impact_on_hit_child",
 		"predicted": false
+	},
+	{
+		"class_name": "buff",
+		"predicted": false,
+		"hud_icon": "content/ui/textures/icons/buffs/hud/states_sprint_buff_hud",
+		"name": "sprint_with_stamina_buff"
+	},
+	{
+		"class_name": "buff",
+		"name": "weapon_trait_ranged_increase_damage_elites",
+		"predicted": false
+	},
+	{
+		"class_name": "weapon_trait_target_number_parent_proc_buff",
+		"predicted": false,
+		"name": "weapon_trait_bespoke_powermaul_2h_p1_consecutive_hits_increases_stagger_parent",
+		"proc_events": { "on_hit": 1 }
 	},
 	{
 		"class_name": "weapon_trait_activated_parent_proc_buff",
@@ -3506,25 +3533,13 @@
 	{
 		"class_name": "proc_buff",
 		"predicted": false,
-		"name": "weapon_trait_ranged_common_wield_on_hit_increased_unarmored_damage_buff",
-		"proc_events": { "on_hit": 0.05 }
+		"name": "weapon_trait_bespoke_powermaul_2h_p1_staggered_targets_receive_increased_stagger_debuff",
+		"proc_events": { "on_hit": 1 }
 	},
 	{
 		"class_name": "proc_buff",
 		"predicted": false,
 		"name": "example_weapon_trait_ranged_buff_proc_duration_2",
-		"proc_events": { "on_hit": 1 }
-	},
-	{
-		"class_name": "weapon_trait_target_number_parent_proc_buff",
-		"predicted": false,
-		"name": "weapon_trait_bespoke_powermaul_2h_p1_consecutive_hits_increases_stagger_parent",
-		"proc_events": { "on_hit": 1 }
-	},
-	{
-		"class_name": "proc_buff",
-		"predicted": false,
-		"name": "weapon_trait_bespoke_powermaul_2h_p1_staggered_targets_receive_increased_stagger_debuff",
 		"proc_events": { "on_hit": 1 }
 	},
 	{
@@ -3542,7 +3557,19 @@
 	{
 		"class_name": "proc_buff",
 		"predicted": false,
-		"name": "weapon_trait_bespoke_laspistol_p1_burninating_on_crit",
+		"name": "weapon_trait_bespoke_laspistol_p1_count_as_dodge_vs_ranged_on_weakspot",
+		"proc_events": { "on_hit": 1 }
+	},
+	{
+		"class_name": "weapon_trait_parent_proc_buff",
+		"predicted": false,
+		"name": "weapon_trait_bespoke_combatsword_p1_stacking_increase_impact_on_hit_parent",
+		"proc_events": { "on_hit": 1 }
+	},
+	{
+		"class_name": "proc_buff",
+		"predicted": false,
+		"name": "weapon_trait_bespoke_plasmagun_p1_targets_receive_rending_debuff",
 		"proc_events": { "on_hit": 1 }
 	},
 	{
@@ -3561,10 +3588,15 @@
 		"unique_buff_id": "psyker_psychic_fortress"
 	},
 	{
-		"class_name": "proc_buff",
+		"class_name": "interval_buff",
+		"keywords": ["electrocuted"],
+		"start_interval_on_apply": true,
+		"start_with_frame_offset": true,
 		"predicted": false,
-		"name": "weapon_trait_bespoke_plasmagun_p1_targets_receive_rending_debuff",
-		"proc_events": { "on_hit": 1 }
+		"max_stacks_cap": 1,
+		"max_stacks": 1,
+		"name": "chain_lightning_interval",
+		"interval": [0.1, 0.3]
 	},
 	{
 		"class_name": "buff",
@@ -3573,15 +3605,15 @@
 	},
 	{
 		"class_name": "proc_buff",
-		"max_stacks": 1,
 		"predicted": false,
-		"name": "weapon_trait_bespoke_plasmagun_p1_toughness_on_elite_kills",
-		"proc_events": { "on_kill": 1 }
+		"name": "weapon_trait_bespoke_ogryn_thumper_p2_targets_receive_rending_debuff",
+		"proc_events": { "on_hit": 1 }
 	},
 	{
 		"class_name": "buff",
-		"name": "weapon_trait_ranged_aimed_wield_while_aiming_increased_attack_buff",
-		"predicted": false
+		"keywords": ["sticky_projectiles"],
+		"predicted": false,
+		"name": "weapon_trait_bespoke_ogryn_thumper_p2_grenades_stick_to_monsters"
 	},
 	{
 		"class_name": "buff",
@@ -3604,38 +3636,38 @@
 				"distance": [3, 5]
 			},
 			"stagger_category": "melee",
-			"suppression_value": [100, 100],
+			"targets": { "default_target": { "boost_curve": [0, 0.3, 0.6, 0.8, 1] } },
 			"ignore_toughness": true,
-			"power_distribution": { "impact": 0, "attack": 40 },
 			"armor_damage_modifier": {
-				"impact": {
-					"armored": 1,
-					"unarmored": 1.5,
-					"berserker": 1,
-					"prop_armor": 0.75,
-					"player": 0.125,
-					"resistant": 1.5,
-					"void_shield": 1,
-					"super_armor": 0.1,
-					"disgustingly_resilient": 1.25
-				},
 				"attack": {
 					"armored": 1,
 					"unarmored": 1.5,
 					"berserker": 1,
 					"prop_armor": 0.75,
-					"player": 0.125,
+					"super_armor": 0.1,
 					"resistant": 1.5,
 					"void_shield": 1,
+					"player": 0.125,
+					"disgustingly_resilient": 1.25
+				},
+				"impact": {
+					"armored": 1,
+					"unarmored": 1.5,
+					"berserker": 1,
+					"prop_armor": 0.75,
 					"super_armor": 0.1,
+					"resistant": 1.5,
+					"void_shield": 1,
+					"player": 0.125,
 					"disgustingly_resilient": 1.25
 				}
 			},
+			"cleave_distribution": { "attack": 0.125, "impact": 0 },
 			"ignore_shield": true,
-			"targets": { "default_target": { "boost_curve": [0, 0.3, 0.6, 0.8, 1] } },
+			"power_distribution": { "attack": 40, "impact": 0 },
 			"override_allow_friendly_fire": true,
 			"name": "liquid_area_fire_burning",
-			"cleave_distribution": { "impact": 0, "attack": 0.125 }
+			"suppression_value": [100, 100]
 		}
 	},
 	{
@@ -3646,9 +3678,10 @@
 	},
 	{
 		"class_name": "proc_buff",
+		"max_stacks": 1,
 		"predicted": false,
-		"name": "weapon_trait_bespoke_ogryn_thumper_p2_targets_receive_rending_debuff",
-		"proc_events": { "on_hit": 1 }
+		"name": "weapon_trait_bespoke_ogryn_thumper_p2_toughness_on_elite_kills",
+		"proc_events": { "on_kill": 1 }
 	},
 	{
 		"class_name": "weapon_trait_target_number_parent_proc_buff",
@@ -3660,8 +3693,8 @@
 		"class_name": "proc_buff",
 		"max_stacks": 1,
 		"predicted": false,
-		"name": "weapon_trait_bespoke_ogryn_thumper_p2_toughness_on_elite_kills",
-		"proc_events": { "on_kill": 1 }
+		"name": "weapon_trait_bespoke_ogryn_thumper_p1_power_bonus_on_hitting_single_enemy_with_all",
+		"proc_events": { "on_shoot": 1 }
 	},
 	{
 		"class_name": "stepped_stat_buff",
@@ -3681,11 +3714,10 @@
 		"predicted": false
 	},
 	{
-		"class_name": "proc_buff",
+		"class_name": "stepped_stat_buff",
 		"max_stacks": 1,
-		"predicted": false,
-		"name": "weapon_trait_bespoke_ogryn_thumper_p1_power_bonus_on_hitting_single_enemy_with_all",
-		"proc_events": { "on_shoot": 1 }
+		"name": "weapon_trait_bespoke_ogryn_thumper_p1_crit_chance_based_on_aim_time",
+		"predicted": false
 	},
 	{
 		"class_name": "proc_buff",
@@ -3706,39 +3738,39 @@
 		"name": "chaos_beast_of_nurgle_being_eaten",
 		"damage_template": {
 			"ogryn_disorientation_type": "corruption",
-			"cleave_distribution": { "impact": 0, "attack": 1 },
-			"ignore_toughness": true,
-			"stagger_category": "melee",
-			"power_distribution": { "impact": 0, "attack": 1 },
 			"targets": { "default_target": { "boost_curve": [0, 0.3, 0.6, 0.8, 1] } },
-			"disorientation_type": "corruption",
-			"permanent_damage_ratio": 1,
-			"toughness_multiplier": 2,
-			"name": "beast_of_nurgle_slime_liquid",
+			"ignore_toughness": true,
 			"armor_damage_modifier": {
-				"impact": {
-					"armored": 0,
-					"unarmored": 0,
-					"berserker": 0,
-					"prop_armor": 0,
-					"player": 0.1,
-					"resistant": 0,
-					"void_shield": 0,
-					"super_armor": 0,
-					"disgustingly_resilient": 0
-				},
 				"attack": {
 					"armored": 0,
 					"unarmored": 0,
 					"berserker": 0,
 					"prop_armor": 0,
-					"player": 0.1,
+					"super_armor": 0,
 					"resistant": 0,
 					"void_shield": 0,
+					"player": 0.1,
+					"disgustingly_resilient": 0
+				},
+				"impact": {
+					"armored": 0,
+					"unarmored": 0,
+					"berserker": 0,
+					"prop_armor": 0,
 					"super_armor": 0,
+					"resistant": 0,
+					"void_shield": 0,
+					"player": 0.1,
 					"disgustingly_resilient": 0
 				}
-			}
+			},
+			"power_distribution": { "attack": 1, "impact": 0 },
+			"cleave_distribution": { "attack": 1, "impact": 0 },
+			"stagger_category": "melee",
+			"permanent_damage_ratio": 1,
+			"toughness_multiplier": 2,
+			"name": "beast_of_nurgle_slime_liquid",
+			"disorientation_type": "corruption"
 		}
 	},
 	{
@@ -3747,16 +3779,16 @@
 		"predicted": false
 	},
 	{
-		"class_name": "stepped_stat_buff",
-		"max_stacks": 1,
-		"name": "weapon_trait_bespoke_ogryn_thumper_p1_toughness_on_continuous_fire",
+		"class_name": "buff",
+		"max_stacks": 5,
+		"name": "weapon_trait_bespoke_ogryn_thumper_p1_pass_trough_armor_on_weapon_special",
 		"predicted": false
 	},
 	{
-		"class_name": "stepped_stat_buff",
-		"max_stacks": 1,
-		"name": "weapon_trait_bespoke_ogryn_thumper_p1_crit_chance_based_on_aim_time",
-		"predicted": false
+		"class_name": "proc_buff",
+		"predicted": false,
+		"name": "weapon_trait_bespoke_ogryn_thumper_p1_suppression_on_close_kill",
+		"proc_events": { "on_hit": 1 }
 	},
 	{
 		"class_name": "buff",
@@ -3789,11 +3821,10 @@
 		"proc_events": { "on_sweep_finish": 1 }
 	},
 	{
-		"class_name": "proc_buff",
-		"max_stacks": 1,
-		"predicted": false,
-		"name": "weapon_trait_bespoke_ogryn_thumper_p1_weapon_special_power_bonus_after_one_shots",
-		"proc_events": { "on_shoot": 1 }
+		"class_name": "buff",
+		"max_stacks": 5,
+		"name": "weapon_trait_bespoke_ogryn_rippergun_p1_increase_close_damage_on_close_kill_child",
+		"predicted": false
 	},
 	{
 		"class_name": "buff",
@@ -3802,10 +3833,9 @@
 		"predicted": false
 	},
 	{
-		"class_name": "proc_buff",
-		"predicted": false,
-		"name": "weapon_trait_bespoke_ogryn_rippergun_p1_bleed_on_crit",
-		"proc_events": { "on_pellet_hits": 1 }
+		"class_name": "buff",
+		"name": "weapon_trait_increase_impact",
+		"predicted": false
 	},
 	{
 		"class_name": "weapon_trait_activated_parent_proc_buff",
@@ -3821,10 +3851,10 @@
 		}
 	},
 	{
-		"class_name": "buff",
-		"max_stacks": 5,
-		"name": "weapon_trait_bespoke_ogryn_rippergun_p1_increase_close_damage_on_close_kill_child",
-		"predicted": false
+		"class_name": "weapon_trait_target_number_parent_proc_buff",
+		"predicted": false,
+		"name": "weapon_trait_bespoke_combatsword_p1_consecutive_hits_increases_stagger_parent",
+		"proc_events": { "on_hit": 1 }
 	},
 	{
 		"class_name": "buff",
@@ -3834,10 +3864,10 @@
 		"name": "veteran_ranger_grenade_replenishment"
 	},
 	{
-		"class_name": "weapon_trait_parent_proc_buff",
-		"predicted": false,
-		"name": "weapon_trait_bespoke_combatsword_p1_stacking_increase_impact_on_hit_parent",
-		"proc_events": { "on_hit": 1 }
+		"class_name": "stepped_stat_buff",
+		"max_stacks": 1,
+		"name": "weapon_trait_bespoke_ogryn_rippergun_p1_power_bonus_on_continuous_fire",
+		"predicted": false
 	},
 	{
 		"class_name": "weapon_trait_parent_proc_buff",
@@ -3846,10 +3876,10 @@
 		"proc_events": { "on_hit": 1 }
 	},
 	{
-		"class_name": "weapon_trait_parent_proc_buff",
+		"class_name": "proc_buff",
 		"predicted": false,
-		"name": "weapon_trait_bespoke_ogryn_rippergun_p1_increase_close_damage_on_close_kill_parent",
-		"proc_events": { "on_kill": 1 }
+		"name": "weapon_trait_bespoke_ogryn_rippergun_p1_suppression_on_close_kill",
+		"proc_events": { "on_hit": 1 }
 	},
 	{
 		"class_name": "stepped_stat_buff",
@@ -3858,10 +3888,10 @@
 		"predicted": false
 	},
 	{
-		"class_name": "stepped_stat_buff",
-		"max_stacks": 1,
-		"name": "weapon_trait_bespoke_ogryn_rippergun_p1_power_bonus_on_continuous_fire",
-		"predicted": false
+		"class_name": "weapon_trait_target_number_parent_proc_buff",
+		"predicted": false,
+		"name": "weapon_trait_bespoke_ogryn_powermaul_slabshield_p1_taunt_target_on_hit",
+		"proc_events": { "on_hit": 1 }
 	},
 	{
 		"class_name": "buff",
@@ -3876,14 +3906,15 @@
 	{
 		"class_name": "proc_buff",
 		"predicted": false,
-		"name": "weapon_trait_bespoke_ogryn_rippergun_p1_suppression_on_close_kill",
+		"name": "weapon_trait_bespoke_ogryn_powermaul_slabshield_p1_staggered_targets_receive_increased_damage_debuff",
 		"proc_events": { "on_hit": 1 }
 	},
 	{
-		"class_name": "weapon_trait_target_number_parent_proc_buff",
+		"class_name": "proc_buff",
+		"max_stacks": 1,
 		"predicted": false,
-		"name": "weapon_trait_bespoke_ogryn_powermaul_slabshield_p1_taunt_target_on_hit",
-		"proc_events": { "on_hit": 1 }
+		"name": "weapon_trait_bespoke_ogryn_powermaul_slabshield_p1_toughness_recovery_on_chained_attacks",
+		"proc_events": { "on_sweep_finish": 1 }
 	},
 	{
 		"class_name": "buff",
@@ -3892,9 +3923,9 @@
 		"predicted": false
 	},
 	{
-		"class_name": "proc_buff",
+		"class_name": "weapon_trait_target_number_parent_proc_buff",
 		"predicted": false,
-		"name": "weapon_trait_bespoke_ogryn_powermaul_slabshield_p1_staggered_targets_receive_increased_damage_debuff",
+		"name": "weapon_trait_bespoke_ogryn_powermaul_p1_taunt_target_on_hit",
 		"proc_events": { "on_hit": 1 }
 	},
 	{
@@ -3910,19 +3941,6 @@
 		"proc_events": { "on_kill": 1 }
 	},
 	{
-		"class_name": "proc_buff",
-		"max_stacks": 1,
-		"predicted": false,
-		"name": "weapon_trait_bespoke_ogryn_powermaul_slabshield_p1_toughness_recovery_on_chained_attacks",
-		"proc_events": { "on_sweep_finish": 1 }
-	},
-	{
-		"class_name": "weapon_trait_target_number_parent_proc_buff",
-		"predicted": false,
-		"name": "weapon_trait_bespoke_ogryn_powermaul_p1_taunt_target_on_hit",
-		"proc_events": { "on_hit": 1 }
-	},
-	{
 		"class_name": "buff",
 		"max_stacks": 1,
 		"name": "weapon_trait_bespoke_ogryn_powermaul_p1_taunt_target_on_hit_child",
@@ -3935,24 +3953,16 @@
 		"proc_events": { "on_hit": 1 }
 	},
 	{
-		"class_name": "buff",
-		"name": "weapon_trait_reduce_sprint_cost",
-		"predicted": false
-	},
-	{
-		"class_name": "buff",
-		"duration": 5,
+		"class_name": "proc_buff",
 		"predicted": false,
-		"max_stacks": 8,
-		"refresh_duration_on_stack": true,
-		"name": "rending_debuff",
-		"stat_buffs": { "rending_multiplier": 0.05 }
+		"name": "weapon_trait_ranged_common_wield_on_hit_increased_unarmored_damage_buff",
+		"proc_events": { "on_hit": 0.05 }
 	},
 	{
 		"class_name": "proc_buff",
 		"predicted": false,
-		"name": "weapon_trait_ranged_common_wield_on_hit_damage_bonus_buff",
-		"proc_events": { "on_hit": 0.05 }
+		"name": "example_weapon_trait_ranged_buff_proc_1",
+		"proc_events": { "on_hit": 1 }
 	},
 	{
 		"class_name": "proc_buff",
@@ -3963,8 +3973,30 @@
 	},
 	{
 		"class_name": "buff",
+		"max_stacks": 5,
+		"name": "weapon_trait_bespoke_ogryn_heavystubber_p1_increase_power_on_close_kill_child",
+		"predicted": false
+	},
+	{
+		"class_name": "proc_buff",
+		"predicted": false,
+		"name": "weapon_trait_ranged_common_wield_on_hit_damage_bonus_buff",
+		"proc_events": { "on_hit": 0.05 }
+	},
+	{
+		"class_name": "stepped_stat_buff",
+		"max_stacks": 1,
+		"name": "weapon_trait_bespoke_ogryn_heavystubber_p1_increased_suppression_on_continuous_fire",
+		"predicted": false
+	},
+	{
+		"class_name": "buff",
 		"lerped_stat_buffs": {
-			"stamina_regeneration_modifier": { "max": 0.15, "min": 0.03 }
+			"stamina_regeneration_modifier": {
+				"max": 0.15,
+				"lerp_value_func": "",
+				"min": 0.03
+			}
 		},
 		"predicted": false,
 		"localization_info": { "stamina_regeneration_modifier": "percentage" },
@@ -3977,10 +4009,10 @@
 		"predicted": false
 	},
 	{
-		"class_name": "stepped_stat_buff",
-		"max_stacks": 1,
-		"name": "weapon_trait_bespoke_ogryn_heavystubber_p1_increased_suppression_on_continuous_fire",
-		"predicted": false
+		"class_name": "weapon_trait_parent_proc_buff",
+		"predicted": false,
+		"name": "weapon_trait_bespoke_ogryn_heavystubber_p1_increase_power_on_close_kill_parent",
+		"proc_events": { "on_kill": 1 }
 	},
 	{
 		"class_name": "proc_buff",
@@ -4002,16 +4034,16 @@
 		"predicted": false
 	},
 	{
-		"class_name": "weapon_trait_parent_proc_buff",
-		"predicted": false,
-		"name": "weapon_trait_bespoke_ogryn_heavystubber_p1_increase_power_on_close_kill_parent",
-		"proc_events": { "on_kill": 1 }
-	},
-	{
 		"class_name": "stepped_stat_buff",
 		"max_stacks": 1,
-		"name": "weapon_trait_bespoke_ogryn_heavystubber_p1_movement_speed_on_continous_fire",
+		"name": "weapon_trait_bespoke_ogryn_gauntlet_p1_power_bonus_on_continuous_fire",
 		"predicted": false
+	},
+	{
+		"class_name": "proc_buff",
+		"predicted": false,
+		"name": "weapon_trait_bespoke_ogryn_gauntlet_p1_targets_receive_rending_debuff",
+		"proc_events": { "on_hit": 1 }
 	},
 	{
 		"class_name": "weapon_trait_target_number_parent_proc_buff",
@@ -4033,20 +4065,19 @@
 	{
 		"class_name": "proc_buff",
 		"predicted": false,
-		"name": "weapon_trait_bespoke_ogryn_gauntlet_p1_targets_receive_rending_debuff",
-		"proc_events": { "on_hit": 1 }
-	},
-	{
-		"class_name": "weapon_trait_target_number_parent_proc_buff",
-		"predicted": false,
-		"name": "weapon_trait_bespoke_lasgun_p3_consecutive_hits_increases_close_damage_parent",
-		"proc_events": { "on_hit": 1 }
+		"name": "weapon_trait_bespoke_ogryn_combatblade_p1_crit_chance_on_push",
+		"proc_events": { "on_push_finish": 1 }
 	},
 	{
 		"class_name": "proc_buff",
 		"predicted": false,
-		"name": "weapon_trait_bespoke_ogryn_combatblade_p1_crit_chance_on_push",
-		"proc_events": { "on_push_finish": 1 }
+		"name": "weapon_trait_bespoke_ogryn_combatblade_p1_increased_power_on_weapon_special_follow_up_hits",
+		"proc_events": { "on_hit": 1, "on_sweep_finish": 1 }
+	},
+	{
+		"class_name": "buff",
+		"name": "weapon_trait_bespoke_ogryn_combatblade_p1_infinite_melee_cleave_on_crit",
+		"predicted": false
 	},
 	{
 		"class_name": "weapon_trait_parent_proc_buff",
@@ -4055,9 +4086,58 @@
 		"proc_events": { "on_hit": 1 }
 	},
 	{
-		"class_name": "buff",
-		"name": "weapon_trait_bespoke_ogryn_combatblade_p1_infinite_melee_cleave_on_crit",
-		"predicted": false
+		"is_negative": true,
+		"stat_buffs": {
+			"toughness_regen_rate_multiplier": 0,
+			"dodge_speed_multiplier": 0.9,
+			"movement_speed": 0.9
+		},
+		"keywords": ["concealed", "hud_nameplates_disabled"],
+		"max_stacks": 1,
+		"damage_type": "corruption",
+		"hud_icon": "content/ui/textures/icons/buffs/hud/states_knocked_down_buff_hud",
+		"hud_priority": 1,
+		"predicted": false,
+		"damage_template": {
+			"ignore_depleting_toughness": true,
+			"ogryn_disorientation_type": "corruption",
+			"targets": { "default_target": { "boost_curve": [0, 0.3, 0.6, 0.8, 1] } },
+			"stagger_category": "melee",
+			"ignore_mood_effects": true,
+			"power_distribution": { "attack": 1, "impact": 0 },
+			"armor_damage_modifier": {
+				"attack": {
+					"armored": 0,
+					"unarmored": 0,
+					"berserker": 0,
+					"prop_armor": 0,
+					"super_armor": 0,
+					"resistant": 0,
+					"void_shield": 0,
+					"player": 1,
+					"disgustingly_resilient": 0
+				},
+				"impact": {
+					"armored": 0,
+					"unarmored": 0,
+					"berserker": 0,
+					"prop_armor": 0,
+					"super_armor": 0,
+					"resistant": 0,
+					"void_shield": 0,
+					"player": 1,
+					"disgustingly_resilient": 0
+				}
+			},
+			"disorientation_type": "corruption",
+			"permanent_damage_ratio": 0.8,
+			"toughness_multiplier": 3,
+			"name": "cultist_grenadier_gas",
+			"cleave_distribution": { "attack": 1, "impact": 0 }
+		},
+		"class_name": "interval_buff",
+		"name": "in_cultist_grenadier_gas",
+		"interval": 0.75
 	},
 	{
 		"class_name": "proc_buff",
@@ -4068,8 +4148,8 @@
 	{
 		"class_name": "proc_buff",
 		"predicted": false,
-		"name": "weapon_trait_bespoke_forcesword_p1_guaranteed_melee_crit_on_activated_kill",
-		"proc_events": { "on_kill": 1 }
+		"name": "weapon_trait_bespoke_ogryn_combatblade_p1_toughness_recovery_on_multiple_hits",
+		"proc_events": { "on_hit": 1 }
 	},
 	{
 		"class_name": "weapon_trait_activated_parent_proc_buff",
@@ -4085,12 +4165,6 @@
 		"proc_events": { "on_hit": 0.05 }
 	},
 	{
-		"class_name": "proc_buff",
-		"predicted": false,
-		"name": "weapon_trait_bespoke_ogryn_combatblade_p1_toughness_recovery_on_multiple_hits",
-		"proc_events": { "on_hit": 1 }
-	},
-	{
 		"class_name": "weapon_trait_parent_proc_buff",
 		"max_stacks": 3,
 		"predicted": false,
@@ -4103,16 +4177,16 @@
 		}
 	},
 	{
+		"class_name": "buff",
+		"max_stacks": 3,
+		"name": "weapon_trait_bespoke_ogryn_combatblade_p1_windup_increases_power_child",
+		"predicted": false
+	},
+	{
 		"class_name": "proc_buff",
 		"predicted": false,
 		"name": "psyker_biomancer_warpfire_grants_souls",
 		"proc_events": { "on_minion_death": 0.1 }
-	},
-	{
-		"class_name": "buff",
-		"max_stacks": 5,
-		"name": "weapon_trait_bespoke_ogryn_combatblade_p1_increase_power_on_kill_child",
-		"predicted": false
 	},
 	{
 		"class_name": "weapon_trait_parent_proc_buff",
@@ -4123,8 +4197,14 @@
 	{
 		"class_name": "buff",
 		"max_stacks": 5,
-		"name": "weapon_trait_bespoke_forcesword_p1_chained_hits_increases_crit_chance_child",
+		"name": "weapon_trait_bespoke_forcesword_p1_increase_power_on_kill_child",
 		"predicted": false
+	},
+	{
+		"class_name": "proc_buff",
+		"predicted": false,
+		"name": "weapon_trait_melee_common_wield_on_block_impact_bonus_buff",
+		"proc_events": { "on_block": 0.05 }
 	},
 	{
 		"class_name": "buff",
@@ -4135,26 +4215,32 @@
 		},
 		"name": "gadget_damage_reduction_vs_flamers",
 		"stat_buffs": {
-			"damage_taken_by_renegade_flamer_multiplier": 0.8,
-			"damage_taken_by_cultist_flamer_multiplier": 0.8
+			"damage_taken_by_cultist_flamer_multiplier": 0.8,
+			"damage_taken_by_renegade_flamer_multiplier": 0.8
 		}
-	},
-	{
-		"class_name": "buff",
-		"name": "weapon_trait_bespoke_ogryn_club_p2_pass_past_armor_on_crit",
-		"predicted": false
-	},
-	{
-		"class_name": "proc_buff",
-		"predicted": false,
-		"name": "weapon_trait_melee_common_wield_on_heavy_hit_power_bonus_buff",
-		"proc_events": { "on_hit": 1 }
 	},
 	{
 		"class_name": "buff",
 		"max_stacks": 3,
 		"name": "weapon_trait_bespoke_ogryn_club_p2_windup_increases_power_child",
 		"predicted": false
+	},
+	{
+		"class_name": "buff",
+		"name": "weapon_trait_melee_common_wield_increased_armored_damage_buff",
+		"predicted": false
+	},
+	{
+		"class_name": "weapon_trait_parent_proc_buff",
+		"max_stacks": 3,
+		"predicted": false,
+		"name": "weapon_trait_bespoke_ogryn_club_p2_windup_increases_power_parent",
+		"proc_events": {
+			"on_windup_trigger": 1,
+			"on_sweep_finish": 1,
+			"on_action_start": 1,
+			"on_wield": 1
+		}
 	},
 	{
 		"class_name": "buff",
@@ -4172,13 +4258,6 @@
 		"predicted": false,
 		"name": "weapon_trait_bespoke_laspistol_p1_reload_speed_on_slide",
 		"proc_events": { "on_slide_start": 1 }
-	},
-	{
-		"class_name": "proc_buff",
-		"max_stacks": 1,
-		"predicted": false,
-		"name": "weapon_trait_bespoke_ogryn_club_p2_toughness_recovery_on_chained_attacks",
-		"proc_events": { "on_sweep_finish": 1 }
 	},
 	{
 		"class_name": "proc_buff",
@@ -4200,9 +4279,10 @@
 		}
 	},
 	{
-		"class_name": "buff",
-		"name": "weapon_trait_melee_activated_wield_during_weapon_special_reduce_corruption_taken",
-		"predicted": false
+		"class_name": "proc_buff",
+		"predicted": true,
+		"name": "weapon_trait_ranged_movement_speed_on_kill",
+		"proc_events": { "on_kill": 1 }
 	},
 	{
 		"class_name": "proc_buff",
@@ -4212,14 +4292,20 @@
 	},
 	{
 		"class_name": "buff",
+		"max_stacks": 2,
+		"name": "weapon_trait_bespoke_ogryn_club_p2_increased_crit_chance_on_staggered_weapon_special_hit_child",
+		"predicted": false
+	},
+	{
+		"class_name": "buff",
 		"predicted": true,
 		"stat_buffs": {
 			"disgustingly_resilient_damage": -0.5,
 			"berserker_damage": -0.5,
-			"super_armor_damage": -0.25,
+			"unarmored_damage": -0.5,
 			"resistant_damage": -0.25,
 			"armored_damage": -0.25,
-			"unarmored_damage": -0.5
+			"super_armor_damage": -0.25
 		},
 		"name": "mutator_minion_nurgle_blessing_tougher",
 		"target": "minion_only"
@@ -4241,15 +4327,13 @@
 	{
 		"class_name": "proc_buff",
 		"predicted": false,
-		"name": "weapon_trait_melee_common_wield_on_hit_increased_unarmored_damage_buff",
+		"name": "weapon_trait_melee_common_wield_on_hit_increased_berserker_damage_buff",
 		"proc_events": { "on_hit": 0.05 }
 	},
 	{
-		"class_name": "proc_buff",
-		"max_stacks": 5,
-		"predicted": false,
-		"name": "weapon_trait_bespoke_ogryn_club_p2_heavy_chained_hits_increases_killing_blow_chance_child",
-		"proc_events": { "on_hit": 1 }
+		"class_name": "buff",
+		"name": "weapon_trait_bespoke_ogryn_club_p2_pass_past_armor_on_crit",
+		"predicted": false
 	},
 	{
 		"class_name": "weapon_trait_target_number_parent_proc_buff",
@@ -4301,10 +4385,10 @@
 		"proc_events": { "on_hit": 0.05 }
 	},
 	{
-		"class_name": "proc_buff",
-		"predicted": false,
-		"name": "weapon_trait_melee_activated_wield_on_weapon_special_increase_attack_of_next_attack",
-		"proc_events": { "on_weapon_special": 1 }
+		"class_name": "buff",
+		"max_stacks": 3,
+		"name": "weapon_trait_bespoke_ogryn_club_p1_windup_increases_power_child",
+		"predicted": false
 	},
 	{
 		"class_name": "buff",
@@ -4316,11 +4400,10 @@
 		"stat_buffs": { "damage_vs_renegade_grenadier": 0.2 }
 	},
 	{
-		"class_name": "buff",
-		"keywords": {},
-		"predicted": true,
-		"name": "ranged_attack_speed",
-		"stat_buffs": { "ranged_attack_speed": 0.5 }
+		"class_name": "weapon_trait_target_number_parent_proc_buff",
+		"predicted": false,
+		"name": "weapon_trait_bespoke_laspistol_p1_consecutive_hits_increases_close_damage_parent",
+		"proc_events": { "on_hit": 1 }
 	},
 	{
 		"class_name": "buff",
@@ -4328,9 +4411,9 @@
 		"predicted": false
 	},
 	{
-		"class_name": "weapon_trait_target_number_parent_proc_buff",
+		"class_name": "proc_buff",
 		"predicted": false,
-		"name": "weapon_trait_bespoke_laspistol_p1_consecutive_hits_increases_close_damage_parent",
+		"name": "weapon_trait_bespoke_laspistol_p1_burninating_on_crit",
 		"proc_events": { "on_hit": 1 }
 	},
 	{
@@ -4347,8 +4430,9 @@
 	},
 	{
 		"class_name": "proc_buff",
+		"max_stacks": 1,
 		"predicted": false,
-		"name": "weapon_trait_bespoke_laspistol_p1_count_as_dodge_vs_ranged_on_weakspot",
+		"name": "weapon_trait_bespoke_forcestaff_p1_rend_armor_on_aoe_charge",
 		"proc_events": { "on_hit": 1 }
 	},
 	{
@@ -4368,12 +4452,6 @@
 		"predicted": false
 	},
 	{
-		"class_name": "buff",
-		"max_stacks": 1,
-		"name": "weapon_trait_bespoke_forcestaff_p1_double_shot_on_crit",
-		"predicted": false
-	},
-	{
 		"class_name": "proc_buff",
 		"predicted": false,
 		"name": "weapon_trait_bespoke_laspistol_p1_suppression_negation_on_weakspot",
@@ -4383,6 +4461,12 @@
 		"class_name": "buff",
 		"name": "weapon_trait_bespoke_lasgun_p3_followup_shots_ranged_weakspot_damage",
 		"predicted": false
+	},
+	{
+		"class_name": "weapon_trait_parent_proc_buff",
+		"predicted": false,
+		"name": "weapon_trait_bespoke_lasgun_p3_increase_power_on_close_kill_parent",
+		"proc_events": { "on_kill": 1 }
 	},
 	{
 		"meta_stat_buffs": { "mission_reward_credit_modifier": 0.2 },
@@ -4400,15 +4484,9 @@
 		"unique_buff_id": "taunted"
 	},
 	{
-		"class_name": "weapon_trait_parent_proc_buff",
-		"predicted": false,
-		"name": "weapon_trait_bespoke_lasgun_p3_increase_power_on_close_kill_parent",
-		"proc_events": { "on_kill": 1 }
-	},
-	{
 		"class_name": "stepped_stat_buff",
 		"max_stacks": 1,
-		"name": "weapon_trait_bespoke_forcestaff_p2_warp_charge_critical_strike_chance_bonus",
+		"name": "weapon_trait_bespoke_forcestaff_p1_faster_charge_on_chained_secondary_attacks",
 		"predicted": false
 	},
 	{
@@ -4416,6 +4494,12 @@
 		"predicted": false,
 		"name": "weapon_trait_bespoke_lasgun_p3_reload_speed_on_slide",
 		"proc_events": { "on_slide_start": 1 }
+	},
+	{
+		"class_name": "proc_buff",
+		"predicted": false,
+		"name": "weapon_trait_bespoke_lasgun_p3_count_as_dodge_vs_ranged_on_close_kill",
+		"proc_events": { "on_hit": 1 }
 	},
 	{
 		"class_name": "active_time_offset_proc_buff",
@@ -4433,9 +4517,9 @@
 		"unique_buff_id": "stun_immunity"
 	},
 	{
-		"class_name": "proc_buff",
+		"class_name": "weapon_trait_parent_proc_buff",
 		"predicted": false,
-		"name": "weapon_trait_bespoke_lasgun_p3_count_as_dodge_vs_ranged_on_close_kill",
+		"name": "weapon_trait_bespoke_autopistol_p1_stacking_power_bonus_on_staggering_enemies_parent",
 		"proc_events": { "on_hit": 1 }
 	},
 	{
@@ -4459,10 +4543,10 @@
 		"stat_buffs": { "toughness_bonus": 0.05 }
 	},
 	{
-		"class_name": "proc_buff",
-		"predicted": false,
-		"name": "weapon_trait_melee_activated_wield_on_weapon_special_kill_chance_to_remove_corruption",
-		"proc_events": { "on_kill": 0.33 }
+		"class_name": "buff",
+		"max_stacks": 5,
+		"name": "weapon_trait_bespoke_lasgun_p3_consecutive_hits_increases_close_damage_child",
+		"predicted": false
 	},
 	{
 		"class_name": "buff",
@@ -4472,10 +4556,10 @@
 		"name": "zealot_maniac_toughness_regen_in_melee"
 	},
 	{
-		"class_name": "weapon_trait_parent_proc_buff",
-		"predicted": false,
-		"name": "weapon_trait_bespoke_lasgun_p3_stacking_crit_chance_on_weakspot_parent",
-		"proc_events": { "on_hit": 1, "on_critical_strike": 1 }
+		"class_name": "buff",
+		"max_stacks": 5,
+		"name": "weapon_trait_bespoke_lasgun_p3_stacking_crit_chance_on_weakspot_child",
+		"predicted": false
 	},
 	{
 		"class_name": "stepped_range_buff",
@@ -4499,10 +4583,10 @@
 		"predicted": false
 	},
 	{
-		"class_name": "buff",
-		"max_stacks": 5,
-		"name": "weapon_trait_bespoke_lasgun_p3_stacking_crit_chance_on_weakspot_child",
-		"predicted": false
+		"class_name": "weapon_trait_target_number_parent_proc_buff",
+		"predicted": false,
+		"name": "weapon_trait_bespoke_lasgun_p3_consecutive_hits_increases_close_damage_parent",
+		"proc_events": { "on_hit": 1 }
 	},
 	{
 		"class_name": "proc_buff",
@@ -4522,30 +4606,10 @@
 		"interval": 0.5
 	},
 	{
-		"class_name": "proc_buff",
+		"class_name": "weapon_trait_parent_proc_buff",
 		"predicted": false,
-		"name": "weapon_trait_bespoke_lasgun_p3_burninating_on_crit",
-		"proc_events": { "on_hit": 1 }
-	},
-	{
-		"class_name": "buff",
-		"keywords": {},
-		"predicted": true,
-		"name": "alternate_fire_movement_speed",
-		"stat_buffs": { "alternate_fire_movement_speed_reduction_modifier": 0.3 }
-	},
-	{
-		"is_negative": true,
-		"class_name": "buff",
-		"duration": 1.75,
-		"unique_buff_priority": 1,
-		"hud_icon": "content/ui/textures/icons/buffs/hud/states_fire_buff_hud",
-		"hud_priority": 1,
-		"predicted": true,
-		"forbidden_keywords": ["renegade_grenadier_liquid_immunity"],
-		"lerped_stat_buffs": { "spread_modifier": { "max": 0, "min": 1 } },
-		"name": "renegade_grenadier_leaving_liquid_fire_spread_increase",
-		"unique_buff_id": "fire_spread_increase"
+		"name": "weapon_trait_bespoke_chainaxe_p1_increase_power_on_kill_parent",
+		"proc_events": { "on_kill": 1 }
 	},
 	{
 		"class_name": "stepped_stat_buff",
@@ -4556,8 +4620,19 @@
 	{
 		"class_name": "proc_buff",
 		"predicted": false,
+		"name": "weapon_trait_melee_activated_wield_on_weapon_special_kill_chance_to_remove_corruption",
+		"proc_events": { "on_kill": 0.33 }
+	},
+	{
+		"class_name": "proc_buff",
+		"predicted": false,
 		"name": "weapon_trait_bespoke_lasgun_p2_burninating_on_crit",
 		"proc_events": { "on_hit": 1 }
+	},
+	{
+		"class_name": "buff",
+		"name": "weapon_trait_bespoke_lasgun_p2_negate_stagger_reduction_on_weakspot",
+		"predicted": false
 	},
 	{
 		"class_name": "buff",
@@ -4569,7 +4644,7 @@
 	},
 	{
 		"class_name": "buff",
-		"name": "weapon_trait_bespoke_lasgun_p2_negate_stagger_reduction_on_weakspot",
+		"name": "weapon_trait_bespoke_autogun_p1_increased_sprint_speed",
 		"predicted": false
 	},
 	{
@@ -4585,7 +4660,8 @@
 	},
 	{
 		"class_name": "buff",
-		"name": "weapon_trait_bespoke_autogun_p1_increased_sprint_speed",
+		"max_stacks": 5,
+		"name": "weapon_trait_bespoke_lasgun_p1_stacking_crit_chance_on_weakspot_child",
 		"predicted": false
 	},
 	{
@@ -4601,14 +4677,14 @@
 	},
 	{
 		"class_name": "buff",
-		"max_stacks": 5,
-		"name": "weapon_trait_bespoke_lasgun_p1_stacking_crit_chance_on_weakspot_child",
+		"name": "weapon_trait_bespoke_lasgun_p1_power_bonus_on_first_shot",
 		"predicted": false
 	},
 	{
-		"class_name": "buff",
-		"name": "weapon_trait_bespoke_lasgun_p1_power_bonus_on_first_shot",
-		"predicted": false
+		"class_name": "proc_buff",
+		"predicted": false,
+		"name": "tg_player_on_dodge_tutorial",
+		"proc_events": { "on_successful_dodge": 1 }
 	},
 	{
 		"class_name": "proc_buff",
@@ -4658,10 +4734,10 @@
 		"stat_buffs": { "recoil_modifier": -0.3 }
 	},
 	{
-		"class_name": "proc_buff",
-		"predicted": false,
-		"name": "weapon_trait_melee_common_wield_on_block_increased_berserker_damage_buff",
-		"proc_events": { "on_block": 0.05 }
+		"class_name": "stepped_stat_buff",
+		"max_stacks": 1,
+		"name": "weapon_trait_bespoke_forcesword_p1_warp_charge_power_bonus",
+		"predicted": false
 	},
 	{
 		"class_name": "proc_buff",
@@ -4679,9 +4755,9 @@
 		"unique_buff_id": "hit_reaction_movement_slow"
 	},
 	{
-		"class_name": "stepped_stat_buff",
-		"max_stacks": 1,
-		"name": "weapon_trait_bespoke_forcesword_p1_warp_charge_power_bonus",
+		"class_name": "buff",
+		"max_stacks": 5,
+		"name": "weapon_trait_bespoke_forcesword_p1_chained_hits_increases_crit_chance_child",
 		"predicted": false
 	},
 	{
@@ -4729,16 +4805,17 @@
 		"proc_events": { "on_minion_death": 1 }
 	},
 	{
-		"class_name": "proc_buff",
-		"predicted": false,
-		"name": "weapon_trait_bespoke_forcesword_p1_dodge_grants_finesse_bonus",
-		"proc_events": { "on_successful_dodge": 1 }
-	},
-	{
 		"class_name": "buff",
 		"max_stacks": 5,
 		"name": "weapon_trait_bespoke_forcesword_p1_stacking_rending_on_weakspot_child",
 		"predicted": false
+	},
+	{
+		"class_name": "proc_buff",
+		"max_stacks": 1,
+		"predicted": false,
+		"name": "weapon_trait_bespoke_forcesword_p1_warp_burninating_on_crit",
+		"proc_events": { "on_hit": 1 }
 	},
 	{
 		"class_name": "buff",
@@ -4757,15 +4834,14 @@
 	},
 	{
 		"class_name": "proc_buff",
-		"max_stacks": 1,
 		"predicted": false,
-		"name": "weapon_trait_bespoke_forcesword_p1_chained_hits_vents_warpcharge",
-		"proc_events": { "on_sweep_finish": 1 }
+		"name": "weapon_trait_bespoke_forcesword_p1_guaranteed_melee_crit_on_activated_kill",
+		"proc_events": { "on_kill": 1 }
 	},
 	{
 		"class_name": "buff",
 		"lerped_stat_buffs": {
-			"max_health_modifier": { "max": 0.25, "min": 0.05 }
+			"max_health_modifier": { "max": 0.25, "lerp_value_func": "", "min": 0.05 }
 		},
 		"predicted": false,
 		"localization_info": { "max_health_modifier": "percentage" },
@@ -4790,15 +4866,8 @@
 		"predicted": false
 	},
 	{
-		"class_name": "weapon_trait_activated_parent_proc_buff",
-		"max_stacks": 1,
-		"predicted": false,
-		"name": "weapon_trait_bespoke_forcesword_p1_chained_weakspot_hits_increases_power_parent",
-		"proc_events": { "on_sweep_start": 1, "on_sweep_finish": 1, "on_hit": 1 }
-	},
-	{
 		"class_name": "buff",
-		"name": "weapon_trait_melee_common_wield_power_modifier_bonus_buff",
+		"name": "weapon_trait_reduced_block_cost",
 		"predicted": false
 	},
 	{
@@ -4822,14 +4891,14 @@
 	},
 	{
 		"class_name": "buff",
-		"name": "weapon_trait_bespoke_autogun_p3_crit_weakspot_finesse",
-		"predicted": false
-	},
-	{
-		"class_name": "buff",
 		"keywords": ["allow_hipfire_during_sprint"],
 		"predicted": false,
 		"name": "weapon_trait_bespoke_forcestaff_p4_hipfire_while_sprinting"
+	},
+	{
+		"class_name": "buff",
+		"name": "weapon_trait_bespoke_autogun_p3_crit_weakspot_finesse",
+		"predicted": false
 	},
 	{
 		"class_name": "buff",
@@ -4843,6 +4912,13 @@
 		"predicted": false
 	},
 	{
+		"class_name": "proc_buff",
+		"max_stacks": 1,
+		"predicted": false,
+		"name": "weapon_trait_bespoke_forcestaff_p4_vents_warpcharge_on_weakspot_hits",
+		"proc_events": { "on_hit": 1 }
+	},
+	{
 		"class_name": "buff",
 		"duration": 0.5,
 		"predicted": true,
@@ -4850,13 +4926,6 @@
 		"lerped_stat_buffs": { "movement_speed": { "max": 1, "min": 1.25 } },
 		"name": "ranged_sprinting_stun_movement_slow",
 		"unique_buff_id": "hit_reaction_movement_slow"
-	},
-	{
-		"class_name": "proc_buff",
-		"max_stacks": 1,
-		"predicted": false,
-		"name": "weapon_trait_bespoke_forcestaff_p4_vents_warpcharge_on_weakspot_hits",
-		"proc_events": { "on_hit": 1 }
 	},
 	{
 		"class_name": "proc_buff",
@@ -4883,21 +4952,16 @@
 		"proc_events": { "on_hit": 1 }
 	},
 	{
-		"class_name": "weapon_trait_parent_proc_buff",
-		"predicted": false,
-		"name": "weapon_trait_bespoke_autogun_p1_increase_damage_on_close_kill_parent",
-		"proc_events": { "on_kill": 1 }
-	},
-	{
 		"class_name": "stepped_stat_buff",
 		"max_stacks": 1,
 		"name": "weapon_trait_bespoke_forcestaff_p3_faster_charge_on_chained_secondary_attacks",
 		"predicted": false
 	},
 	{
-		"class_name": "buff",
-		"name": "example_weapon_trait_ranged_buff_stat_3",
-		"predicted": false
+		"class_name": "weapon_trait_parent_proc_buff",
+		"predicted": false,
+		"name": "weapon_trait_bespoke_autogun_p1_increase_damage_on_close_kill_parent",
+		"proc_events": { "on_kill": 1 }
 	},
 	{
 		"class_name": "buff",
@@ -4906,9 +4970,8 @@
 		"name": "weapon_trait_bespoke_forcestaff_p3_hipfire_while_sprinting"
 	},
 	{
-		"class_name": "stepped_stat_buff",
-		"max_stacks": 1,
-		"name": "weapon_trait_bespoke_autogun_p3_crit_chance_based_on_aim_time",
+		"class_name": "buff",
+		"name": "example_weapon_trait_ranged_buff_stat_3",
 		"predicted": false
 	},
 	{
@@ -4916,6 +4979,18 @@
 		"max_stacks": 1,
 		"name": "weapon_trait_bespoke_forcestaff_p2_faster_charge_on_chained_secondary_attacks",
 		"predicted": false
+	},
+	{
+		"class_name": "stepped_stat_buff",
+		"max_stacks": 1,
+		"name": "weapon_trait_bespoke_autogun_p3_crit_chance_based_on_aim_time",
+		"predicted": false
+	},
+	{
+		"class_name": "proc_buff",
+		"predicted": false,
+		"name": "weapon_trait_bespoke_forcestaff_p2_suppression_on_close_kill",
+		"proc_events": { "on_hit": 1 }
 	},
 	{
 		"class_name": "proc_buff",
@@ -4982,44 +5057,44 @@
 		"max_stacks": 1,
 		"name": "prop_in_corruptor_liquid_corruption",
 		"damage_template": {
-			"name": "corruptor_liquid_corruption",
-			"stagger_category": "melee",
-			"targets": { "default_target": { "boost_curve": [0, 0.3, 0.6, 0.8, 1] } },
-			"cleave_distribution": { "impact": 0, "attack": 1 },
-			"permanent_damage_ratio": 1,
-			"power_distribution": { "impact": 0, "attack": 1 },
-			"ignore_toughness": true,
 			"armor_damage_modifier": {
-				"impact": {
-					"armored": 0,
-					"unarmored": 0,
-					"berserker": 0,
-					"prop_armor": 0,
-					"player": 0.1,
-					"resistant": 0,
-					"void_shield": 0,
-					"super_armor": 0,
-					"disgustingly_resilient": 0
-				},
 				"attack": {
 					"armored": 0,
 					"unarmored": 0,
 					"berserker": 0,
 					"prop_armor": 0,
-					"player": 0.1,
+					"super_armor": 0,
 					"resistant": 0,
 					"void_shield": 0,
+					"player": 0.1,
+					"disgustingly_resilient": 0
+				},
+				"impact": {
+					"armored": 0,
+					"unarmored": 0,
+					"berserker": 0,
+					"prop_armor": 0,
 					"super_armor": 0,
+					"resistant": 0,
+					"void_shield": 0,
+					"player": 0.1,
 					"disgustingly_resilient": 0
 				}
-			}
+			},
+			"stagger_category": "melee",
+			"ignore_toughness": true,
+			"power_distribution": { "attack": 1, "impact": 0 },
+			"targets": { "default_target": { "boost_curve": [0, 0.3, 0.6, 0.8, 1] } },
+			"permanent_damage_ratio": 1,
+			"name": "corruptor_liquid_corruption",
+			"cleave_distribution": { "attack": 1, "impact": 0 }
 		}
 	},
 	{
-		"class_name": "buff",
-		"keywords": ["allow_hipfire_during_sprint"],
-		"predicted": false,
-		"name": "weapon_trait_bespoke_forcestaff_p2_hipfire_while_sprinting"
+		"class_name": "stepped_stat_buff",
+		"max_stacks": 1,
+		"name": "weapon_trait_bespoke_forcestaff_p2_warp_charge_critical_strike_chance_bonus",
+		"predicted": false
 	},
 	{
 		"class_name": "buff",
@@ -5029,7 +5104,7 @@
 	{
 		"class_name": "stepped_stat_buff",
 		"max_stacks": 1,
-		"name": "weapon_trait_bespoke_forcestaff_p1_faster_charge_on_chained_secondary_attacks",
+		"name": "weapon_trait_bespoke_forcestaff_p1_warp_charge_critical_strike_chance_bonus",
 		"predicted": false
 	},
 	{
@@ -5047,12 +5122,13 @@
 	},
 	{
 		"class_name": "buff",
-		"name": "weapon_trait_ranged_aimed_wield_while_aiming_increased_armored_damage_buff",
+		"name": "weapon_trait_bespoke_forcestaff_p1_followup_shots_ranged_damage",
 		"predicted": false
 	},
 	{
 		"class_name": "buff",
-		"name": "weapon_trait_bespoke_forcestaff_p1_followup_shots_ranged_damage",
+		"max_stacks": 1,
+		"name": "weapon_trait_bespoke_forcestaff_p1_double_shot_on_crit",
 		"predicted": false
 	},
 	{
@@ -5061,13 +5137,6 @@
 		"predicted": false,
 		"name": "weapon_trait_bespoke_laspistol_p1_toughness_on_crit_kills",
 		"proc_events": { "on_kill": 1 }
-	},
-	{
-		"class_name": "proc_buff",
-		"max_stacks": 1,
-		"predicted": false,
-		"name": "weapon_trait_bespoke_forcestaff_p1_rend_armor_on_aoe_charge",
-		"proc_events": { "on_hit": 1 }
 	},
 	{
 		"class_name": "proc_buff",
@@ -5085,6 +5154,12 @@
 		"class_name": "stepped_stat_buff",
 		"max_stacks": 1,
 		"name": "weapon_trait_bespoke_flamer_p1_toughness_on_continuous_fire",
+		"predicted": false
+	},
+	{
+		"class_name": "stepped_stat_buff",
+		"max_stacks": 1,
+		"name": "weapon_trait_bespoke_flamer_p1_power_bonus_on_continuous_fire",
 		"predicted": false
 	},
 	{
@@ -5134,9 +5209,8 @@
 		}
 	},
 	{
-		"class_name": "stepped_stat_buff",
-		"max_stacks": 1,
-		"name": "weapon_trait_bespoke_flamer_p1_power_bonus_on_continuous_fire",
+		"class_name": "buff",
+		"name": "weapon_trait_bespoke_flamer_p1_negate_stagger_reduction_with_primary_on_burning",
 		"predicted": false
 	},
 	{
@@ -5158,15 +5232,16 @@
 		"proc_events": { "on_hit": 0.2 }
 	},
 	{
-		"class_name": "buff",
-		"name": "weapon_trait_bespoke_flamer_p1_negate_stagger_reduction_with_primary_on_burning",
-		"predicted": false
-	},
-	{
 		"class_name": "proc_buff",
 		"predicted": false,
 		"name": "weapon_trait_bespoke_combatsword_p3_increased_melee_damage_on_multiple_hits",
 		"proc_events": { "on_hit": 1 }
+	},
+	{
+		"class_name": "buff",
+		"max_stacks": 5,
+		"name": "weapon_trait_bespoke_combatsword_p3_chained_hits_increases_crit_chance_child",
+		"predicted": false
 	},
 	{
 		"class_name": "proc_buff",
@@ -5197,10 +5272,11 @@
 		}
 	},
 	{
-		"class_name": "buff",
+		"class_name": "weapon_trait_activated_parent_proc_buff",
 		"max_stacks": 5,
-		"name": "weapon_trait_bespoke_combatsword_p3_chained_hits_increases_crit_chance_child",
-		"predicted": false
+		"predicted": false,
+		"name": "weapon_trait_bespoke_combatsword_p3_chained_hits_increases_crit_chance_parent",
+		"proc_events": { "on_sweep_start": 1, "on_sweep_finish": 1, "on_hit": 1 }
 	},
 	{
 		"class_name": "buff",
@@ -5218,16 +5294,16 @@
 		"predicted": false
 	},
 	{
-		"class_name": "proc_buff",
-		"predicted": false,
-		"name": "weapon_trait_bespoke_combatsword_p2_increased_melee_damage_on_multiple_hits",
-		"proc_events": { "on_hit": 1 }
-	},
-	{
 		"class_name": "weapon_trait_parent_proc_buff",
 		"predicted": false,
 		"name": "weapon_trait_bespoke_combatsword_p2_increase_power_on_hit_parent",
 		"proc_events": { "on_hit": 1 }
+	},
+	{
+		"class_name": "buff",
+		"max_stacks": 5,
+		"name": "weapon_trait_bespoke_combatsword_p2_chained_hits_increases_melee_cleave_child",
+		"predicted": false
 	},
 	{
 		"class_name": "buff",
@@ -5238,7 +5314,7 @@
 	{
 		"class_name": "buff",
 		"max_stacks": 5,
-		"name": "weapon_trait_bespoke_combatsword_p2_chained_hits_increases_melee_cleave_child",
+		"name": "weapon_trait_bespoke_combatsword_p2_increase_power_on_hit_child",
 		"predicted": false
 	},
 	{
@@ -5250,14 +5326,15 @@
 	{
 		"class_name": "weapon_trait_parent_proc_buff",
 		"predicted": false,
-		"name": "weapon_trait_bespoke_autogun_p2_increase_close_damage_on_close_kill_parent",
+		"name": "weapon_trait_bespoke_autogun_p1_increase_close_damage_on_close_kill_parent",
 		"proc_events": { "on_kill": 1 }
 	},
 	{
-		"class_name": "buff",
+		"class_name": "weapon_trait_activated_parent_proc_buff",
 		"max_stacks": 5,
-		"name": "weapon_trait_bespoke_combatsword_p2_increase_power_on_hit_child",
-		"predicted": false
+		"predicted": false,
+		"name": "weapon_trait_bespoke_combatsword_p2_chained_hits_increases_melee_cleave_parent",
+		"proc_events": { "on_sweep_start": 1, "on_sweep_finish": 1, "on_hit": 1 }
 	},
 	{
 		"predicted": true,
@@ -5267,11 +5344,10 @@
 		"name": "gadget_mission_xp_increase"
 	},
 	{
-		"class_name": "weapon_trait_activated_parent_proc_buff",
-		"max_stacks": 5,
+		"class_name": "proc_buff",
 		"predicted": false,
-		"name": "weapon_trait_bespoke_combatsword_p2_chained_hits_increases_melee_cleave_parent",
-		"proc_events": { "on_sweep_start": 1, "on_sweep_finish": 1, "on_hit": 1 }
+		"name": "weapon_trait_bespoke_combatsword_p2_increased_attack_cleave_on_multiple_hits",
+		"proc_events": { "on_hit": 1 }
 	},
 	{
 		"class_name": "buff",
@@ -5296,7 +5372,7 @@
 	{
 		"class_name": "buff",
 		"max_stacks": 5,
-		"name": "weapon_trait_bespoke_combatsword_p1_chained_hits_increases_melee_cleave_child",
+		"name": "weapon_trait_bespoke_combatsword_p1_increase_stagger_per_hit_in_sweep_child",
 		"predicted": false
 	},
 	{
@@ -5313,10 +5389,11 @@
 		}
 	},
 	{
-		"class_name": "buff",
+		"class_name": "weapon_trait_activated_parent_proc_buff",
 		"max_stacks": 5,
-		"name": "weapon_trait_bespoke_combatsword_p1_increase_stagger_per_hit_in_sweep_child",
-		"predicted": false
+		"predicted": false,
+		"name": "weapon_trait_bespoke_combatsword_p1_chained_hits_increases_crit_chance_parent",
+		"proc_events": { "on_sweep_start": 1, "on_sweep_finish": 1, "on_hit": 1 }
 	},
 	{
 		"class_name": "proc_buff",
@@ -5362,38 +5439,38 @@
 				"distance": [3, 5]
 			},
 			"stagger_category": "melee",
-			"suppression_value": [100, 100],
+			"targets": { "default_target": { "boost_curve": [0, 0.3, 0.6, 0.8, 1] } },
 			"ignore_toughness": true,
-			"power_distribution": { "impact": 0, "attack": 40 },
 			"armor_damage_modifier": {
-				"impact": {
-					"armored": 1,
-					"unarmored": 1.5,
-					"berserker": 1,
-					"prop_armor": 0.75,
-					"player": 0.125,
-					"resistant": 1.5,
-					"void_shield": 1,
-					"super_armor": 0.1,
-					"disgustingly_resilient": 1.25
-				},
 				"attack": {
 					"armored": 1,
 					"unarmored": 1.5,
 					"berserker": 1,
 					"prop_armor": 0.75,
-					"player": 0.125,
+					"super_armor": 0.1,
 					"resistant": 1.5,
 					"void_shield": 1,
+					"player": 0.125,
+					"disgustingly_resilient": 1.25
+				},
+				"impact": {
+					"armored": 1,
+					"unarmored": 1.5,
+					"berserker": 1,
+					"prop_armor": 0.75,
 					"super_armor": 0.1,
+					"resistant": 1.5,
+					"void_shield": 1,
+					"player": 0.125,
 					"disgustingly_resilient": 1.25
 				}
 			},
+			"cleave_distribution": { "attack": 0.125, "impact": 0 },
 			"ignore_shield": true,
-			"targets": { "default_target": { "boost_curve": [0, 0.3, 0.6, 0.8, 1] } },
+			"power_distribution": { "attack": 40, "impact": 0 },
 			"override_allow_friendly_fire": true,
 			"name": "liquid_area_fire_burning",
-			"cleave_distribution": { "impact": 0, "attack": 0.125 }
+			"suppression_value": [100, 100]
 		}
 	},
 	{
@@ -5416,12 +5493,6 @@
 		"predicted": false
 	},
 	{
-		"class_name": "weapon_trait_parent_proc_buff",
-		"predicted": false,
-		"name": "weapon_trait_bespoke_chainaxe_p1_increase_power_on_kill_parent",
-		"proc_events": { "on_kill": 1 }
-	},
-	{
 		"class_name": "buff",
 		"max_stacks": 2,
 		"name": "weapon_trait_bespoke_combatknife_p1_increased_crit_chance_on_staggered_weapon_special_hit_child",
@@ -5439,6 +5510,12 @@
 		"predicted": false,
 		"name": "weapon_trait_bespoke_combatknife_p1_dodge_grants_finesse_bonus",
 		"proc_events": { "on_successful_dodge": 1 }
+	},
+	{
+		"class_name": "proc_buff",
+		"predicted": false,
+		"name": "weapon_traits_ranged_explosive_wield_explosion_increased_berserker_damage_buff",
+		"proc_events": { "on_explosion_hit": 1 }
 	},
 	{
 		"class_name": "buff",
@@ -5459,10 +5536,10 @@
 		"predicted": false
 	},
 	{
-		"class_name": "buff",
-		"max_stacks": 3,
-		"name": "weapon_trait_bespoke_combataxe_p3_windup_increases_power_child",
-		"predicted": false
+		"class_name": "weapon_trait_parent_proc_buff",
+		"predicted": false,
+		"name": "weapon_trait_bespoke_combataxe_p3_stacking_increase_impact_on_hit_parent",
+		"proc_events": { "on_hit": 1 }
 	},
 	{
 		"class_name": "weapon_trait_target_number_parent_proc_buff",
@@ -5471,15 +5548,17 @@
 		"proc_events": { "on_hit": 1 }
 	},
 	{
-		"class_name": "buff",
-		"name": "weapon_trait_melee_activated_wield_during_weapon_special_increased_attack",
-		"predicted": false
+		"class_name": "proc_buff",
+		"max_stacks": 1,
+		"predicted": false,
+		"name": "weapon_trait_melee_common_wield_on_successful_dodge_grant_bleed_temporary_buff",
+		"proc_events": { "on_hit": 1 }
 	},
 	{
-		"class_name": "weapon_trait_parent_proc_buff",
+		"class_name": "weapon_trait_proc_conditional_switch_buff",
 		"predicted": false,
-		"name": "weapon_trait_bespoke_combataxe_p3_stacking_increase_impact_on_hit_parent",
-		"proc_events": { "on_hit": 1 }
+		"name": "weapon_trait_bespoke_combataxe_p3_power_bonus_on_first_attack",
+		"proc_events": { "on_windup_start": 1, "on_sweep_start": 1 }
 	},
 	{
 		"class_name": "buff",
@@ -5491,9 +5570,9 @@
 		"stat_buffs": { "damage_vs_cultist_mutant": 0.2 }
 	},
 	{
-		"class_name": "buff",
-		"max_stacks": 5,
-		"name": "weapon_trait_bespoke_combataxe_p3_stacking_rending_on_weakspot_child",
+		"class_name": "stepped_stat_buff",
+		"max_stacks": 1,
+		"name": "weapon_trait_bespoke_combataxe_p3_power_bonus_scaled_on_stamina",
 		"predicted": false
 	},
 	{
@@ -5504,10 +5583,10 @@
 		"name": "gadget_mission_credits_increase"
 	},
 	{
-		"class_name": "stepped_stat_buff",
-		"max_stacks": 1,
-		"name": "weapon_trait_bespoke_combataxe_p3_power_bonus_scaled_on_stamina",
-		"predicted": false
+		"class_name": "proc_buff",
+		"predicted": false,
+		"name": "weapon_trait_melee_common_wield_on_block_increased_berserker_damage_buff",
+		"proc_events": { "on_block": 0.05 }
 	},
 	{
 		"class_name": "proc_buff",
@@ -5523,10 +5602,9 @@
 	},
 	{
 		"class_name": "proc_buff",
-		"max_stacks": 1,
-		"predicted": true,
-		"name": "weapon_trait_guaranteed_critical_strike_after_non_fatal_weapon_special",
-		"proc_events": { "on_hit": 1 }
+		"predicted": false,
+		"name": "example_weapon_trait_ranged_buff_proc_chance_3",
+		"proc_events": { "on_hit": 0.75 }
 	},
 	{
 		"class_name": "proc_buff",
@@ -5536,9 +5614,10 @@
 	},
 	{
 		"class_name": "proc_buff",
-		"predicted": false,
-		"name": "weapon_trait_melee_common_wield_on_weakspot_grant_bleeding_buff",
-		"proc_events": { "on_hit": 0.2 }
+		"max_stacks": 1,
+		"predicted": true,
+		"name": "weapon_trait_melee_attack_speed_on_special_smite_kill",
+		"proc_events": { "on_kill": 1 }
 	},
 	{
 		"class_name": "buff",
@@ -5562,9 +5641,17 @@
 		"proc_events": { "on_slide_start": 1 }
 	},
 	{
-		"class_name": "buff",
-		"name": "weapon_trait_increase_power",
-		"predicted": false
+		"class_name": "stepped_stat_buff",
+		"keywords": {},
+		"max_stacks": 4,
+		"stepped_stat_buffs": [
+			{ "permanent_damage_converter": 0.1 },
+			{ "permanent_damage_converter": 0.25 },
+			{ "permanent_damage_converter": 0.5 },
+			{ "permanent_damage_converter": 0.75 }
+		],
+		"name": "grimoire_pickup",
+		"predicted": true
 	},
 	{
 		"class_name": "buff",
@@ -5587,13 +5674,8 @@
 	},
 	{
 		"class_name": "buff",
-		"lerped_stat_buffs": {
-			"ammo_reserve_capacity": { "max": 0.2, "min": 0.05 }
-		},
-		"predicted": false,
-		"localization_info": { "ammo_reserve_capacity": "percentage" },
-		"name": "gadget_inate_ammo_increase",
-		"keywords": {}
+		"name": "weapon_trait_melee_common_wield_increased_resistant_damage_buff",
+		"predicted": false
 	},
 	{
 		"class_name": "buff",
@@ -5601,14 +5683,15 @@
 		"predicted": false
 	},
 	{
-		"class_name": "proc_buff",
-		"predicted": false,
-		"name": "weapon_trait_ranged_common_wield_on_hit_increased_disgustingly_resilient_damage_buff",
-		"proc_events": { "on_hit": 0.05 }
+		"class_name": "buff",
+		"max_stacks": 5,
+		"name": "weapon_trait_bespoke_chainaxe_p1_increase_power_on_kill_child",
+		"predicted": false
 	},
 	{
-		"class_name": "buff",
-		"name": "weapon_trait_ranged_overheat_wield_high_overheat_increased_charge_speed",
+		"class_name": "stepped_stat_buff",
+		"max_stacks": 1,
+		"name": "weapon_trait_bespoke_bolter_p1_crit_chance_based_on_aim_time",
 		"predicted": false
 	},
 	{
@@ -5625,14 +5708,24 @@
 		"proc_events": { "on_hit": 1 }
 	},
 	{
-		"class_name": "interval_buff",
-		"duration": 1,
-		"max_stacks": 1,
-		"refresh_duration_on_stack": true,
+		"class_name": "proc_buff",
 		"predicted": false,
-		"keywords": ["burning"],
-		"name": "renegade_flamer_hit_by_flame",
-		"interval": 0.5
+		"name": "weapon_trait_melee_activated_wield_on_weapon_special_increase_attack_of_next_attack",
+		"proc_events": { "on_weapon_special": 1 }
+	},
+	{
+		"class_name": "buff",
+		"lerped_stat_buffs": {
+			"ammo_reserve_capacity": {
+				"max": 0.2,
+				"lerp_value_func": "",
+				"min": 0.05
+			}
+		},
+		"predicted": false,
+		"localization_info": { "ammo_reserve_capacity": "percentage" },
+		"name": "gadget_inate_ammo_increase",
+		"keywords": {}
 	},
 	{
 		"class_name": "proc_buff",
@@ -5643,15 +5736,14 @@
 		"unique_buff_id": "weapon_trait_melee_activated_wield_on_weapon_special_increase_attack_of_next_attack_buff"
 	},
 	{
-		"class_name": "weapon_trait_parent_proc_buff",
-		"predicted": false,
-		"name": "weapon_trait_bespoke_autogun_p3_stacking_crit_chance_on_weakspot_parent",
-		"proc_events": { "on_hit": 1, "on_critical_strike": 1 }
-	},
-	{
 		"class_name": "stepped_stat_buff",
 		"max_stacks": 1,
 		"name": "weapon_trait_bespoke_bolter_p1_toughness_on_continuous_fire",
+		"predicted": false
+	},
+	{
+		"class_name": "buff",
+		"name": "weapon_trait_ranged_aimed_wield_while_aiming_increased_impact_buff",
 		"predicted": false
 	},
 	{
@@ -5662,12 +5754,6 @@
 		"keywords": {},
 		"name": "daemonhost_corruption_aura",
 		"interval": 1
-	},
-	{
-		"class_name": "proc_buff",
-		"predicted": false,
-		"name": "weapon_trait_melee_common_wield_on_block_damage_bonus_buff",
-		"proc_events": { "on_block": 0.05 }
 	},
 	{
 		"class_name": "buff",
@@ -5684,14 +5770,14 @@
 	{
 		"class_name": "proc_buff",
 		"predicted": false,
-		"name": "weapon_trait_bespoke_autogun_p1_count_as_dodge_vs_ranged_on_close_kill",
-		"proc_events": { "on_hit": 1 }
+		"name": "weapon_trait_melee_common_wield_on_block_damage_bonus_buff",
+		"proc_events": { "on_block": 0.05 }
 	},
 	{
 		"class_name": "proc_buff",
 		"predicted": false,
-		"name": "weapon_trait_bespoke_autogun_p2_reload_speed_on_slide",
-		"proc_events": { "on_slide_start": 1 }
+		"name": "weapon_trait_bespoke_autogun_p1_count_as_dodge_vs_ranged_on_close_kill",
+		"proc_events": { "on_hit": 1 }
 	},
 	{
 		"class_name": "proc_buff",
@@ -5707,9 +5793,11 @@
 		"predicted": false
 	},
 	{
-		"class_name": "buff",
-		"name": "weapon_trait_melee_common_wield_decrease_corruption_damage_taken_buff",
-		"predicted": false
+		"class_name": "proc_buff",
+		"duration": 3,
+		"predicted": false,
+		"name": "weapon_trait_melee_common_wield_on_weakspot_grant_bleeding_temporary_buff",
+		"proc_events": { "on_hit": 1 }
 	},
 	{
 		"class_name": "proc_buff",
@@ -5718,10 +5806,9 @@
 		"proc_events": { "on_alternative_fire_start": 1 }
 	},
 	{
-		"class_name": "proc_buff",
-		"predicted": true,
-		"name": "weapon_trait_ranged_movement_speed_on_kill",
-		"proc_events": { "on_kill": 1 }
+		"class_name": "buff",
+		"name": "weapon_trait_melee_common_wield_decrease_corruption_damage_taken_buff",
+		"predicted": false
 	},
 	{
 		"class_name": "buff",
@@ -5736,10 +5823,11 @@
 		"predicted": false
 	},
 	{
-		"class_name": "proc_buff",
+		"class_name": "weapon_trait_activated_parent_proc_buff",
+		"max_stacks": 5,
 		"predicted": false,
-		"name": "weapon_trait_melee_common_wield_on_block_power_bonus_buff",
-		"proc_events": { "on_block": 0.05 }
+		"name": "weapon_trait_bespoke_combataxe_p1_chained_hits_increases_crit_chance_parent",
+		"proc_events": { "on_sweep_start": 1, "on_sweep_finish": 1, "on_hit": 1 }
 	},
 	{
 		"class_name": "proc_buff",
@@ -5748,10 +5836,9 @@
 		"proc_events": { "on_player_toughness_broken": 1 }
 	},
 	{
-		"class_name": "proc_buff",
-		"predicted": false,
-		"name": "example_weapon_trait_ranged_buff_proc_1",
-		"proc_events": { "on_hit": 1 }
+		"class_name": "buff",
+		"name": "weapon_trait_melee_common_wield_increased_berserker_damage_buff",
+		"predicted": false
 	},
 	{
 		"class_name": "proc_buff",
@@ -5761,14 +5848,14 @@
 	},
 	{
 		"stat_buffs": {
+			"ranged_weakspot_damage": 0.25,
 			"ranged_impact_modifier": 1,
-			"ranged_damage": 0.5,
-			"push_speed_modifier": -0.5,
 			"fov_multiplier": 0.85,
+			"ranged_damage": 0.5,
 			"recoil_modifier": -0.24,
 			"sway_modifier": 0.4,
-			"spread_modifier": -0.38,
-			"ranged_weakspot_damage": 0.25
+			"push_speed_modifier": -0.5,
+			"spread_modifier": -0.38
 		},
 		"duration": 5,
 		"max_stacks": 1,
@@ -5789,9 +5876,10 @@
 		"buff_id": "veteran_ranger_combat_ability"
 	},
 	{
-		"class_name": "buff",
-		"name": "weapon_trait_ranged_reduce_sprint_cost",
-		"predicted": false
+		"class_name": "proc_buff",
+		"predicted": false,
+		"name": "example_weapon_trait_ranged_buff_proc_3",
+		"proc_events": { "on_hit": 1 }
 	},
 	{
 		"class_name": "buff",
@@ -5811,78 +5899,40 @@
 		"stat_buffs": { "toughness_melee_replenish": 1 }
 	},
 	{
+		"class_name": "proc_buff",
+		"max_stacks": 1,
+		"predicted": true,
+		"name": "weapon_trait_guaranteed_critical_strike_after_non_fatal_weapon_special",
+		"proc_events": { "on_hit": 1 }
+	},
+	{
+		"class_name": "proc_buff",
+		"predicted": false,
+		"name": "weapon_trait_melee_common_wield_on_block_increased_resistant_damage_buff",
+		"proc_events": { "on_block": 0.05 }
+	},
+	{
+		"class_name": "buff",
+		"duration": 5,
+		"predicted": false,
+		"max_stacks": 8,
+		"refresh_duration_on_stack": true,
+		"name": "rending_debuff",
+		"stat_buffs": { "rending_multiplier": 0.05 }
+	},
+	{
+		"class_name": "weapon_trait_parent_proc_buff",
+		"predicted": false,
+		"name": "weapon_trait_bespoke_autogun_p1_increase_power_on_close_kill_parent",
+		"proc_events": { "on_kill": 1 }
+	},
+	{
 		"class_name": "buff",
 		"keywords": {},
 		"predicted": false,
 		"localization_info": { "extra_max_amount_of_wounds": "number" },
 		"name": "gadget_inate_max_wounds_increase",
 		"stat_buffs": { "extra_max_amount_of_wounds": 1 }
-	},
-	{
-		"class_name": "proc_buff",
-		"predicted": false,
-		"name": "weapon_traits_ranged_explosive_wield_explosion_increase_impact_buff",
-		"proc_events": { "on_explosion_hit": 0.1 }
-	},
-	{
-		"class_name": "buff",
-		"name": "weapon_trait_increase_crit_chance",
-		"predicted": false
-	},
-	{
-		"class_name": "interval_buff",
-		"duration": 1,
-		"max_stacks": 10,
-		"damage_type": "burning",
-		"predicted": false,
-		"interval": [0.5, 1.5],
-		"keywords": ["burning"],
-		"name": "fire_burninating",
-		"damage_template": {
-			"on_kill_area_suppression": {
-				"suppression_value": [1, 2],
-				"distance": [3, 5]
-			},
-			"stagger_category": "melee",
-			"suppression_value": [100, 100],
-			"ignore_toughness": true,
-			"power_distribution": { "impact": 0, "attack": 40 },
-			"armor_damage_modifier": {
-				"impact": {
-					"armored": 1,
-					"unarmored": 1.5,
-					"berserker": 1,
-					"prop_armor": 0.75,
-					"player": 0.125,
-					"resistant": 1.5,
-					"void_shield": 1,
-					"super_armor": 0.1,
-					"disgustingly_resilient": 1.25
-				},
-				"attack": {
-					"armored": 1,
-					"unarmored": 1.5,
-					"berserker": 1,
-					"prop_armor": 0.75,
-					"player": 0.125,
-					"resistant": 1.5,
-					"void_shield": 1,
-					"super_armor": 0.1,
-					"disgustingly_resilient": 1.25
-				}
-			},
-			"ignore_shield": true,
-			"targets": { "default_target": { "boost_curve": [0, 0.3, 0.6, 0.8, 1] } },
-			"override_allow_friendly_fire": true,
-			"name": "liquid_area_fire_burning",
-			"cleave_distribution": { "impact": 0, "attack": 0.125 }
-		}
-	},
-	{
-		"class_name": "proc_buff",
-		"predicted": true,
-		"name": "weapon_trait_bash_refunds_warpcharge",
-		"proc_events": { "on_hit": 1 }
 	},
 	{
 		"class_name": "proc_buff",
@@ -5897,10 +5947,9 @@
 		"proc_events": { "on_explosion_hit": 1 }
 	},
 	{
-		"class_name": "proc_buff",
-		"predicted": false,
-		"name": "weapon_traits_ranged_explosive_wield_explosion_increased_resistant_damage_buff",
-		"proc_events": { "on_explosion_hit": 1 }
+		"class_name": "buff",
+		"name": "weapon_trait_melee_activated_wield_during_weapon_special_increased_attack",
+		"predicted": false
 	},
 	{
 		"class_name": "buff",
@@ -5910,16 +5959,15 @@
 		"name": "veteran_ranger_toughness_regen_out_of_melee"
 	},
 	{
-		"class_name": "proc_buff",
-		"predicted": false,
-		"name": "weapon_traits_ranged_explosive_wield_explosion_increase_damage_buff",
-		"proc_events": { "on_explosion_hit": 0.1 }
+		"class_name": "buff",
+		"name": "weapon_trait_increase_crit_chance",
+		"predicted": false
 	},
 	{
 		"class_name": "proc_buff",
 		"predicted": false,
-		"name": "weapon_trait_melee_common_wield_on_heavy_hit_increased_unarmored_damage_buff",
-		"proc_events": { "on_hit": 1 }
+		"name": "weapon_traits_ranged_explosive_wield_explosion_increase_damage_buff",
+		"proc_events": { "on_explosion_hit": 0.1 }
 	},
 	{
 		"predicted": true,
@@ -5935,9 +5983,10 @@
 		"name": "gadget_side_mission_double_reward"
 	},
 	{
-		"class_name": "buff",
-		"name": "weapon_trait_melee_activated_wield_during_weapon_special_increase_damage_vs_resistant",
-		"predicted": false
+		"class_name": "proc_buff",
+		"predicted": false,
+		"name": "weapon_trait_bespoke_autogun_p1_suppression_on_close_kill",
+		"proc_events": { "on_hit": 1 }
 	},
 	{
 		"class_name": "proc_buff",
@@ -5946,15 +5995,15 @@
 		"proc_events": { "on_ally_knocked_down": 1 }
 	},
 	{
-		"class_name": "proc_buff",
-		"predicted": false,
-		"name": "example_weapon_trait_ranged_buff_proc_3",
-		"proc_events": { "on_hit": 1 }
+		"class_name": "buff",
+		"name": "weapon_trait_ranged_increased_reload_speed",
+		"predicted": false
 	},
 	{
 		"class_name": "buff",
-		"name": "weapon_trait_ranged_common_wield_decrease_damage_taken_buff",
-		"predicted": false
+		"predicted": true,
+		"name": "tg_increased_coherency_veteran_2",
+		"stat_buffs": { "toughness_regen_rate_modifier": 25 }
 	},
 	{
 		"class_name": "stepped_stat_buff",
@@ -5963,10 +6012,17 @@
 		"predicted": false
 	},
 	{
-		"class_name": "proc_buff",
-		"predicted": false,
-		"name": "example_weapon_trait_ranged_buff_proc_chance_3",
-		"proc_events": { "on_hit": 0.75 }
+		"is_negative": true,
+		"class_name": "buff",
+		"duration": 1.75,
+		"unique_buff_priority": 1,
+		"hud_icon": "content/ui/textures/icons/buffs/hud/states_fire_buff_hud",
+		"hud_priority": 1,
+		"predicted": true,
+		"forbidden_keywords": ["renegade_grenadier_liquid_immunity"],
+		"lerped_stat_buffs": { "spread_modifier": { "max": 0, "min": 1 } },
+		"name": "renegade_grenadier_leaving_liquid_fire_spread_increase",
+		"unique_buff_id": "fire_spread_increase"
 	},
 	{
 		"class_name": "buff",
@@ -5979,15 +6035,16 @@
 	},
 	{
 		"class_name": "buff",
-		"name": "example_weapon_trait_ranged_buff_stat_2",
-		"predicted": false
+		"keywords": ["beast_of_nurgle_liquid_immunity"],
+		"predicted": true,
+		"unique_buff_priority": 1,
+		"name": "beast_of_nurgle_liquid_immunity",
+		"unique_buff_id": "beast_of_nurgle_liquid_immunity"
 	},
 	{
-		"class_name": "proc_buff",
-		"max_stacks": 1,
-		"predicted": false,
-		"name": "weapon_trait_melee_common_wield_on_successful_dodge_grant_bleed_temporary_buff",
-		"proc_events": { "on_hit": 1 }
+		"class_name": "buff",
+		"name": "weapon_trait_ranged_common_wield_increase_stamina_regen_buff",
+		"predicted": false
 	},
 	{
 		"class_name": "buff",
@@ -6005,12 +6062,12 @@
 			"ranged_impact_modifier": 1,
 			"ranged_damage": 0.5,
 			"push_speed_modifier": -0.5,
+			"sway_modifier": 0.4,
+			"ranged_weakspot_damage": 0.25,
+			"recoil_modifier": -0.24,
 			"fov_multiplier": 0.85,
 			"damage_vs_ogryn_and_monsters": 0.75,
-			"recoil_modifier": -0.24,
-			"spread_modifier": -0.38,
-			"sway_modifier": 0.4,
-			"ranged_weakspot_damage": 0.25
+			"spread_modifier": -0.38
 		},
 		"duration": 5,
 		"max_stacks": 1,
@@ -6031,19 +6088,14 @@
 		"buff_id": "veteran_ranger_combat_ability"
 	},
 	{
-		"class_name": "buff",
-		"max_stacks": 5,
-		"name": "weapon_trait_bespoke_autogun_p2_increase_close_damage_on_close_kill_child",
+		"class_name": "grimoire_buff",
+		"name": "grimoire_damage_tick",
 		"predicted": false
 	},
 	{
 		"class_name": "buff",
-		"keywords": ["stun_immune"],
-		"predicted": true,
-		"stat_buffs": {},
-		"duration": 1,
-		"name": "stun_immune_short",
-		"unique_buff_id": "stun_immunity"
+		"name": "weapon_trait_ranged_common_wield_increased_resistant_damage_buff",
+		"predicted": false
 	},
 	{
 		"class_name": "proc_buff",
@@ -6059,61 +6111,24 @@
 		"proc_events": { "on_hit": 1 }
 	},
 	{
-		"stat_buffs": { "movement_speed": 0.6, "dodge_speed_multiplier": 0.9 },
-		"keywords": ["zero_slide_friction"],
-		"max_stacks": 1,
-		"forbidden_keywords": ["beast_of_nurgle_liquid_immunity"],
-		"damage_type": "minion_vomit",
-		"predicted": false,
-		"damage_template": {
-			"ogryn_disorientation_type": "corruption",
-			"cleave_distribution": { "impact": 0, "attack": 1 },
-			"ignore_toughness": true,
-			"stagger_category": "melee",
-			"power_distribution": { "impact": 0, "attack": 1 },
-			"targets": { "default_target": { "boost_curve": [0, 0.3, 0.6, 0.8, 1] } },
-			"disorientation_type": "corruption",
-			"permanent_damage_ratio": 1,
-			"toughness_multiplier": 2,
-			"name": "beast_of_nurgle_slime_liquid",
-			"armor_damage_modifier": {
-				"impact": {
-					"armored": 0,
-					"unarmored": 0,
-					"berserker": 0,
-					"prop_armor": 0,
-					"player": 0.1,
-					"resistant": 0,
-					"void_shield": 0,
-					"super_armor": 0,
-					"disgustingly_resilient": 0
-				},
-				"attack": {
-					"armored": 0,
-					"unarmored": 0,
-					"berserker": 0,
-					"prop_armor": 0,
-					"player": 0.1,
-					"resistant": 0,
-					"void_shield": 0,
-					"super_armor": 0,
-					"disgustingly_resilient": 0
-				}
-			}
-		},
 		"class_name": "interval_buff",
-		"name": "beast_of_nurgle_in_slime",
+		"duration": 1,
+		"max_stacks": 1,
+		"refresh_duration_on_stack": true,
+		"predicted": false,
+		"keywords": ["burning"],
+		"name": "renegade_flamer_hit_by_flame",
 		"interval": 0.5
 	},
 	{
-		"class_name": "buff",
+		"class_name": "proc_buff",
 		"predicted": false,
-		"name": "weapon_trait_ranged_common_equip_decrease_toughness_damage_taken_buff",
-		"stat_buffs": { "toughness_damage_taken_multiplier": 0.9 }
+		"name": "weapon_trait_melee_common_wield_on_weakspot_grant_bleeding_buff",
+		"proc_events": { "on_hit": 0.2 }
 	},
 	{
 		"class_name": "buff",
-		"name": "weapon_trait_ranged_common_wield_increase_stamina_regen_buff",
+		"name": "weapon_trait_ranged_common_wield_finesse_modifier_bonus_buff",
 		"predicted": false
 	},
 	{
@@ -6142,10 +6157,11 @@
 		"proc_events": { "on_hit": 1 }
 	},
 	{
-		"class_name": "proc_buff",
-		"predicted": false,
-		"name": "weapon_trait_melee_common_wield_on_heavy_attack_kill_increase_attack_speed_buff",
-		"proc_events": { "on_kill": 1 }
+		"class_name": "buff",
+		"keywords": {},
+		"predicted": true,
+		"name": "spread_reduction",
+		"stat_buffs": { "spread_modifier": -0.15 }
 	},
 	{
 		"class_name": "stepped_stat_buff",
@@ -6154,9 +6170,10 @@
 		"predicted": false
 	},
 	{
-		"class_name": "buff",
-		"name": "weapon_trait_increase_impact",
-		"predicted": false
+		"class_name": "proc_buff",
+		"predicted": false,
+		"name": "weapon_trait_ranged_aimed_wield_on_weakspot_hit_increase_damage_buff",
+		"proc_events": { "on_hit": 0.05 }
 	},
 	{
 		"class_name": "buff",
@@ -6165,9 +6182,10 @@
 		"name": "ogryn_bonebreaker_direct_grenade_hits_on_supers_explode"
 	},
 	{
-		"class_name": "buff",
-		"name": "weapon_trait_melee_common_wield_increased_resistant_damage_buff",
-		"predicted": false
+		"class_name": "proc_buff",
+		"predicted": false,
+		"name": "weapon_trait_melee_common_wield_on_heavy_attack_kill_increase_attack_speed_buff",
+		"proc_events": { "on_kill": 1 }
 	},
 	{
 		"class_name": "proc_buff",
@@ -6177,7 +6195,7 @@
 	},
 	{
 		"class_name": "buff",
-		"name": "weapon_trait_ranged_common_wield_increase_ranged_damage_buff",
+		"name": "weapon_trait_ranged_aimed_wield_while_aiming_increased_berserker_damage_buff",
 		"predicted": false
 	},
 	{
@@ -6188,8 +6206,8 @@
 	{
 		"class_name": "proc_buff",
 		"predicted": false,
-		"name": "weapon_trait_melee_common_wield_on_heavy_hit_increased_resistant_damage_buff",
-		"proc_events": { "on_hit": 1 }
+		"name": "weapon_trait_ranged_aimed_wield_on_enter_ads_increased_unarmored_damage_buff",
+		"proc_events": { "on_alternative_fire_start": 1 }
 	},
 	{
 		"class_name": "buff",
@@ -6201,12 +6219,10 @@
 		"unique_buff_id": "hit_reaction_movement_slow"
 	},
 	{
-		"class_name": "buff",
-		"duration": 5,
+		"class_name": "proc_buff",
 		"predicted": false,
-		"refresh_duration_on_stack": true,
-		"name": "increase_damage_received_while_staggered",
-		"max_stacks": 8
+		"name": "weapon_trait_melee_common_wield_on_successful_dodge_grant_finess_bonus_buff",
+		"proc_events": { "on_successful_dodge": 1 }
 	},
 	{
 		"class_name": "buff",
@@ -6221,31 +6237,33 @@
 	{
 		"class_name": "proc_buff",
 		"predicted": false,
-		"name": "weapon_trait_ranged_common_wield_on_hit_power_bonus_buff",
+		"name": "weapon_trait_melee_common_wield_on_hit_increased_super_armor_damage_buff",
 		"proc_events": { "on_hit": 0.05 }
 	},
 	{
-		"class_name": "proc_buff",
-		"predicted": false,
-		"name": "weapon_trait_melee_common_wield_on_heavy_hit_impact_bonus_buff",
-		"proc_events": { "on_hit": 1 }
-	},
-	{
 		"class_name": "buff",
-		"predicted": false,
-		"name": "weapon_trait_melee_common_equip_decrease_toughness_damage_taken_buff",
-		"stat_buffs": { "toughness_damage_taken_multiplier": 0.5 }
-	},
-	{
-		"class_name": "proc_buff",
-		"predicted": false,
-		"name": "weapon_trait_melee_activated_wield_on_weapon_special_kill_chance_to_increase_attack",
-		"proc_events": { "on_kill": 0.33 }
-	},
-	{
-		"class_name": "buff",
-		"name": "weapon_trait_melee_common_wield_decrease_damage_taken_buff",
+		"name": "weapon_trait_melee_activated_wield_during_weapon_special_increased_movement_speed",
 		"predicted": false
+	},
+	{
+		"class_name": "buff",
+		"max_stacks": 5,
+		"name": "weapon_trait_bespoke_combataxe_p1_chained_hits_increases_crit_chance_child",
+		"predicted": false
+	},
+	{
+		"class_name": "buff",
+		"duration": 5,
+		"predicted": false,
+		"refresh_duration_on_stack": true,
+		"name": "increase_damage_received_while_staggered",
+		"max_stacks": 8
+	},
+	{
+		"class_name": "proc_buff",
+		"predicted": false,
+		"name": "weapon_trait_ranged_common_wield_on_hit_power_bonus_buff",
+		"proc_events": { "on_hit": 0.05 }
 	},
 	{
 		"class_name": "buff",
@@ -6253,16 +6271,15 @@
 		"predicted": false
 	},
 	{
-		"class_name": "interval_buff",
-		"predicted": true,
-		"target": "player_only",
-		"name": "mutator_corruption_over_time",
-		"interval": 7
+		"class_name": "buff",
+		"name": "weapon_trait_melee_common_wield_increase_crit_chance_buff",
+		"predicted": false
 	},
 	{
-		"class_name": "buff",
-		"name": "weapon_trait_melee_common_wield_increased_berserker_damage_buff",
-		"predicted": false
+		"class_name": "proc_buff",
+		"predicted": false,
+		"name": "weapon_trait_melee_common_wield_on_heavy_hit_power_bonus_buff",
+		"proc_events": { "on_hit": 1 }
 	},
 	{
 		"class_name": "buff",
@@ -6275,8 +6292,8 @@
 	{
 		"class_name": "proc_buff",
 		"predicted": false,
-		"name": "weapon_trait_melee_common_wield_on_hit_impact_bonus_buff",
-		"proc_events": { "on_hit": 0.05 }
+		"name": "weapon_trait_melee_common_wield_on_heavy_hit_impact_bonus_buff",
+		"proc_events": { "on_hit": 1 }
 	},
 	{
 		"class_name": "weapon_trait_parent_proc_buff",
@@ -6291,24 +6308,31 @@
 		}
 	},
 	{
-		"class_name": "proc_buff",
-		"predicted": false,
-		"name": "weapon_trait_melee_common_wield_on_hit_increased_resistant_damage_buff",
-		"proc_events": { "on_hit": 0.05 }
-	},
-	{
-		"class_name": "buff",
-		"predicted": false,
-		"name": "weapon_trait_melee_common_equip_decrease_corruption_damage_taken_buff",
-		"stat_buffs": { "corruption_taken_multiplier": 0.5 }
-	},
-	{
-		"class_name": "buff",
-		"keywords": ["beast_of_nurgle_liquid_immunity"],
+		"class_name": "interval_buff",
 		"predicted": true,
-		"unique_buff_priority": 1,
-		"name": "beast_of_nurgle_liquid_immunity",
-		"unique_buff_id": "beast_of_nurgle_liquid_immunity"
+		"target": "player_only",
+		"name": "mutator_corruption_over_time",
+		"interval": 7
+	},
+	{
+		"class_name": "buff",
+		"name": "weapon_trait_melee_common_wield_decrease_damage_taken_buff",
+		"predicted": false
+	},
+	{
+		"class_name": "buff",
+		"predicted": true,
+		"stat_buffs": {
+			"disgustingly_resilient_damage": -0.8,
+			"berserker_damage": -0.8,
+			"consumed_hit_mass_modifier": 10,
+			"unarmored_damage": -0.8,
+			"resistant_damage": -0.8,
+			"armored_damage": -0.6,
+			"super_armor_damage": -0.6
+		},
+		"name": "mutator_stimmed_minion",
+		"target": "minion_only"
 	},
 	{
 		"class_name": "buff",
@@ -6319,10 +6343,9 @@
 		"stat_buffs": { "stamina_regeneration_modifier": 0.2 }
 	},
 	{
-		"class_name": "proc_buff",
-		"predicted": false,
-		"name": "weapon_trait_melee_common_wield_on_hit_increased_berserker_damage_buff",
-		"proc_events": { "on_hit": 0.05 }
+		"class_name": "buff",
+		"name": "weapon_trait_increase_power",
+		"predicted": false
 	},
 	{
 		"class_name": "proc_buff",
@@ -6335,14 +6358,15 @@
 	},
 	{
 		"class_name": "buff",
-		"max_stacks": 5,
-		"name": "weapon_trait_bespoke_combataxe_p1_chained_hits_increases_crit_chance_child",
-		"predicted": false
+		"predicted": false,
+		"name": "weapon_trait_melee_common_equip_decrease_toughness_damage_taken_buff",
+		"stat_buffs": { "toughness_damage_taken_multiplier": 0.5 }
 	},
 	{
-		"class_name": "buff",
-		"name": "weapon_trait_melee_activated_wield_during_weapon_special_increased_movement_speed",
-		"predicted": false
+		"class_name": "proc_buff",
+		"predicted": false,
+		"name": "weapon_trait_melee_common_wield_on_heavy_hit_increased_unarmored_damage_buff",
+		"proc_events": { "on_hit": 1 }
 	},
 	{
 		"class_name": "buff",
@@ -6367,8 +6391,8 @@
 	{
 		"class_name": "proc_buff",
 		"predicted": false,
-		"name": "weapon_trait_ranged_aimed_wield_on_enter_ads_increased_resistant_damage_buff",
-		"proc_events": { "on_alternative_fire_start": 1 }
+		"name": "weapon_trait_melee_common_wield_on_heavy_hit_increased_resistant_damage_buff",
+		"proc_events": { "on_hit": 1 }
 	},
 	{
 		"class_name": "weapon_trait_parent_proc_buff",
@@ -6377,16 +6401,14 @@
 		"proc_events": { "on_hit": 1 }
 	},
 	{
-		"class_name": "proc_buff",
-		"duration": 3,
-		"predicted": false,
-		"name": "weapon_trait_ranged_aimed_wield_on_enter_ads_apply_bleeding_temporary_buff",
-		"proc_events": { "on_hit": 1 }
+		"class_name": "buff",
+		"name": "weapon_trait_ranged_common_wield_increase_ranged_damage_buff",
+		"predicted": false
 	},
 	{
 		"class_name": "proc_buff",
 		"predicted": false,
-		"name": "weapon_trait_ranged_aimed_wield_on_enter_ads_increase_damage_buff",
+		"name": "weapon_trait_ranged_aimed_wield_on_enter_ads_increased_resistant_damage_buff",
 		"proc_events": { "on_alternative_fire_start": 1 }
 	},
 	{
@@ -6397,8 +6419,8 @@
 	{
 		"class_name": "proc_buff",
 		"predicted": false,
-		"name": "weapon_trait_ranged_aimed_wield_on_weakspot_hit_apply_bleeding_buff",
-		"proc_events": { "on_hit": 1 }
+		"name": "weapon_trait_ranged_aimed_wield_on_enter_ads_increase_damage_buff",
+		"proc_events": { "on_alternative_fire_start": 1 }
 	},
 	{
 		"class_name": "proc_buff",
@@ -6407,31 +6429,26 @@
 		"proc_events": { "on_block": 0.05 }
 	},
 	{
-		"class_name": "buff",
-		"name": "weapon_trait_ranged_aimed_wield_while_aiming_increased_resistant_damage_buff",
-		"predicted": false
-	},
-	{
 		"class_name": "proc_buff",
 		"predicted": false,
-		"name": "weapon_trait_ranged_aimed_wield_on_weakspot_hit_increase_impact_buff",
-		"proc_events": { "on_hit": 0.05 }
+		"name": "weapon_trait_ranged_aimed_wield_on_weakspot_hit_apply_bleeding_buff",
+		"proc_events": { "on_hit": 1 }
 	},
 	{
 		"class_name": "buff",
-		"name": "weapon_trait_ranged_increased_reload_speed",
+		"name": "weapon_trait_ranged_aimed_wield_while_aiming_increased_unarmored_damage_buff",
 		"predicted": false
 	},
 	{
-		"class_name": "interval_buff",
-		"keywords": ["electrocuted"],
-		"start_interval_on_apply": true,
-		"start_with_frame_offset": true,
+		"class_name": "buff",
+		"name": "weapon_trait_ranged_aimed_wield_while_aiming_increased_armored_damage_buff",
+		"predicted": false
+	},
+	{
+		"class_name": "buff",
 		"predicted": false,
-		"max_stacks_cap": 1,
-		"max_stacks": 1,
-		"name": "chain_lightning_interval",
-		"interval": [0.1, 0.3]
+		"name": "weapon_trait_melee_common_equip_decrease_corruption_damage_taken_buff",
+		"stat_buffs": { "corruption_taken_multiplier": 0.5 }
 	},
 	{
 		"class_name": "buff",
@@ -6445,10 +6462,9 @@
 		"proc_events": { "on_hit": 1 }
 	},
 	{
-		"class_name": "proc_buff",
-		"predicted": false,
-		"name": "weapon_trait_ranged_common_wield_on_hit_increased_super_armor_damage_buff",
-		"proc_events": { "on_hit": 0.05 }
+		"class_name": "buff",
+		"name": "weapon_trait_ranged_common_wield_increased_attack_buff",
+		"predicted": false
 	},
 	{
 		"class_name": "proc_buff",
@@ -6468,12 +6484,6 @@
 	{
 		"class_name": "proc_buff",
 		"predicted": false,
-		"name": "weapon_trait_ranged_aimed_wield_on_enter_ads_increased_berserker_damage_buff",
-		"proc_events": { "on_alternative_fire_start": 1 }
-	},
-	{
-		"class_name": "proc_buff",
-		"predicted": false,
 		"name": "weapon_trait_ranged_common_wield_on_hit_increased_resistant_damage_buff",
 		"proc_events": { "on_hit": 0.05 }
 	},
@@ -6482,6 +6492,15 @@
 		"predicted": false,
 		"name": "weapon_trait_ranged_common_wield_on_hit_impact_bonus_buff",
 		"proc_events": { "on_hit": 0.05 }
+	},
+	{
+		"class_name": "buff",
+		"keywords": ["stun_immune"],
+		"predicted": true,
+		"stat_buffs": {},
+		"duration": 1,
+		"name": "stun_immune_short",
+		"unique_buff_id": "stun_immunity"
 	},
 	{
 		"class_name": "buff",
@@ -6500,21 +6519,72 @@
 		"proc_events": { "on_hit": 1 }
 	},
 	{
-		"class_name": "buff",
-		"name": "weapon_trait_ranged_increase_damage_elites",
-		"predicted": false
-	},
-	{
-		"class_name": "proc_buff",
-		"predicted": false,
-		"name": "weapon_trait_melee_common_wield_on_successful_dodge_grant_finess_bonus_buff",
-		"proc_events": { "on_successful_dodge": 1 }
-	},
-	{
 		"class_name": "proc_buff",
 		"predicted": true,
 		"name": "weapon_trait_ranged_reload_speed_on_kill",
 		"proc_events": { "on_kill": 1 }
+	},
+	{
+		"is_negative": true,
+		"class_name": "interval_buff",
+		"keywords": ["concealed", "hud_nameplates_disabled"],
+		"max_stacks": 1,
+		"damage_type": "corruption",
+		"hud_icon": "content/ui/textures/icons/buffs/hud/states_knocked_down_buff_hud",
+		"interval": 0.5,
+		"target": "player_only",
+		"hud_priority": 1,
+		"predicted": false,
+		"stat_buffs": {
+			"toughness_regen_rate_multiplier": 0,
+			"dodge_speed_multiplier": 0.9,
+			"movement_speed": 0.9
+		},
+		"duration": 0.5,
+		"name": "left_toxic_gas",
+		"damage_template": {
+			"ignore_depleting_toughness": true,
+			"ogryn_disorientation_type": "corruption",
+			"targets": { "default_target": { "boost_curve": [0, 0.3, 0.6, 0.8, 1] } },
+			"stagger_category": "melee",
+			"ignore_mood_effects": true,
+			"power_distribution": { "attack": 1, "impact": 0 },
+			"armor_damage_modifier": {
+				"attack": {
+					"armored": 0,
+					"unarmored": 0,
+					"berserker": 0,
+					"prop_armor": 0,
+					"super_armor": 0,
+					"resistant": 0,
+					"void_shield": 0,
+					"player": 1,
+					"disgustingly_resilient": 0
+				},
+				"impact": {
+					"armored": 0,
+					"unarmored": 0,
+					"berserker": 0,
+					"prop_armor": 0,
+					"super_armor": 0,
+					"resistant": 0,
+					"void_shield": 0,
+					"player": 1,
+					"disgustingly_resilient": 0
+				}
+			},
+			"disorientation_type": "corruption",
+			"permanent_damage_ratio": 1,
+			"toughness_multiplier": 3,
+			"name": "toxic_gas_mutator",
+			"cleave_distribution": { "attack": 1, "impact": 0 }
+		}
+	},
+	{
+		"class_name": "buff",
+		"max_stacks": 5,
+		"name": "weapon_trait_bespoke_autogun_p2_increase_close_damage_on_close_kill_child",
+		"predicted": false
 	},
 	{
 		"class_name": "proc_buff",
@@ -6524,18 +6594,21 @@
 	},
 	{
 		"class_name": "buff",
-		"name": "weapon_trait_ranged_common_wield_finesse_modifier_bonus_buff",
-		"predicted": false
-	},
-	{
-		"class_name": "buff",
-		"name": "weapon_trait_ranged_common_wield_increased_resistant_damage_buff",
-		"predicted": false
-	},
-	{
-		"class_name": "buff",
 		"name": "weapon_trait_ranged_common_wield_increased_berserker_damage_buff",
 		"predicted": false
+	},
+	{
+		"class_name": "proc_buff",
+		"duration": 3,
+		"predicted": false,
+		"name": "weapon_trait_ranged_aimed_wield_on_enter_ads_apply_bleeding_temporary_buff",
+		"proc_events": { "on_hit": 1 }
+	},
+	{
+		"class_name": "buff",
+		"predicted": false,
+		"name": "weapon_trait_ranged_common_equip_decrease_damage_taken_buff",
+		"stat_buffs": { "damage_taken_multiplier": 0.92 }
 	},
 	{
 		"class_name": "buff",
@@ -6551,9 +6624,10 @@
 		"predicted": false
 	},
 	{
-		"class_name": "grimoire_buff",
-		"name": "grimoire_damage_tick",
-		"predicted": false
+		"class_name": "proc_buff",
+		"predicted": false,
+		"name": "weapon_trait_bespoke_autogun_p2_reload_speed_on_slide",
+		"proc_events": { "on_slide_start": 1 }
 	},
 	{
 		"class_name": "buff",
@@ -6635,7 +6709,7 @@
 	{
 		"class_name": "proc_buff",
 		"predicted": false,
-		"name": "weapon_traits_ranged_explosive_wield_explosion_increased_unarmored_damage_buff",
+		"name": "weapon_traits_ranged_explosive_wield_explosion_increased_resistant_damage_buff",
 		"proc_events": { "on_explosion_hit": 1 }
 	},
 	{
@@ -6657,9 +6731,10 @@
 		"unique_buff_id": "weapon_trait_melee_common_wield_grants_increased_attack_buff"
 	},
 	{
-		"class_name": "buff",
-		"name": "weapon_trait_bespoke_chainsword_p1_infinite_melee_cleave_on_crit",
-		"predicted": false
+		"class_name": "proc_buff",
+		"predicted": false,
+		"name": "weapon_traits_ranged_explosive_wield_explosion_increase_impact_buff",
+		"proc_events": { "on_explosion_hit": 0.1 }
 	},
 	{
 		"class_name": "buff",
@@ -6695,10 +6770,8 @@
 	},
 	{
 		"class_name": "buff",
-		"predicted": true,
-		"stat_buffs": { "ability_cooldown_modifier": -0.5 },
-		"name": "mutator_player_cooldown_reduction",
-		"target": "player_only"
+		"name": "weapon_trait_ranged_increase_power",
+		"predicted": false
 	},
 	{
 		"is_negative": true,
@@ -6715,38 +6788,38 @@
 				"distance": [3, 5]
 			},
 			"stagger_category": "melee",
-			"suppression_value": [100, 100],
+			"targets": { "default_target": { "boost_curve": [0, 0.3, 0.6, 0.8, 1] } },
 			"ignore_toughness": true,
-			"power_distribution": { "impact": 0, "attack": 20 },
 			"armor_damage_modifier": {
-				"impact": {
-					"armored": 1.75,
-					"unarmored": 2,
-					"berserker": 2,
-					"prop_armor": 1.75,
-					"player": 0.5,
-					"resistant": 1.5,
-					"void_shield": 2,
-					"super_armor": 0.1,
-					"disgustingly_resilient": 2.25
-				},
 				"attack": {
 					"armored": 1.75,
 					"unarmored": 2,
 					"berserker": 2,
 					"prop_armor": 1.75,
-					"player": 0.5,
+					"super_armor": 0.1,
 					"resistant": 1.5,
 					"void_shield": 2,
+					"player": 0.5,
+					"disgustingly_resilient": 2.25
+				},
+				"impact": {
+					"armored": 1.75,
+					"unarmored": 2,
+					"berserker": 2,
+					"prop_armor": 1.75,
 					"super_armor": 0.1,
+					"resistant": 1.5,
+					"void_shield": 2,
+					"player": 0.5,
 					"disgustingly_resilient": 2.25
 				}
 			},
+			"cleave_distribution": { "attack": 0.125, "impact": 0 },
 			"ignore_shield": true,
-			"targets": { "default_target": { "boost_curve": [0, 0.3, 0.6, 0.8, 1] } },
+			"power_distribution": { "attack": 20, "impact": 0 },
 			"override_allow_friendly_fire": true,
 			"name": "liquid_area_fire_burning_barrel",
-			"cleave_distribution": { "impact": 0, "attack": 0.125 }
+			"suppression_value": [100, 100]
 		},
 		"class_name": "interval_buff",
 		"name": "prop_in_liquid_fire_burning_movement_slow",
@@ -6754,14 +6827,13 @@
 	},
 	{
 		"class_name": "buff",
-		"name": "weapon_trait_ranged_increase_power",
+		"name": "weapon_trait_ranged_overheat_wield_high_overheat_increased_charge_speed",
 		"predicted": false
 	},
 	{
 		"class_name": "buff",
-		"predicted": true,
-		"name": "tg_increased_coherency_ogryn_2",
-		"stat_buffs": { "toughness_regen_rate_modifier": 12 }
+		"name": "weapon_trait_ranged_reduce_sprint_cost",
+		"predicted": false
 	},
 	{
 		"class_name": "buff",
@@ -6773,8 +6845,8 @@
 	},
 	{
 		"class_name": "buff",
-		"name": "braced_damage_reduction",
-		"predicted": true
+		"name": "weapon_trait_melee_activated_wield_during_weapon_special_increase_damage_vs_resistant",
+		"predicted": false
 	},
 	{
 		"class_name": "buff",
@@ -6800,9 +6872,10 @@
 		"predicted": false
 	},
 	{
-		"class_name": "buff",
-		"name": "weapon_trait_melee_activated_wield_during_weapon_special_increase_damage_vs_disgustingly_resilient_damage",
-		"predicted": false
+		"class_name": "proc_buff",
+		"predicted": false,
+		"name": "weapon_trait_melee_common_wield_on_block_power_bonus_buff",
+		"proc_events": { "on_block": 0.05 }
 	},
 	{
 		"class_name": "buff",
@@ -6814,15 +6887,15 @@
 		"name": "gadget_damage_reduction_vs_gunners",
 		"stat_buffs": {
 			"damage_taken_by_renegade_gunner_multiplier": 0.8,
-			"damage_taken_by_chaos_ogryn_gunner_multiplier": 0.8,
-			"damage_taken_by_cultist_gunner_multiplier": 0.8
+			"damage_taken_by_cultist_gunner_multiplier": 0.8,
+			"damage_taken_by_chaos_ogryn_gunner_multiplier": 0.8
 		}
 	},
 	{
-		"class_name": "weapon_trait_parent_proc_buff",
+		"class_name": "proc_buff",
 		"predicted": false,
-		"name": "weapon_trait_bespoke_autogun_p1_increase_close_damage_on_close_kill_parent",
-		"proc_events": { "on_kill": 1 }
+		"name": "weapon_trait_bespoke_autogun_p1_reload_speed_on_dodge",
+		"proc_events": { "on_dodge_start": 1 }
 	},
 	{
 		"class_name": "buff",
@@ -6850,10 +6923,11 @@
 		"predicted": false
 	},
 	{
-		"class_name": "proc_buff",
-		"predicted": false,
-		"name": "weapon_trait_bespoke_autogun_p1_reload_speed_on_dodge",
-		"proc_events": { "on_dodge_start": 1 }
+		"class_name": "buff",
+		"keywords": {},
+		"predicted": true,
+		"name": "ranged_attack_speed",
+		"stat_buffs": { "ranged_attack_speed": 0.5 }
 	},
 	{
 		"class_name": "buff",
@@ -6899,11 +6973,11 @@
 		"predicted": false
 	},
 	{
-		"class_name": "weapon_trait_activated_parent_proc_buff",
-		"max_stacks": 5,
-		"predicted": false,
-		"name": "weapon_trait_bespoke_combataxe_p1_chained_hits_increases_crit_chance_parent",
-		"proc_events": { "on_sweep_start": 1, "on_sweep_finish": 1, "on_hit": 1 }
+		"class_name": "buff",
+		"predicted": true,
+		"stat_buffs": { "ability_cooldown_modifier": -0.5 },
+		"name": "mutator_player_cooldown_reduction",
+		"target": "player_only"
 	},
 	{
 		"class_name": "buff",
@@ -6952,10 +7026,10 @@
 		"stat_buffs": { "damage_vs_chaos_hound": 0.2 }
 	},
 	{
-		"class_name": "stepped_stat_buff",
-		"max_stacks": 1,
-		"name": "weapon_trait_bespoke_bolter_p1_crit_chance_based_on_aim_time",
-		"predicted": false
+		"class_name": "proc_buff",
+		"predicted": false,
+		"name": "weapon_trait_melee_common_wield_on_hit_increased_unarmored_damage_buff",
+		"proc_events": { "on_hit": 0.05 }
 	},
 	{
 		"class_name": "proc_buff",
@@ -6965,44 +7039,30 @@
 	},
 	{
 		"class_name": "buff",
-		"max_stacks": 5,
-		"name": "weapon_trait_bespoke_chainaxe_p1_increase_power_on_kill_child",
+		"name": "weapon_trait_bespoke_chainsword_p1_infinite_melee_cleave_on_crit",
 		"predicted": false
 	},
 	{
 		"class_name": "buff",
-		"lerped_stat_buffs": { "toughness_bonus": { "max": 0.2, "min": 0.05 } },
 		"predicted": false,
-		"localization_info": { "toughness_bonus": "percentage" },
-		"name": "gadget_inate_toughness_increase",
-		"keywords": {}
+		"name": "weapon_trait_ranged_common_equip_decrease_toughness_damage_taken_buff",
+		"stat_buffs": { "toughness_damage_taken_multiplier": 0.9 }
 	},
 	{
 		"class_name": "buff",
-		"name": "weapon_trait_melee_common_wield_increased_armored_damage_buff",
+		"name": "weapon_trait_melee_common_wield_power_modifier_bonus_buff",
 		"predicted": false
 	},
 	{
 		"class_name": "proc_buff",
 		"predicted": false,
-		"name": "weapon_traits_ranged_explosive_wield_explosion_increased_berserker_damage_buff",
+		"name": "weapon_traits_ranged_explosive_wield_explosion_increased_unarmored_damage_buff",
 		"proc_events": { "on_explosion_hit": 1 }
 	},
 	{
 		"class_name": "stepped_stat_buff",
 		"max_stacks": 1,
 		"name": "weapon_trait_bespoke_combataxe_p2_power_bonus_scaled_on_stamina",
-		"predicted": false
-	},
-	{
-		"class_name": "buff",
-		"name": "weapon_trait_melee_common_wield_increase_crit_chance_buff",
-		"predicted": false
-	},
-	{
-		"class_name": "buff",
-		"max_stacks": 5,
-		"name": "weapon_trait_bespoke_chainsword_2h_p1_chained_hits_increases_crit_chance_child",
 		"predicted": false
 	},
 	{
@@ -7027,6 +7087,16 @@
 		"class_name": "buff",
 		"max_stacks": 5,
 		"name": "weapon_trait_bespoke_combataxe_p1_increase_power_on_hit_child",
+		"predicted": false
+	},
+	{
+		"class_name": "buff",
+		"name": "weapon_trait_melee_activated_wield_during_weapon_special_reduce_corruption_taken",
+		"predicted": false
+	},
+	{
+		"class_name": "stepped_stat_buff",
+		"name": "weapon_trait_bespoke_autogun_p3_crit_chance_based_on_ammo_left",
 		"predicted": false
 	}
 ]
