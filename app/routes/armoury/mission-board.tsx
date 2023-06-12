@@ -58,24 +58,24 @@ export default function Missions() {
 	return (
 		<>
 			<h1 className="sr-only">Missions</h1>
-			<div className="w-full h-full flex justify-center p-12 xl:px-48 overflow-y-scroll">
-				<div className="w-full flex flex-wrap justify-evenly gap-10">
+			<div className="xl:px-48 flex h-full w-full justify-center overflow-y-scroll p-12">
+				<div className="flex w-full flex-wrap justify-evenly gap-10">
 					{missions.map((mission) => (
 						<div
 							key={mission.id}
-							className="relative w-96 h-56 rounded drop-shadow-lg text-green-100 font-montserrat"
+							className="relative h-56 w-96 rounded font-montserrat text-green-100 drop-shadow-lg"
 						>
 							<img
 								src={img_url(
 									`content/ui/textures/missions/${mission.map}_medium`
 								)}
 								alt=""
-								className="absolute w-full h-full top-0 left-0 object-cover rounded"
+								className="absolute left-0 top-0 h-full w-full rounded object-cover"
 							/>
 
-							<div className="h-full hover:opacity-20 transition-opacity">
+							<div className="h-full transition-opacity hover:opacity-20">
 								<div
-									className="relative w-full h-full pl-9 pb-2"
+									className="relative h-full w-full pb-2 pl-9"
 									style={{
 										background: `linear-gradient(180deg,
 											hsl(0 0% 0% / 1) 0%,
@@ -83,7 +83,7 @@ export default function Missions() {
 											hsl(0 0% 0% / 0) 100%)`,
 									}}
 								>
-									<div className="h-8 flex flex-row justify-between items-center text-sm">
+									<div className="flex h-8 flex-row items-center justify-between text-sm">
 										<div className="uppercase">
 											{loc(
 												`loc_mission_type_${
@@ -93,12 +93,12 @@ export default function Missions() {
 											)}
 										</div>
 
-										<div className="w-full h-6 flex justify-end gap-[2px] mt-2 mr-2">
+										<div className="mr-2 mt-2 flex h-6 w-full justify-end gap-[2px]">
 											{Array(mission.challenge).fill(
-												<span className="w-2 h-full bg-green-100"></span>
+												<span className="h-full w-2 bg-green-100"></span>
 											)}
 											{Array(5 - mission.challenge).fill(
-												<span className="w-2 h-full border border-green-100"></span>
+												<span className="h-full w-2 border border-green-100"></span>
 											)}
 										</div>
 									</div>
@@ -116,7 +116,7 @@ export default function Missions() {
 											)}
 										</div>
 
-										<p className="relative mt-2 text-xs invisible xs:visible">
+										<p className="invisible relative mt-2 text-xs xs:visible">
 											{loc(
 												missionInfo[mission.map as keyof typeof missionInfo]
 													.mission_description
@@ -127,15 +127,15 @@ export default function Missions() {
 
 								<div className="absolute left-9 top-32 text-xs">
 									{mission.circumstance !== "default" ? (
-										<div className="relative pt-[0.375rem] align-text-middle text-sm text-yellow-400">
+										<div className="align-text-middle relative pt-[0.375rem] text-sm text-yellow-400">
 											{loc(
 												circumstanceInfo[
 													mission.circumstance as keyof typeof circumstanceInfo
 												].display_name
 											)}
-											<div className="absolute w-10 h-10 -top-1 -left-12 border border-yellow-400 bg-gray-900 ">
+											<div className="absolute -left-12 -top-1 h-10 w-10 border border-yellow-400 bg-gray-900 ">
 												<div
-													className="absolute w-[124px] h-[124px] top-0 left-0 bg-yellow-400"
+													className="absolute left-0 top-0 h-[124px] w-[124px] bg-yellow-400"
 													style={{
 														WebkitMaskImage: `url(${img_url(
 															circumstanceInfo[
@@ -168,7 +168,7 @@ export default function Missions() {
 											<li>
 												<span
 													aria-label="Credits"
-													className="absolute w-16 h-16 top-1 bg-green-100"
+													className="absolute top-1 h-16 w-16 bg-green-100"
 													style={{
 														WebkitMaskImage: `url(${img_url(
 															"glyphs/objective_credits"
@@ -180,13 +180,13 @@ export default function Missions() {
 														transform: "scale(calc(16 / 64))",
 													}}
 												/>
-												<span className="inline-block ml-6">
+												<span className="ml-6 inline-block">
 													{mission.credits +
 														(mission.extraRewards?.circumstances?.credits || 0)}
 												</span>
 
 												{mission.extraRewards?.sideMission && (
-													<div className="relative ml-6 -mt-1 text-xs">
+													<div className="relative -mt-1 ml-6 text-xs">
 														+ {mission.extraRewards.sideMission.credits}
 													</div>
 												)}
@@ -194,7 +194,7 @@ export default function Missions() {
 											<li>
 												<span
 													aria-label="Experience"
-													className="absolute w-16 h-16 top-1 bg-green-100"
+													className="absolute top-1 h-16 w-16 bg-green-100"
 													style={{
 														WebkitMaskImage: `url(${img_url(
 															"glyphs/objective_xp"
@@ -204,19 +204,19 @@ export default function Missions() {
 														transform: "scale(calc(16 / 64))",
 													}}
 												/>
-												<span className="inline-block ml-5">
+												<span className="ml-5 inline-block">
 													{mission.xp +
 														(mission.extraRewards?.circumstances?.xp || 0)}
 												</span>
 												{mission.extraRewards?.sideMission && (
-													<div className="relative ml-5 -mt-1 text-xs">
+													<div className="relative -mt-1 ml-5 text-xs">
 														+ {mission.extraRewards.sideMission.xp}
 													</div>
 												)}
 											</li>
 										</ul>
 										{mission?.extraRewards?.sideMission && (
-											<div className="absolute w-10 h-10 -top-1 -left-12 p-[2px] bg-gray-900">
+											<div className="absolute -left-12 -top-1 h-10 w-10 bg-gray-900 p-[2px]">
 												<img
 													src={img_url(
 														`content/ui/textures/icons/pocketables/hud/small/party_${determineSecondary(
@@ -228,14 +228,17 @@ export default function Missions() {
 															mission
 														)}_header`
 													)}
-													className="border border-solid p-1 border-gray-300"
+													className="border border-solid border-gray-300 p-1"
 												/>
 											</div>
 										)}
 									</div>
 								</div>
-								<MissionTimer mission={mission} />
-								<div className="absolute w-10 h-10 -top-2 -left-3 p-[2px] bg-gray-900">
+								<MissionTimer
+									start={parseInt(mission.start, 10)}
+									end={parseInt(mission.expiry, 10)}
+								/>
+								<div className="absolute -left-3 -top-2 h-10 w-10 bg-gray-900 p-[2px]">
 									<img
 										src={img_url(
 											`content/ui/textures/icons/mission_types/mission_type_${
@@ -244,7 +247,7 @@ export default function Missions() {
 											}`
 										)}
 										alt=""
-										className="border border-solid p-1 border-gray-300"
+										className="border border-solid border-gray-300 p-1"
 									/>
 								</div>
 							</div>

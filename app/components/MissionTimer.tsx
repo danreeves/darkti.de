@@ -1,43 +1,34 @@
-import type { z } from "zod"
-import type { MissionBoardSchema } from "~/services/darktide.server"
 import { useEffect, useState } from "react"
 import { msToClockString } from "~/utils/msToClockString"
+import { useRevalidator } from "@remix-run/react"
 
-export function MissionTimer({
-	mission,
-}: {
-	mission: z.infer<typeof MissionBoardSchema>["missions"][number]
-}): JSX.Element {
+export function MissionTimer({ start, end }: { start: number; end: number }) {
 	const [dateNow, setDateNow] = useState(Date.now())
+	const revalidator = useRevalidator()
 
 	useEffect(() => {
 		const interval = setInterval(() => {
-			if (Date.now() >= Number(mission.expiry)) {
-				window.location.reload()
+			if (Date.now() >= end) {
+				revalidator.revalidate()
 				return
 			}
 			setDateNow(Date.now())
 		}, 1_000)
 
 		return () => clearInterval(interval)
-	}, [dateNow, mission.expiry])
+	}, [revalidator, dateNow, end])
 
 	return (
-		<div className="absolute bottom-0 right-0 w-full flex flex-row justify-between items-end">
+		<div className="absolute bottom-0 right-0 flex w-full flex-row items-end justify-between">
 			<div
-				className={`h-2 bg-yellow-400 rounded-bl`}
+				className={`h-2 rounded-bl bg-yellow-400`}
 				style={{
-					width: `calc(${
-						(Number(mission.expiry) - dateNow) /
-						(Number(mission.expiry) - Number(mission.start))
-					} * (100% - 3.5rem))`,
+					width: `calc(${(end - dateNow) / (end - start)} * (100% - 3.5rem))`,
 				}}
 			></div>
 
-			<div className="w-14 h-6 bg-gray-800  flex flex-row justify-center items-center text-sm text-green-50 rounded-tl rounded-br">
-				<span className="tabular-nums">
-					{msToClockString(Number(mission.expiry) - dateNow)}
-				</span>
+			<div className="flex h-6 w-14  flex-row items-center justify-center rounded-br rounded-tl bg-gray-800 text-sm text-green-50">
+				<span className="tabular-nums">{msToClockString(end - dateNow)}</span>
 			</div>
 		</div>
 	)
