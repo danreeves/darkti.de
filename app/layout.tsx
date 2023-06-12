@@ -6,9 +6,8 @@ import type { User } from "./services/auth.server"
 import { classnames } from "./utils/classnames"
 
 const navigation = [
-	{ name: "Home", href: "/" },
-
 	{ name: "Armoury", href: "/armoury" },
+	{ name: "Mission Board", href: "/mission-board" },
 	{ name: "Codex", href: "/codex" },
 	{ name: "Extension", href: "/extension" },
 	{ name: "Modding", href: "/modding" },
