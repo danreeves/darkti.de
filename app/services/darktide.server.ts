@@ -219,10 +219,26 @@ let MissionBoardSchema = z.object({
 			id: z.string(),
 			map: z.string(),
 			circumstance: z.string(),
-			flags: z.unknown(),
+			flags: z.object({
+				event: z.unknown(),
+				altered: z.unknown().optional(),
+			}),
 			credits: z.number(),
 			xp: z.number(),
-			extraRewards: z.unknown(),
+			extraRewards: z.object({
+				circumstance: z
+					.object({
+						credits: z.number(),
+						xp: z.number(),
+					})
+					.optional(),
+				sideMission: z
+					.object({
+						credits: z.number(),
+						xp: z.number(),
+					})
+					.optional(),
+			}),
 			challenge: z.number(),
 			resistance: z.number(),
 			start: z.string(),
@@ -230,6 +246,7 @@ let MissionBoardSchema = z.object({
 			requiredLevel: z.number(),
 			missionGiver: z.string(),
 			displayIndex: z.number(),
+			sideMission: z.string().optional(),
 		})
 	),
 	refreshAt: z.string(),
@@ -249,6 +266,8 @@ export async function getMissions(auth: AuthToken) {
 		let result = MissionBoardSchema.safeParse(data)
 		if (result.success) {
 			return result.data
+		} else {
+			console.log(result.error)
 		}
 	}
 }

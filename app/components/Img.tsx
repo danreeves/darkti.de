@@ -1,8 +1,21 @@
-export function Img(props: JSX.IntrinsicElements["img"]) {
-	let url = `https://darktide-images.vercel.app/_vercel/image?q=100&url=pngs/${
-		props.src
-	}&w=${props.width}${props.height ? `&h=${props.height}` : ""}`
+export function imgUrl(
+	src?: string,
+	width?: number | string,
+	height?: number | string
+) {
+	let url = `https://darktide-images.vercel.app/_vercel/image?q=100&url=pngs/${src}&w=${width}${
+		height ? `&h=${height}` : ""
+	}`
 
+	if (!src) {
+		return ""
+	}
+
+	return url
+}
+
+export function Img(props: JSX.IntrinsicElements["img"]) {
+	let url = imgUrl(props.src, props.width, props.height)
 	return (
 		<img
 			alt=""

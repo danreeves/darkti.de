@@ -1,0 +1,37 @@
+{
+	"02": {
+		"name": "loc_mission_type_02_name",
+		"icon": "content/ui/materials/icons/mission_types/mission_type_02",
+		"id": 2
+	},
+	"01": {
+		"name": "loc_mission_type_01_name",
+		"icon": "content/ui/materials/icons/mission_types/mission_type_01",
+		"id": 1
+	},
+	"04": {
+		"name": "loc_mission_type_04_name",
+		"icon": "content/ui/materials/icons/mission_types/mission_type_04",
+		"id": 4
+	},
+	"03": {
+		"name": "loc_mission_type_03_name",
+		"icon": "content/ui/materials/icons/mission_types/mission_type_03",
+		"id": 3
+	},
+	"06": {
+		"name": "loc_mission_type_06_name",
+		"icon": "content/ui/materials/icons/mission_types/mission_type_06",
+		"id": 6
+	},
+	"05": {
+		"name": "loc_mission_type_05_name",
+		"icon": "content/ui/materials/icons/mission_types/mission_type_05",
+		"id": 5
+	},
+	"07": {
+		"name": "loc_mission_type_07_name",
+		"icon": "content/ui/materials/icons/mission_types/mission_type_07",
+		"id": 7
+	}
+}
