@@ -63,7 +63,12 @@ end
 function mod.copy_keys(tbl, keys)
 	local new_tbl = {}
 	for _, key in ipairs(keys) do
-		new_tbl[key] = tbl[key]
+		local val = tbl[key]
+		if type(val) == "table" then
+			new_tbl[key] = table.clone(val)
+		else
+			new_tbl[key] = val
+		end
 	end
 	return new_tbl
 end
@@ -96,7 +101,15 @@ function mod.export_files()
 	local lm = LocalizationManager:new()
 	lm:setup_localizers(strings_package_id)
 
-	local icon_keys = { "hud_icon", "hud_icon_small", "icon", "icon_small" }
+	local icon_keys = {
+		"hud_icon",
+		"hud_icon_small",
+		"icon",
+		"icon_small",
+		"texture_big",
+		"texture_medium",
+		"texture_small",
+	}
 
 	local localizations = {}
 	local textures = {}
@@ -107,7 +120,7 @@ function mod.export_files()
 
 	local function add_texture(name)
 		if #name > 0 then
-			textures[#textures + 1] = name
+			textures[#textures + 1] = string.gsub(name, "materials", "textures")
 		end
 	end
 
@@ -327,9 +340,45 @@ function mod.export_files()
 
 	preprocess(buff_templates)
 
+	local Missions = require("scripts/settings/mission/mission_templates")
+	local CircumstanceTemplates = require("scripts/settings/circumstance/circumstance_templates")
+
+	local mission_templates = {}
+	for name, mission in pairs(Missions) do
+		table.insert(mission_templates, {
+			name = name,
+			display_name = mission.mission_name,
+			zone_id = mission.zone_id,
+			texture_small = mission.texture_small,
+			texture_medium = mission.texture_medium,
+			texture_big = mission.texture_big,
+			objectives = mission.objectives,
+			coordinates = mission.coordinates,
+			type = mission.mission_type,
+			description = mission.mission_description,
+		})
+	end
+
+	local circumstance_templates = {}
+	for name, circumstance in pairs(CircumstanceTemplates) do
+		circumstance_templates[name] = circumstance.ui
+	end
+
+	local mission_types = table.clone(require("scripts/settings/mission/mission_types"))
+	local zones = table.clone(require("scripts/settings/zones/zones"))
+
+	preprocess(mission_templates)
+	preprocess(circumstance_templates)
+	preprocess(mission_types)
+	preprocess(zones)
+
 	mod.write_file("exports\\buff_templates.json", cjson.encode(buff_templates))
 	mod.write_file("exports\\weapon_templates.json", cjson.encode(weapon_templates))
 	mod.write_file("exports\\item_master_list.json", cjson.encode(item_master_list))
+	mod.write_file("exports\\mission_templates.json", cjson.encode(mission_templates))
+	mod.write_file("exports\\circumstance_templates.json", cjson.encode(circumstance_templates))
+	mod.write_file("exports\\mission_types.json", cjson.encode(mission_types))
+	mod.write_file("exports\\zones.json", cjson.encode(zones))
 
 	mod.write_file(string.format("exports\\localization_%s.json", lm:language()), cjson.encode(localizations))
 	mod.write_file("exports\\textures.txt", mod.array_join(textures))
