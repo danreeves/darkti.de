@@ -10,7 +10,7 @@ import { getAccountSummary } from "~/services/darktide.server"
 
 let navLinks = [
 	{ label: "Trait collection", link: "traits" },
-	{ label: "Mission board", link: "mission-board" },
+	// { label: "Mission board", link: "mission-board" },
 ]
 
 export let loader = async ({ request, params }: LoaderArgs) => {
