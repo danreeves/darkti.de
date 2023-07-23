@@ -35,11 +35,11 @@ let CircumstanceSchema = z.record(
 		happening_display_name: z.string().optional(),
 		favourable_to_players: z.boolean().optional(),
 		icon: z.string(),
-	})
+	}),
 )
 
 export let CircumstanceTemplates = CircumstanceSchema.parse(
-	RAW_CIRCUMSTANCE_TEMPLATES
+	RAW_CIRCUMSTANCE_TEMPLATES,
 )
 
 let MissionTypeSchema = z.record(
@@ -48,7 +48,7 @@ let MissionTypeSchema = z.record(
 		id: z.number(),
 		name: z.string(),
 		icon: z.string(),
-	})
+	}),
 )
 
 export let MissionTypes = MissionTypeSchema.parse(RAW_MISSION_TYPES)
@@ -66,7 +66,7 @@ let ZonesSchema = z.record(
 				mission_board_details: z.string(),
 			})
 			.optional(),
-	})
+	}),
 )
 
 export let Zones = ZonesSchema.parse(RAW_ZONES)

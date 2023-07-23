@@ -12,7 +12,7 @@ export function getLocalization(lang: Lang = "en") {
 
 function hasTranslation<X extends {}, Y extends PropertyKey>(
 	obj: X,
-	prop: Y
+	prop: Y,
 ): obj is X & Record<Y, string> {
 	return obj.hasOwnProperty(prop)
 }

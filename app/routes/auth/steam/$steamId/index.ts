@@ -15,7 +15,7 @@ export let loader = async ({ request, params }: LoaderArgs) => {
 	if (!user) {
 		return json(
 			{ error: "User not found. Sign up at https://darkti.de first." },
-			{ status: 404 }
+			{ status: 404 },
 		)
 	}
 

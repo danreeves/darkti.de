@@ -25,7 +25,7 @@ export const action = async ({ request }: ActionArgs) => {
 
 		body = body.replaceAll(
 			/[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}/g,
-			":id"
+			":id",
 		)
 
 		console.log({ body })

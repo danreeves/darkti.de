@@ -13,7 +13,7 @@ export async function getItems<Schema extends ZodSchema>(
 		item_type?: string[]
 		archetypes?: string[]
 		name?: string
-	} = {}
+	} = {},
 ) {
 	const items = sortBy(filterBySchema(ITEM_DATA, schema), "baseName")
 	return items.filter((item) => {
@@ -32,7 +32,7 @@ export async function getItems<Schema extends ZodSchema>(
 
 export async function getItem<Schema extends ZodSchema>(
 	schema: Schema,
-	slug: string
+	slug: string,
 ) {
 	const items = sortBy(filterBySchema(ITEM_DATA, schema), "baseName")
 	return items.find((item) => item.slug === slug)

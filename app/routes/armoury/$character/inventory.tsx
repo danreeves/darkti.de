@@ -48,7 +48,7 @@ export async function loader({ request, params }: LoaderArgs) {
 			})
 			.map(([id, item]) => {
 				let weapon = weapons.find(
-					(wep) => wep.id === item.masterDataInstance.id
+					(wep) => wep.id === item.masterDataInstance.id,
 				)
 				if (!weapon) return undefined
 
@@ -90,7 +90,7 @@ export async function loader({ request, params }: LoaderArgs) {
 				item.displayName.toLowerCase().includes(searchName.toLowerCase()) &&
 				(searchBlessing
 					? item.traits.some((trait) => trait.baseName === searchBlessing)
-					: true)
+					: true),
 		)
 
 		let traitTable: Record<string, string> = {}
@@ -139,7 +139,7 @@ export default function Inventory() {
 				to={`.?${searchParams}`}
 				className={classnames(
 					"grid h-full w-full grow auto-rows-min grid-cols-1 flex-row flex-wrap gap-4 overflow-y-scroll bg-neutral-200 p-4 shadow-inner lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4",
-					!outlet && "cursor-default"
+					!outlet && "cursor-default",
 				)}
 			>
 				{items.map((item) => {
@@ -151,7 +151,7 @@ export default function Inventory() {
 								classnames(
 									"from-1% relative h-full w-full basis-1/4 border-2 border-neutral-400 bg-white bg-gradient-to-r shadow transition",
 									rarityBorder[item.rarity],
-									outlet && !isActive && "opacity-50"
+									outlet && !isActive && "opacity-50",
 								)
 							}
 						>
@@ -164,7 +164,7 @@ export default function Inventory() {
 								<div
 									className={classnames(
 										"m-2 font-bold leading-none",
-										rarityColor[item.rarity]
+										rarityColor[item.rarity],
 									)}
 								>
 									{item.displayName}

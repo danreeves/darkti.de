@@ -103,7 +103,7 @@ export async function loader({ params, request }: LoaderArgs) {
 
 	let numComplete = tasks.reduce(
 		(sum, task) => sum + (task.complete ? 1 : 0),
-		0
+		0,
 	)
 
 	return json({
@@ -163,7 +163,7 @@ export default function Contracts() {
 	let navigation = useNavigation()
 
 	let [timeLeft, setTimeLeft] = useState(
-		timeUntil(parseInt(data?.refreshTime ?? "0", 10))
+		timeUntil(parseInt(data?.refreshTime ?? "0", 10)),
 	)
 
 	useEffect(() => {
@@ -202,7 +202,7 @@ export default function Contracts() {
 			<div
 				className={classnames(
 					"grid w-full grow grid-cols-1 gap-4 lg:grid-cols-2",
-					navigation.state !== "idle" && "opacity-50"
+					navigation.state !== "idle" && "opacity-50",
 				)}
 			>
 				{data.tasks.map((task) => (
@@ -211,13 +211,13 @@ export default function Contracts() {
 						className={classnames(
 							"relative flex flex-col justify-between border-2 border-neutral-400 bg-white p-2 shadow transition",
 							difficultyBorder[task.difficulty],
-							task.complete && "border-green-400 opacity-50"
+							task.complete && "border-green-400 opacity-50",
 						)}
 					>
 						<div
 							className={classnames(
 								"mb-2 font-heading text-lg",
-								task.complete && "line-through"
+								task.complete && "line-through",
 							)}
 						>
 							{task.description}
@@ -228,7 +228,7 @@ export default function Contracts() {
 								<div
 									className={classnames(
 										"capitalize",
-										difficultyColor[task.difficulty]
+										difficultyColor[task.difficulty],
 									)}
 								>
 									{task.difficulty}
@@ -274,7 +274,7 @@ export default function Contracts() {
 					<div
 						className={classnames(
 							"mb-2 font-heading text-lg",
-							data.allComplete && "line-through"
+							data.allComplete && "line-through",
 						)}
 					>
 						Contract completion

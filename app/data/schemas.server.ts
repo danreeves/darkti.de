@@ -4,7 +4,7 @@ import { t } from "./localization.server"
 export const WeaponSchema = z
 	.object({
 		slots: z.array(
-			z.union([z.literal("slot_secondary"), z.literal("slot_primary")])
+			z.union([z.literal("slot_secondary"), z.literal("slot_primary")]),
 		),
 		item_type: z.union([z.literal("WEAPON_RANGED"), z.literal("WEAPON_MELEE")]),
 		hud_icon: z.string(),
@@ -19,7 +19,7 @@ export const WeaponSchema = z
 				z.literal("zealot"),
 				z.literal("psyker"),
 				z.literal("ogryn"),
-			])
+			]),
 		),
 		breeds: z.array(z.union([z.literal("human"), z.literal("ogryn")])),
 		display_name: z.string(),
@@ -56,7 +56,7 @@ export const CurioSchema = z
 				z.literal("slot_attachment_1"),
 				z.literal("slot_attachment_2"),
 				z.literal("slot_attachment_3"),
-			])
+			]),
 		),
 		item_type: z.literal("GADGET"),
 		preview_image: z.string(),
@@ -121,7 +121,7 @@ export const TraitSchema = z
 					string_key: z.string(),
 					string_value: z.string(),
 					rarity: z.string(),
-				})
+				}),
 			)
 			.optional(),
 		trait: z.string(),
@@ -142,9 +142,9 @@ export const TraitSchema = z
 
 export const BlessingSchema = z.intersection(
 	TraitSchema,
-	z.object({ item_type: z.literal("TRAIT") })
+	z.object({ item_type: z.literal("TRAIT") }),
 )
 export const PerkSchema = z.intersection(
 	TraitSchema,
-	z.object({ item_type: z.literal("PERK") })
+	z.object({ item_type: z.literal("PERK") }),
 )

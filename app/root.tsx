@@ -53,7 +53,7 @@ export default function App() {
 				<Links />
 			</head>
 			<body className="h-screen">
-					<Layout user={user} />
+				<Layout user={user} />
 				<Scripts />
 				<LiveReload />
 			</body>

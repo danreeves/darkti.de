@@ -10,7 +10,7 @@ global.cachedFetch =
 	fetchBuilder.withCache(
 		new MemoryCache({
 			ttl: 100,
-		})
+		}),
 	)
 
 export const fetch = global.cachedFetch

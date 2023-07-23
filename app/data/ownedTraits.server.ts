@@ -16,12 +16,12 @@ let OwnedTraitsSchema = z.array(
 							z.literal("OWNED"),
 							z.literal("UNOWNED"),
 							z.literal("INVALID"),
-						])
+						]),
 					)
 					.length(4),
-			})
+			}),
 		),
-	})
+	}),
 )
 type OwnedTraits = z.infer<typeof OwnedTraitsSchema>
 
