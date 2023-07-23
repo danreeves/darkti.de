@@ -20,7 +20,7 @@ let app = fastify({
 // TODO: Figure out cors for images
 // await app.register(import("@fastify/helmet"), { global: true })
 
-await app.register(import("@fastify/compress"), { global: true })
+// await app.register(import("@fastify/compress"), { global: true })
 
 await app.register(remixFastifyPlugin, {
 	build: serverBuild,
