@@ -1,6 +1,6 @@
 import { broadcastDevReady } from "@remix-run/node"
 import { Hono } from "hono"
-import { logger } from 'hono/logger'
+import { logger } from "hono/logger"
 import { serve } from "@hono/node-server"
 import { serveStatic } from "@hono/node-server/serve-static"
 import * as rh from "remix-hono/handler"
@@ -10,7 +10,7 @@ if (process.env.NODE_ENV === "development") broadcastDevReady(build)
 
 const server = new Hono()
 
-server.use('*', logger())
+server.use("*", logger())
 
 server.get(
 	"*",
