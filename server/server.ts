@@ -1,20 +1,20 @@
 import { broadcastDevReady } from "@remix-run/node"
 import { Hono } from "hono"
 import { serve } from "@hono/node-server"
-import { serveStatic } from '@hono/node-server/serve-static'
+import { serveStatic } from "@hono/node-server/serve-static"
 import * as rh from "remix-hono/handler"
-import * as build from "@remix-run/dev/server-build";
+import * as build from "@remix-run/dev/server-build"
 
 if (process.env.NODE_ENV === "development") broadcastDevReady(build)
 
 const server = new Hono()
 
 server.get(
-  '*',
-  serveStatic({
-    root: './public',
-    rewriteRequestPath: (path) => path.replace(/^\/public/, '/'),
-  })
+	"*",
+	serveStatic({
+		root: "./public",
+		rewriteRequestPath: (path) => path.replace(/^\/public/, "/"),
+	}),
 )
 
 server.use(
@@ -25,9 +25,11 @@ server.use(
 		getLoadContext(ctx) {
 			return ctx.env
 		},
-	})
+	}),
 )
 
 serve(server, (info) => {
-	console.log(`Listening on http://localhost:${info.port} in ${process.env.NODE_ENV} mode`)
+	console.log(
+		`Listening on http://localhost:${info.port} in ${process.env.NODE_ENV} mode`,
+	)
 })
