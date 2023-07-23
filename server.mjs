@@ -1,6 +1,5 @@
 import fastify from "fastify"
-// import { remixFastifyPlugin } from "@mcansh/remix-fastify"
-import { remixFastifyPlugin } from "./remix-fastify.js"
+import { remixFastifyPlugin } from "@mcansh/remix-fastify"
 import { installGlobals } from "@remix-run/node"
 
 installGlobals()
@@ -8,8 +7,6 @@ installGlobals()
 import * as serverBuild from "./build/index.mjs"
 
 let MODE = process.env.NODE_ENV
-
-console.log(MODE)
 
 let app = fastify({
 	logger: {
@@ -23,18 +20,17 @@ let app = fastify({
 // TODO: Figure out cors for images
 // await app.register(import("@fastify/helmet"), { global: true })
 
-// BLOCKED: https://github.com/mcansh/remix-fastify/pull/100
-// await app.register(import("@fastify/compress"), { global: true })
+await app.register(import("@fastify/compress"), { global: true })
 
 await app.register(remixFastifyPlugin, {
 	build: serverBuild,
 	mode: MODE,
 	getLoadContext: () => ({}),
-	purgeRequireCacheInDevelopment: false,
+  purgeRequireCacheInDevelopment: false,
+  unstable_earlyHints: true,
 })
 
-let port = process.env.PORT ? Number(process.env.PORT) || 3000 : 3000
-
+let port = Number(process.env.PORT) || 3000
 let address = await app.listen({ port, host: "0.0.0.0" })
 
 if (MODE === "development") {
@@ -42,4 +38,4 @@ if (MODE === "development") {
 	broadcastDevReady(serverBuild)
 }
 
-console.log(`App server running on ${address}`)
+console.log(`App server running on ${address} in ${MODE} mode`)
