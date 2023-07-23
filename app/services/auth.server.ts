@@ -27,7 +27,7 @@ authenticator.use(
 			let user = await getOrCreateSteamUser(steamUser.steamID)
 
 			if (!user) {
-				console.log('could not find user', steamUser)
+				console.log("could not find user", steamUser)
 				throw new Error("Could not find user")
 			}
 
