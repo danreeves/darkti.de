@@ -13,11 +13,11 @@ export default {
 
 	server: "./server/server.ts",
 	serverDependenciesToBundle: "all",
-  serverBuildPath: "build/server.js",
-  serverMainFields: ["main", "module"],
-  serverMinify: false,
-  serverModuleFormat: "cjs",
-  serverPlatform: "node",
+	serverBuildPath: "build/server.js",
+	serverMainFields: ["main", "module"],
+	serverMinify: false,
+	serverModuleFormat: "cjs",
+	serverPlatform: "node",
 
 	watchPaths: ["./server/**/*.ts"],
 
