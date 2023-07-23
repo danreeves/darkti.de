@@ -7,7 +7,7 @@
 		"dev:remix": "remix dev -c 'node build/server.js'",
 		"dev:db": "pscale connect darktide development --port 3309",
 		"build": "prisma generate && remix build",
-		"start": "node server.mjs",
+		"start": "node build/server.js",
 		"typecheck": "tsc",
 		"update-db": "prisma db push",
 		"test": "vitest",
