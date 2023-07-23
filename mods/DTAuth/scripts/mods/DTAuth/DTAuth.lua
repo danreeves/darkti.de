@@ -3,12 +3,17 @@ local mod = get_mod("DTAuth")
 local domain = "https://darkti.de"
 -- local domain = "http://localhost:3000"
 
+Managers.event:register(mod, "event_player_authenticated", "start_authentication")
+
 mod:command("login", "Open the https://darkti.de/login page in your browser", function()
 	Application.open_url_in_browser(domain .. "/login")
 end)
 
-function mod.on_all_mods_loaded()
+function mod.start_authentication()
+	Managers.event:unregister(mod, "event_player_authenticated", "start_authentication")
+
 	-- TODO: if Backend.get_auth_method() == Backend.AUTH_METHOD_XBOXLIVE then XboxLive.user_id()?
+
 	if HAS_STEAM and Backend.get_auth_method() == Backend.AUTH_METHOD_STEAM then
 		mod.authenticate_steam()
 	end
