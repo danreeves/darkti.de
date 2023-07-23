@@ -30,11 +30,9 @@ export const links: LinksFunction = () => [
 	},
 ]
 
-export const meta: MetaFunction = () => ({
-	charset: "utf-8",
-	title: "Darkti.de - unofficial community tools",
-	viewport: "width=device-width,initial-scale=1",
-})
+export function meta() {
+	return [{ title: "Darkti.de - unofficial community tools" }]
+}
 
 export let loader = async ({ request }: LoaderArgs) => {
 	const user = await authenticator.isAuthenticated(request)
@@ -49,6 +47,8 @@ export default function App() {
 	return (
 		<html lang="en" className="h-screen bg-gray-100">
 			<head>
+				<meta charSet="utf-8" />
+				<meta name="viewport" content="width=device-width,initial-scale=1" />
 				<Meta />
 				<Links />
 			</head>

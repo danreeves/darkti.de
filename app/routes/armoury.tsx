@@ -92,7 +92,7 @@ export default function Armoury() {
 	)
 }
 
-export function CatchBoundary() {
+export function ErrorBoundary() {
 	return (
 		<div className="mx-auto flex max-w-7xl place-content-center px-4 pb-4 pt-6 sm:px-8 lg:px-10">
 			<div
