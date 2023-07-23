@@ -1,7 +1,7 @@
 export function imgUrl(
 	src?: string,
 	width?: number | string,
-	height?: number | string
+	height?: number | string,
 ) {
 	let url = `https://darktide-images.vercel.app/_vercel/image?q=100&url=pngs/${src}&w=${width}${
 		height ? `&h=${height}` : ""

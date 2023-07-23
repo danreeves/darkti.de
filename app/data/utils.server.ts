@@ -4,7 +4,7 @@ import memoize from "memoizee"
 
 function _filterBySchema<Schema extends ZodSchema>(
 	input: unknown[],
-	schema: Schema
+	schema: Schema,
 ): z.infer<Schema>[] {
 	return z
 		.any()
@@ -18,7 +18,7 @@ function _filterBySchema<Schema extends ZodSchema>(
 					}
 					return undefined
 				})
-				.filter(Boolean)
+				.filter(Boolean),
 		)
 		.parse(input)
 }
@@ -33,10 +33,10 @@ export const filterBySchema = memoize(_filterBySchema)
  */
 export function replaceAll(
 	sentence: string,
-	wordsToReplace: { [key: string]: string }
+	wordsToReplace: { [key: string]: string },
 ) {
 	return Object.keys(wordsToReplace).reduce(
 		(f, s, i) => `${f}`.replace(new RegExp(s, "ig"), wordsToReplace[s]),
-		sentence
+		sentence,
 	)
 }

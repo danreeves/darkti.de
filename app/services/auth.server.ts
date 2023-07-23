@@ -36,6 +36,6 @@ authenticator.use(
 				avatar: steamUser.avatar.medium,
 				accountType: "steam",
 			}
-		}
-	)
+		},
+	),
 )

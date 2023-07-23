@@ -57,7 +57,7 @@ export async function action({ params, request }: ActionArgs) {
 	}
 
 	let currentCharacter = accountSummary.summary.characters.find(
-		(c) => c.id == characterId
+		(c) => c.id == characterId,
 	)
 	if (!currentCharacter) {
 		return json({ error: "Couldn't find current character" })
@@ -67,7 +67,7 @@ export async function action({ params, request }: ActionArgs) {
 		auth,
 		currentCharacter.archetype,
 		currentCharacter.id,
-		storeType
+		storeType,
 	)
 	if (!store) {
 		return json({ error: "Couldn't fetch store" })
@@ -136,7 +136,7 @@ export async function loader({ request, params }: LoaderArgs) {
 		return json(EMPTY_RESULT)
 	}
 	let currentCharacter = accountSummary.summary.characters.find(
-		(c) => c.id == character
+		(c) => c.id == character,
 	)
 	if (!currentCharacter) {
 		redirect("/armoury")
@@ -148,7 +148,7 @@ export async function loader({ request, params }: LoaderArgs) {
 			auth,
 			currentCharacter.archetype,
 			currentCharacter.id,
-			storeType
+			storeType,
 		),
 		getItems(WeaponSchema),
 		getItems(CurioSchema),
@@ -185,13 +185,13 @@ export async function loader({ request, params }: LoaderArgs) {
 						let description = "<No description>"
 						if (trait.description && trait.description_values) {
 							let values = trait.description_values.filter(
-								(value) => +value.rarity === perk.rarity
+								(value) => +value.rarity === perk.rarity,
 							)
 							let replacement: { [key: string]: string } = {}
 							values.forEach(
 								(value) =>
 									(replacement["{" + value.string_key + ":%s}"] =
-										value.string_value)
+										value.string_value),
 							)
 							description = replaceAll(trait.description, replacement)
 						} else if (trait.description) {
@@ -215,13 +215,13 @@ export async function loader({ request, params }: LoaderArgs) {
 						let description = "<No description>"
 						if (blessing.description && blessing.description_values) {
 							let values = blessing.description_values.filter(
-								(value) => +value.rarity === t.rarity
+								(value) => +value.rarity === t.rarity,
 							)
 							let replacement: { [key: string]: string } = {}
 							values.forEach(
 								(value) =>
 									(replacement["{" + value.string_key + ":%s}"] =
-										value.string_value)
+										value.string_value),
 							)
 							description = replaceAll(blessing.description, replacement)
 						} else if (blessing.description) {
@@ -332,7 +332,7 @@ export default function Exchange() {
 						className={classnames(
 							"border-l-3 from-1% relative border-2 border-neutral-400 bg-white bg-gradient-to-r shadow",
 							rarityBorder[offer.rarity],
-							offer.purchased && "opacity-50"
+							offer.purchased && "opacity-50",
 						)}
 					>
 						<Img
@@ -352,7 +352,7 @@ export default function Exchange() {
 								<div
 									className={classnames(
 										"font-bold ",
-										rarityColor[offer.rarity]
+										rarityColor[offer.rarity],
 									)}
 								>
 									{offer.displayName}
@@ -450,7 +450,7 @@ export default function Exchange() {
 														className={classnames(
 															"text-center leading-none",
 															!blessing.icon && "w-[128px]",
-															blessing.icon && "absolute left-0 top-0"
+															blessing.icon && "absolute left-0 top-0",
 														)}
 													>
 														{raritySymbol[blessing.rarity]}
@@ -476,7 +476,7 @@ export default function Exchange() {
 									disabled={navigation.state != "idle" || offer.purchased}
 									className={classnames(
 										"m-2 flex inline-flex shrink cursor-pointer flex-row items-center items-center gap-2 rounded border bg-white p-2 font-bold leading-none text-amber-500 shadow hover:bg-neutral-50 disabled:cursor-not-allowed disabled:bg-neutral-200",
-										offer.purchased && "text-neutral-400"
+										offer.purchased && "text-neutral-400",
 									)}
 								>
 									<CircleStackIcon className="h-4 w-4" aria-hidden="true" />

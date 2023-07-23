@@ -37,11 +37,11 @@ export let action = async ({ request }: ActionArgs) => {
 	let weaponTemplates = getWeaponTemplates()
 	let weaponPatterns = Array.from(
 		new Set(
-			weaponTemplates.map((template) => template.name.replace(/_\w\d$/, ""))
-		)
+			weaponTemplates.map((template) => template.name.replace(/_\w\d$/, "")),
+		),
 	)
 	let ownedTraits = await Promise.all(
-		weaponPatterns.map((pattern) => getTraitsForPattern(auth, pattern))
+		weaponPatterns.map((pattern) => getTraitsForPattern(auth, pattern)),
 	)
 	await setUserOwnedTraits(user.id, ownedTraits.filter(Boolean))
 	return json({ ok: true })
@@ -61,14 +61,14 @@ export let loader = async ({ request }: LoaderArgs) => {
 
 	let transformedTraits = ownedTraits.traits.map((weaponPattern) => {
 		let weapons = allWeapons.filter((weapon) =>
-			weapon.baseName.includes(weaponPattern.weapon)
+			weapon.baseName.includes(weaponPattern.weapon),
 		)
 		let displayName = weapons.map((weapon) => weapon.display_name).join(", ")
 		let tiers = [[], [], [], []]
 
 		for (let trait of weaponPattern.traits) {
 			let blessingTemplate = allBlessings.find(
-				(blessing) => blessing.id === trait.name
+				(blessing) => blessing.id === trait.name,
 			)
 			if (!blessingTemplate) {
 				continue
@@ -147,34 +147,34 @@ export default function Traits() {
 									</Tab>
 								))}
 							</TabList>
-								{pattern.tiers.map((tier, i) => {
-									return (
-										<TabPanel key={i} id={i.toString()}>
-											<h3 className="sr-only mb-2">{raritySymbol[i + 1]}</h3>
-											<div className="mb-4 grid grid-cols-3 gap-2">
-												{tier.map((blessing) => (
-													<div
-														key={blessing.id}
-														className={classnames(
-															"rounded bg-neutral-800 bg-white p-2 shadow",
-															blessing.owned ? "" : "opacity-40"
-														)}
-													>
-														<div className="font-bold">{blessing.name}</div>
-														<div className="flex items-center">
-															<Img
-																className="invert"
-																src={blessing.icon}
-																width="256"
-															/>
-															<p>{blessing.description}</p>
-														</div>
+							{pattern.tiers.map((tier, i) => {
+								return (
+									<TabPanel key={i} id={i.toString()}>
+										<h3 className="sr-only mb-2">{raritySymbol[i + 1]}</h3>
+										<div className="mb-4 grid grid-cols-3 gap-2">
+											{tier.map((blessing) => (
+												<div
+													key={blessing.id}
+													className={classnames(
+														"rounded bg-neutral-800 bg-white p-2 shadow",
+														blessing.owned ? "" : "opacity-40",
+													)}
+												>
+													<div className="font-bold">{blessing.name}</div>
+													<div className="flex items-center">
+														<Img
+															className="invert"
+															src={blessing.icon}
+															width="256"
+														/>
+														<p>{blessing.description}</p>
 													</div>
-												))}
-											</div>
-										</TabPanel>
-									)
-								})}
+												</div>
+											))}
+										</div>
+									</TabPanel>
+								)
+							})}
 						</Tabs>
 					</div>
 				))}

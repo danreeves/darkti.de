@@ -140,7 +140,7 @@ let CharactersSchema = z.object({
 			personal: z.object({ character_height: z.number() }),
 			prison_number: z.string(),
 			memberships: z.array(z.unknown()),
-		})
+		}),
 	),
 })
 export async function getCharacters(auth: AuthToken) {
@@ -170,7 +170,7 @@ let CharacterWalletSchema = z
 			z.object({
 				balance: z.object({ amount: z.number(), type: z.string() }),
 				lastTransactionId: z.number(),
-			})
+			}),
 		),
 	})
 	.transform((item) => {
@@ -247,7 +247,7 @@ let MissionBoardSchema = z.object({
 			missionGiver: z.string(),
 			displayIndex: z.number(),
 			sideMission: z.string().optional(),
-		})
+		}),
 	),
 	refreshAt: z.string(),
 	_links: z.unknown(),
@@ -279,7 +279,7 @@ let LatenciesSchema = z.object({
 			httpLatencyUrl: z.string(),
 			pingTarget: z.string(),
 			fastPingTarget: z.string(),
-		})
+		}),
 	),
 })
 export async function getLatencies(auth: AuthToken) {
@@ -322,7 +322,7 @@ let AccountSummarySchema = z.object({
 				narrative: z.unknown(),
 				personal: z.unknown(),
 				prison_number: z.string(),
-			})
+			}),
 		),
 		data: z.array(z.unknown()),
 		currencies: z.array(z.unknown()),
@@ -376,7 +376,7 @@ let AccountGearSchema = z.object({
 									modified: z.number().optional(),
 									id: z.string(),
 									rarity: z.number(),
-								})
+								}),
 							)
 							.optional(),
 						perks: z
@@ -385,7 +385,7 @@ let AccountGearSchema = z.object({
 									value: z.number().optional(),
 									id: z.string(),
 									rarity: z.number(),
-								})
+								}),
 							)
 							.optional(),
 						characterLevel: z.number().optional(),
@@ -400,7 +400,7 @@ let AccountGearSchema = z.object({
 					.optional(),
 			}),
 			characterId: z.string().optional(),
-		})
+		}),
 	),
 })
 export async function getAccountGear(auth: AuthToken) {
@@ -506,7 +506,7 @@ let CharacterStoreSchema = z.object({
 					}),
 				}),
 			})
-			.optional()
+			.optional(),
 	),
 	rerollsThisRotation: z.number(),
 	currentRotationEnd: z.string(),
@@ -515,7 +515,7 @@ export async function getCharacterStore(
 	auth: AuthToken,
 	characterArchetype: string,
 	characterId: string,
-	storeType: "credits" | "marks"
+	storeType: "credits" | "marks",
 ) {
 	let url = `https://bsp-td-prod.atoma.cloud/store/storefront/${storeType}_store_${characterArchetype}?accountId=${auth.sub}&characterId=${characterId}&personal=true`
 	let response = await fetch(url, {
@@ -574,7 +574,7 @@ let PurchaseSchema = z.object({
 			gearId: z.string(),
 			id: z.string(),
 			overrides: z.unknown(),
-		})
+		}),
 	),
 })
 type PurchaseRequest = {
@@ -587,7 +587,7 @@ type PurchaseRequest = {
 }
 export async function purchaseItem(
 	auth: AuthToken,
-	purchaseRequest: PurchaseRequest
+	purchaseRequest: PurchaseRequest,
 ) {
 	let url = `https://bsp-td-prod.atoma.cloud/store/${auth.sub}/wallets/${purchaseRequest.characterId}/purchases`
 
@@ -647,7 +647,7 @@ let ContractDataSchema = z.object({
 				enemyType: z.string().optional(),
 				resourceTypes: z.array(z.string()).optional(),
 			}),
-		})
+		}),
 	),
 })
 let ContractsSchema = z.object({
@@ -656,7 +656,7 @@ let ContractsSchema = z.object({
 export async function getCharacterContracts(
 	auth: AuthToken,
 	characterId: string,
-	createIfMissing = false
+	createIfMissing = false,
 ) {
 	let url = `https://bsp-td-prod.atoma.cloud/data/${auth.sub}/characters/${characterId}/contracts/current?createIfMissing=${createIfMissing}`
 	let response = await fetch(url, {
@@ -682,7 +682,7 @@ let DeleteTaskSchema = z.object({
 export async function deleteCharacterTask(
 	auth: AuthToken,
 	characterId: string,
-	taskId: string
+	taskId: string,
 ) {
 	let url = `https://bsp-td-prod.atoma.cloud/data/${auth.sub}/characters/${characterId}/contracts/current/tasks/${taskId}`
 	let response = await fetch(url, {
@@ -705,7 +705,7 @@ export async function deleteCharacterTask(
 
 export async function completeCharacterContract(
 	auth: AuthToken,
-	characterId: string
+	characterId: string,
 ) {
 	let url = `https://bsp-td-prod.atoma.cloud/data/${auth.sub}/characters/${characterId}/contracts/current/complete`
 	let response = await fetch(url, {

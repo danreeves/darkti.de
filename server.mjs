@@ -26,8 +26,8 @@ await app.register(remixFastifyPlugin, {
 	build: serverBuild,
 	mode: MODE,
 	getLoadContext: () => ({}),
-  purgeRequireCacheInDevelopment: false,
-  unstable_earlyHints: true,
+	purgeRequireCacheInDevelopment: false,
+	unstable_earlyHints: true,
 })
 
 let port = Number(process.env.PORT) || 3000

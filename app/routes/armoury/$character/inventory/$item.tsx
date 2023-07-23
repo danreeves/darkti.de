@@ -43,7 +43,7 @@ export async function loader({ request, params }: LoaderArgs) {
 				}) ?? []
 
 		let weapon = weapons.find(
-			(wep) => item && wep.id === item.masterDataInstance.id
+			(wep) => item && wep.id === item.masterDataInstance.id,
 		)
 
 		let weaponTemplate = getWeaponTemplate(weapon?.baseName ?? "unknown")
@@ -127,7 +127,7 @@ export default function Item() {
 			key={pathname}
 			className={classnames(
 				"absolute right-0 top-0 flex h-full w-2/3 flex-col border-l-4 bg-white",
-				rarityBorder[item.rarity]
+				rarityBorder[item.rarity],
 			)}
 			initial={{ translateX: "10%", opacity: 0 }}
 			animate={{ translateX: 0, opacity: 1 }}
@@ -139,7 +139,7 @@ export default function Item() {
 					<h2
 						className={classnames(
 							"m-6 mb-1 font-heading text-xl",
-							rarityColor[item.rarity]
+							rarityColor[item.rarity],
 						)}
 					>
 						{item.displayName}
@@ -147,7 +147,7 @@ export default function Item() {
 					<span
 						className={classnames(
 							"m-6 mt-0 flex items-center font-heading text-lg font-bold leading-none",
-							rarityColor[item.rarity]
+							rarityColor[item.rarity],
 						)}
 						title="Item level"
 					>
