@@ -1,5 +1,5 @@
 import type { ActionArgs, LoaderArgs } from "@remix-run/node"
-import { Tabs, TabList, Tab, TabPanels, TabPanel } from "react-aria-components"
+import { Tabs, TabList, Tab, TabPanel } from "react-aria-components"
 import { json } from "@remix-run/node"
 import { useLoaderData, useNavigation, Form } from "@remix-run/react"
 import { getAuthToken } from "~/data/authtoken.server"
@@ -147,7 +147,6 @@ export default function Traits() {
 									</Tab>
 								))}
 							</TabList>
-							<TabPanels>
 								{pattern.tiers.map((tier, i) => {
 									return (
 										<TabPanel key={i} id={i.toString()}>
@@ -176,7 +175,6 @@ export default function Traits() {
 										</TabPanel>
 									)
 								})}
-							</TabPanels>
 						</Tabs>
 					</div>
 				))}

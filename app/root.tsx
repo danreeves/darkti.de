@@ -1,5 +1,4 @@
 import type { LinksFunction, LoaderArgs, MetaFunction } from "@remix-run/node"
-import { SSRProvider } from "react-aria"
 import { json } from "@remix-run/node"
 import {
 	Links,
@@ -54,9 +53,7 @@ export default function App() {
 				<Links />
 			</head>
 			<body className="h-screen">
-				<SSRProvider>
 					<Layout user={user} />
-				</SSRProvider>
 				<Scripts />
 				<LiveReload />
 			</body>
