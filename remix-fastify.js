@@ -30,7 +30,7 @@ var __toESM = (mod, isNodeMode, target) => (
 		isNodeMode || !mod || !mod.__esModule
 			? __defProp(target, "default", { value: mod, enumerable: true })
 			: target,
-		mod
+		mod,
 	)
 )
 var __toCommonJS = (mod) =>
@@ -110,7 +110,7 @@ async function sendRemixResponse(reply, nodeResponse) {
 		reply.send(stream)
 		await (0, import_node2.writeReadableStreamToWritable)(
 			nodeResponse.body,
-			stream
+			stream,
 		)
 	} else {
 		reply.send()
@@ -143,7 +143,7 @@ function getStaticFiles({ assetsBuildDirectory, publicPath, rootDir }) {
 		if (isBuildAsset) {
 			browserAssetUrl += normalized.replace(
 				assetsBuildDirectory,
-				publicPath.split("/").filter(Boolean).join("/")
+				publicPath.split("/").filter(Boolean).join("/"),
 			)
 		} else {
 			browserAssetUrl += normalized.replace("public/", "")
@@ -274,7 +274,7 @@ var remixFastify = async (fastify, options = {}) => {
 			;(0, import_tiny_invariant.default)(build, "we lost the build")
 			;(0, import_tiny_invariant.default)(
 				typeof build === "string",
-				`to support "HMR" you must pass a path to the build`
+				`to support "HMR" you must pass a path to the build`,
 			)
 			if (purgeRequireCacheInDevelopment) {
 				purgeRequireCache(build)

@@ -1,6 +1,6 @@
 import fastify from "fastify"
 // import { remixFastifyPlugin } from "@mcansh/remix-fastify"
-import {remixFastifyPlugin} from "./remix-fastify.js"
+import { remixFastifyPlugin } from "./remix-fastify.js"
 import { installGlobals } from "@remix-run/node"
 
 installGlobals()
