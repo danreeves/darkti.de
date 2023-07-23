@@ -28,8 +28,6 @@ export const action = async ({ request }: ActionArgs) => {
 			":id",
 		)
 
-		console.log({ body })
-
 		return await fetch(forwardPath, {
 			method: request.method,
 			headers,
