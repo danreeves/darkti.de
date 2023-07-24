@@ -1,4 +1,4 @@
-import { Link } from "@remix-run/react"
+import { Link, useOutlet } from "@remix-run/react"
 import { json } from "@remix-run/node"
 
 export const loader = async () => {
@@ -6,6 +6,12 @@ export const loader = async () => {
 }
 
 export default function Codex() {
+	let subpage = useOutlet()
+
+	if (subpage) {
+		return subpage
+	}
+
 	return (
 		<div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
 			<LinkBox to="weapons" label="Weapons" />

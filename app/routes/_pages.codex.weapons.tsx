@@ -1,6 +1,6 @@
 import type { LoaderArgs } from "@remix-run/node"
 import { json } from "@remix-run/node"
-import { Link, useLoaderData } from "@remix-run/react"
+import { Link, useLoaderData, useOutlet } from "@remix-run/react"
 import { TagList } from "~/components/TagList"
 import { getItems } from "~/data/items.server"
 import { WeaponSchema } from "~/data/schemas.server"
@@ -22,6 +22,12 @@ export const loader = async ({ request }: LoaderArgs) => {
 
 export default function Weapons() {
 	const { weapons } = useLoaderData<typeof loader>()
+
+	let subpage = useOutlet()
+
+	if (subpage) {
+		return subpage
+	}
 
 	return (
 		<>

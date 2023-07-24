@@ -1,5 +1,5 @@
 import { json } from "@remix-run/node"
-import { Link, useLoaderData } from "@remix-run/react"
+import { Link, useLoaderData, useOutlet } from "@remix-run/react"
 import { Img } from "~/components/Img"
 import { getItems } from "~/data/items.server"
 import { BlessingSchema } from "~/data/schemas.server"
@@ -11,6 +11,12 @@ export const loader = async () => {
 
 export default function Blessings() {
 	const { items } = useLoaderData<typeof loader>()
+
+	let subpage = useOutlet()
+
+	if (subpage) {
+		return subpage
+	}
 
 	return (
 		<ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">

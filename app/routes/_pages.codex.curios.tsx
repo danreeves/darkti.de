@@ -1,5 +1,5 @@
 import { json } from "@remix-run/node"
-import { Link, useLoaderData } from "@remix-run/react"
+import { Link, useLoaderData, useOutlet } from "@remix-run/react"
 import { Img } from "~/components/Img"
 import { getItems } from "~/data/items.server"
 import { CurioSchema } from "~/data/schemas.server"
@@ -11,6 +11,12 @@ export const loader = async () => {
 
 export default function Curios() {
 	const { items } = useLoaderData<typeof loader>()
+
+	let subpage = useOutlet()
+
+	if (subpage) {
+		return subpage
+	}
 
 	return (
 		<>
