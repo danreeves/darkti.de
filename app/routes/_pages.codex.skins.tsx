@@ -1,6 +1,6 @@
 import { json } from "@remix-run/node"
 import type { LoaderArgs } from "@remix-run/node"
-import { Link, useLoaderData } from "@remix-run/react"
+import { Link, useLoaderData, useOutlet } from "@remix-run/react"
 import { Checkbox, Form, TextInput } from "~/components/Form"
 import { getItems } from "~/data/items.server"
 import { SkinSchema } from "~/data/schemas.server"
@@ -16,6 +16,12 @@ export const loader = async ({ request }: LoaderArgs) => {
 
 export default function Skins() {
 	const { items, showDescriptions } = useLoaderData<typeof loader>()
+
+	let subpage = useOutlet()
+
+	if (subpage) {
+		return subpage
+	}
 
 	return (
 		<>

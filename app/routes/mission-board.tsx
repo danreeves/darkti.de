@@ -1,6 +1,6 @@
 import Missions, {
 	getMissionBoardResponse,
-} from "~/routes/armoury/mission-board"
+} from "~/routes/armoury.mission-board"
 import { getAuthTokenBySteamId } from "~/data/authtoken.server"
 import { redirect } from "@remix-run/node"
 
