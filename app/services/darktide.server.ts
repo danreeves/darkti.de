@@ -169,7 +169,7 @@ let CharacterWalletSchema = z
 		wallets: z.array(
 			z.object({
 				balance: z.object({ amount: z.number(), type: z.string() }),
-				lastTransactionId: z.number(),
+				lastTransactionId: z.number().optional(),
 			}),
 		),
 	})
