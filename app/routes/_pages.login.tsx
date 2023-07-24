@@ -36,14 +36,15 @@ export default function LogIn() {
 			<div className="rounded bg-white p-4 shadow">
 				<h2 className="mb-2 font-heading text-lg">Why?</h2>
 				<p className="mb-6">
-					Sign in with your account and then authorise using the DTAuth mod to
-					enabling managing your account from this website.{" "}
+					Sign in with your account and then authorise using the <a className="underline" href="https://www.nexusmods.com/warhammer40kdarktide/mods/178">DTAuth mod</a> to
+					enable managing your account from this website.{" "}
 				</p>
-				<p>Features:</p>
+				<p className="font-bold">Features:</p>
 				<ul className="mb-6 ml-5 list-square">
-					<li>Manage your inventories {comingSoon}</li>
-					<li>Use the weapon shops {comingSoon}</li>
-					<li>Crafting {comingSoon}</li>
+					<li>Use the weapon shops!</li>
+					<li>Track and reroll your contracts!</li>
+					<li>View the mission board! Mission ID history {comingSoon}</li>
+					<li>Manage your inventories, loadouts & builds {comingSoon}</li>
 					<li>Notifications or auto-purchasing items {comingSoon}</li>
 				</ul>
 			</div>
