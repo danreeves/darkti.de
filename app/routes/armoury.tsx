@@ -38,7 +38,7 @@ export default function Armoury() {
 
 	let matches = useMatches()
 	let currentPage = matches.at(-1)
-	let currentRoute = currentPage?.id.replace("routes", "") ?? ""
+	let currentRoute = currentPage?.id.replace("routes", "").replaceAll(".", "/") ?? ""
 	let currentRouteParams = currentPage?.params
 
 	return (
