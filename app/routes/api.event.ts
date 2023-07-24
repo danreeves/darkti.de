@@ -2,7 +2,7 @@ import type { ActionArgs } from "@remix-run/node"
 import { json } from "@remix-run/node"
 import { getClientIPAddress } from "remix-utils"
 
-export const action = async ({ request }: ActionArgs) => {
+export async function action({ request }: ActionArgs) {
 	try {
 		const { origin } = new URL(request.url)
 		const analyticsHost = "https://plausible.io"
@@ -38,4 +38,11 @@ export const action = async ({ request }: ActionArgs) => {
 		console.log(e)
 		return json({ e })
 	}
+}
+
+export async function loader() {
+	throw new Response(null, {
+		status: 404,
+		statusText: "Not Found",
+	});
 }
