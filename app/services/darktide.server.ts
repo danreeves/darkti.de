@@ -218,10 +218,12 @@ let MissionBoardSchema = z.object({
 		z.object({
 			id: z.string(),
 			map: z.string(),
+			category: z.string().optional(),
 			circumstance: z.string(),
 			flags: z.object({
 				event: z.unknown(),
 				altered: z.unknown().optional(),
+				flash: z.unknown().optional(),
 			}),
 			credits: z.number(),
 			xp: z.number(),
