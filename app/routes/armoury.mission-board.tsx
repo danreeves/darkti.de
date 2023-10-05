@@ -40,7 +40,7 @@ export async function getMissionBoardResponse(auth: AuthToken) {
 	}
 	const { missions: rawMissions } = data
 	const sortedMissions = reverse(
-		sortBy(rawMissions, ["challenge", "resistance"])
+		sortBy(rawMissions, ["challenge", "resistance"]),
 	)
 	const missions = sortedMissions
 		.map((mission) => {
@@ -59,6 +59,7 @@ export async function getMissionBoardResponse(auth: AuthToken) {
 				name: t(template.display_name),
 				zone: t(zone?.name_short || zone?.name || "unknown"),
 				description: t(template.description),
+				circumstanceId: mission.circumstance,
 				circumstance: circumstance
 					? {
 							name: t(circumstance.display_name),
@@ -139,7 +140,7 @@ export default function Missions() {
 														key={i}
 														className="h-full w-2 border border-green-100"
 													></span>
-												)
+												),
 											)}
 										</div>
 									</div>
@@ -189,11 +190,11 @@ export default function Missions() {
 													style={{
 														WebkitMaskImage: `url(${imgUrl(
 															"glyphs/objective_credits.png",
-															128
+															128,
 														)})`,
 														maskImage: `url(${imgUrl(
 															"glyphs/objective_credits.png",
-															128
+															128,
 														)})`,
 														transformOrigin: "top left",
 														transform: "scale(calc(16 / 64))",
@@ -217,11 +218,11 @@ export default function Missions() {
 													style={{
 														WebkitMaskImage: `url(${imgUrl(
 															"glyphs/objective_xp.png",
-															128
+															128,
 														)})`,
 														maskImage: `url(${imgUrl(
 															"glyphs/objective_xp.png",
-															128
+															128,
 														)})`,
 														transformOrigin: "top left",
 														transform: "scale(calc(16 / 64))",
@@ -242,7 +243,7 @@ export default function Missions() {
 											<div className="absolute -left-12 -top-1 h-10 w-10 bg-gray-900 p-[2px]">
 												<Img
 													src={`content/ui/textures/icons/pocketables/hud/small/party_${sideObjectiveToType(
-														mission.sideMission
+														mission.sideMission,
 													)}.png`}
 													width={128}
 													// TODO: scripts\settings\mission_objective\templates\side_mission_objective_template.lua
