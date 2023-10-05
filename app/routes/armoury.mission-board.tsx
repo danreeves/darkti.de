@@ -34,20 +34,22 @@ function sideObjectiveToType(sideObjectiveName: string) {
 }
 
 export async function getMissionBoardResponse(auth: AuthToken) {
-	let data = await getMissions(auth)
+	const data = await getMissions(auth)
 	if (!data) {
 		return redirect("/armoury")
 	}
-	let { missions: rawMissions } = data
-	let sortedMissions = reverse(sortBy(rawMissions, ["challenge", "resistance"]))
-	let missions = sortedMissions
+	const { missions: rawMissions } = data
+	const sortedMissions = reverse(
+		sortBy(rawMissions, ["challenge", "resistance"])
+	)
+	const missions = sortedMissions
 		.map((mission) => {
-			let template = getMissionTemplate(mission.map)
+			const template = getMissionTemplate(mission.map)
 			if (!template) return undefined
 
-			let circumstance = CircumstanceTemplates[mission.circumstance]
-			let missionType = MissionTypes[template.type]
-			let zone = Zones[template.zone_id]
+			const circumstance = CircumstanceTemplates[mission.circumstance]
+			const missionType = MissionTypes[template.type]
+			const zone = Zones[template.zone_id]
 
 			return {
 				id: mission.id,
@@ -72,6 +74,8 @@ export async function getMissionBoardResponse(auth: AuthToken) {
 					icon: missionType?.icon.replace("materials", "textures"), // TODO: move replace to Exporter
 				},
 				sideMission: mission.sideMission,
+				category: mission.category,
+				flags: mission.flags,
 			}
 		})
 		.filter(Boolean)
@@ -80,17 +84,17 @@ export async function getMissionBoardResponse(auth: AuthToken) {
 }
 
 export async function loader({ request }: LoaderArgs) {
-	let user = await authenticator.isAuthenticated(request, {
+	const user = await authenticator.isAuthenticated(request, {
 		failureRedirect: "/login",
 	})
 
-	let auth = await getAuthToken(user.id)
+	const auth = await getAuthToken(user.id)
 
 	return getMissionBoardResponse(auth)
 }
 
 export default function Missions() {
-	let { missions } = useLoaderData<typeof loader>()
+	const { missions } = useLoaderData<typeof loader>()
 
 	return (
 		<>
@@ -135,7 +139,7 @@ export default function Missions() {
 														key={i}
 														className="h-full w-2 border border-green-100"
 													></span>
-												),
+												)
 											)}
 										</div>
 									</div>
@@ -185,11 +189,11 @@ export default function Missions() {
 													style={{
 														WebkitMaskImage: `url(${imgUrl(
 															"glyphs/objective_credits.png",
-															128,
+															128
 														)})`,
 														maskImage: `url(${imgUrl(
 															"glyphs/objective_credits.png",
-															128,
+															128
 														)})`,
 														transformOrigin: "top left",
 														transform: "scale(calc(16 / 64))",
@@ -213,11 +217,11 @@ export default function Missions() {
 													style={{
 														WebkitMaskImage: `url(${imgUrl(
 															"glyphs/objective_xp.png",
-															128,
+															128
 														)})`,
 														maskImage: `url(${imgUrl(
 															"glyphs/objective_xp.png",
-															128,
+															128
 														)})`,
 														transformOrigin: "top left",
 														transform: "scale(calc(16 / 64))",
@@ -238,7 +242,7 @@ export default function Missions() {
 											<div className="absolute -left-12 -top-1 h-10 w-10 bg-gray-900 p-[2px]">
 												<Img
 													src={`content/ui/textures/icons/pocketables/hud/small/party_${sideObjectiveToType(
-														mission.sideMission,
+														mission.sideMission
 													)}.png`}
 													width={128}
 													// TODO: scripts\settings\mission_objective\templates\side_mission_objective_template.lua
