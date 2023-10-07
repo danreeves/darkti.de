@@ -96,7 +96,9 @@ export async function loader({ request, params }: LoaderArgs) {
 		let traitTable: Record<string, string> = {}
 		for (let item of characterGear) {
 			for (let trait of item.traits) {
-				traitTable[trait.baseName] = trait.displayName
+				if (trait.baseName && trait.baseName in traitTable) {
+					traitTable[trait.baseName] = trait.displayName
+				}
 			}
 		}
 
