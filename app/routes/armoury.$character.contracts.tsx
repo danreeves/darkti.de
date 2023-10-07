@@ -13,7 +13,7 @@ import {
 	getCharacterContracts,
 	getCharacterWallet,
 } from "~/services/darktide.server"
-import { classnames } from "~/utils/classnames"
+import { twMerge } from "tailwind-merge"
 
 export async function action({ params, request }: ActionArgs) {
 	let { character: characterId } = zx.parseParams(params, {
@@ -200,7 +200,7 @@ export default function Contracts() {
 				</div>
 			</div>
 			<div
-				className={classnames(
+				className={twMerge(
 					"grid w-full grow grid-cols-1 gap-4 lg:grid-cols-2",
 					navigation.state !== "idle" && "opacity-50",
 				)}
@@ -208,14 +208,14 @@ export default function Contracts() {
 				{data.tasks.map((task) => (
 					<div
 						key={task.id}
-						className={classnames(
+						className={twMerge(
 							"relative flex flex-col justify-between border-2 border-neutral-400 bg-white p-2 shadow transition",
 							difficultyBorder[task.difficulty],
 							task.complete && "border-green-400 opacity-50",
 						)}
 					>
 						<div
-							className={classnames(
+							className={twMerge(
 								"mb-2 font-heading text-lg",
 								task.complete && "line-through",
 							)}
@@ -226,7 +226,7 @@ export default function Contracts() {
 							<div className="flex flex-row gap-2 whitespace-nowrap">
 								<div className="font-bold">Difficulty:</div>
 								<div
-									className={classnames(
+									className={twMerge(
 										"capitalize",
 										difficultyColor[task.difficulty],
 									)}
@@ -272,7 +272,7 @@ export default function Contracts() {
 
 				<div className="relative flex flex-col justify-between border-2 border-neutral-600 bg-white p-2 shadow transition">
 					<div
-						className={classnames(
+						className={twMerge(
 							"mb-2 font-heading text-lg",
 							data.allComplete && "line-through",
 						)}

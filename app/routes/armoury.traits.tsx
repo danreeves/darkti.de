@@ -15,7 +15,7 @@ import { getWeaponTemplates } from "~/data/weaponTemplates.server"
 import type { AuthToken } from "@prisma/client"
 import { ArrowPathIcon } from "@heroicons/react/24/outline"
 import { Img } from "~/components/Img"
-import { classnames } from "~/utils/classnames"
+import { twMerge } from "tailwind-merge"
 
 async function getTraitsForPattern(auth: AuthToken, pattern: string) {
 	let traitCategory = `bespoke_${pattern}`
@@ -155,8 +155,8 @@ export default function Traits() {
 											{tier.map((blessing) => (
 												<div
 													key={blessing.id}
-													className={classnames(
-														"rounded bg-neutral-800 bg-white p-2 shadow",
+													className={twMerge(
+														"rounded  bg-white p-2 shadow",
 														blessing.owned ? "" : "opacity-40",
 													)}
 												>
