@@ -4,10 +4,10 @@ import { getAuthTokenBySteamId } from "~/data/authtoken.server"
 
 export async function loader({ params }: LoaderArgs) {
 	if (params.steamId) {
-		let token = await getAuthTokenBySteamId(params.steamId)
-		if (token) {
+		try {
+			await getAuthTokenBySteamId(params.steamId)
 			return json({ hasToken: true })
-		}
+		} catch (e) {}
 	}
 	return json({ hasToken: false })
 }

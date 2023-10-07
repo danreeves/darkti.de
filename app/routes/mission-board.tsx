@@ -14,6 +14,7 @@ import {
 import { t } from "~/data/localization.server"
 import { Img, imgUrl } from "~/components/Img"
 import type { AuthToken } from "@prisma/client"
+import { ExclamationCircleIcon } from "@heroicons/react/24/outline"
 
 function sideObjectiveToType(sideObjectiveName: string) {
 	if (sideObjectiveName === "side_mission_grimoire") {
@@ -85,17 +86,7 @@ export async function getMissionBoardResponse(auth: AuthToken) {
 
 export async function loader({ request }: LoaderArgs) {
 	let auth = await getAuthTokenBySteamId(process.env.DEFAULT_STEAM_ID!)
-	if (!auth) {
-		return redirect("/")
-	}
 	return getMissionBoardResponse(auth)
-	// const user = await authenticator.isAuthenticated(request, {
-	// 	failureRedirect: "/login",
-	// })
-
-	// const auth = await getAuthToken(user.id)
-
-	// return getMissionBoardResponse(auth)
 }
 
 export default function Missions() {
@@ -278,5 +269,25 @@ export default function Missions() {
 				</div>
 			</div>
 		</>
+	)
+}
+
+export function ErrorBoundary() {
+	return (
+		<div className="mx-auto flex max-w-7xl place-content-center px-4 pb-4 pt-6 sm:px-8 lg:px-10">
+			<div
+				className="flex rounded-lg bg-yellow-100 p-4 text-sm text-yellow-700"
+				role="alert"
+			>
+				<ExclamationCircleIcon
+					className="mr-3 inline h-5 w-5"
+					aria-hidden="true"
+				/>
+				<div>
+					<span className="font-medium">Sorry!</span> We're having trouble
+					authenticating with the server.
+				</div>
+			</div>
+		</div>
 	)
 }
