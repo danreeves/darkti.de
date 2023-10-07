@@ -3,7 +3,7 @@ import { Disclosure, Menu, Transition } from "@headlessui/react"
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline"
 import { Link, NavLink, Outlet } from "@remix-run/react"
 import type { User } from "./services/auth.server"
-import { classnames } from "./utils/classnames"
+import { twMerge } from "tailwind-merge"
 
 const navigation = [
 	{ name: "Armoury", href: "/armoury" },
@@ -46,7 +46,7 @@ export default function Layout({ user }: { user: User | null }) {
 														key={item.name}
 														to={item.href}
 														className={({ isActive }) =>
-															classnames(
+															twMerge(
 																isActive
 																	? "bg-neutral-900 text-white"
 																	: "text-neutral-300 hover:bg-neutral-700 hover:text-white",
@@ -90,7 +90,7 @@ export default function Layout({ user }: { user: User | null }) {
 																	{({ active }) => (
 																		<NavLink
 																			to={item.href}
-																			className={classnames(
+																			className={twMerge(
 																				active ? "bg-neutral-100" : "",
 																				"block px-4 py-2 text-sm text-neutral-700",
 																			)}
@@ -140,7 +140,7 @@ export default function Layout({ user }: { user: User | null }) {
 											key={item.name}
 											to={item.href}
 											className={({ isActive }) =>
-												classnames(
+												twMerge(
 													isActive
 														? "bg-neutral-900 text-white"
 														: "text-neutral-300 hover:bg-neutral-700 hover:text-white",
@@ -183,7 +183,7 @@ export default function Layout({ user }: { user: User | null }) {
 								{/* 			key={item.name} */}
 								{/* 			to={item.href} */}
 								{/* 			className={({ isActive }) => */}
-								{/* 				classnames( */}
+								{/* 				twMerge( */}
 								{/* 					isActive */}
 								{/* 						? "bg-neutral-900 text-white" */}
 								{/* 						: "text-neutral-300 hover:bg-neutral-700 hover:text-white", */}

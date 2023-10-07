@@ -23,11 +23,11 @@ import {
 	getCharacterWallet,
 	purchaseItem,
 } from "~/services/darktide.server"
-import { classnames } from "~/utils/classnames"
 import { getSearchParam } from "~/utils/getSearchParam"
 import { Img } from "~/components/Img"
 import { t } from "~/data/localization.server"
 import { getWeaponTemplate } from "~/data/weaponTemplates.server"
+import { twMerge } from "tailwind-merge"
 
 let storeSlugToType: Record<string, "credits" | "marks"> = {
 	exchange: "credits",
@@ -288,7 +288,7 @@ export async function loader({ request, params }: LoaderArgs) {
 			}
 
 			if (sortBy && sortBy in sortTypes) {
-				return sortTypes[sortBy](itemA, itemB)
+				return sortTypes[sortBy]!(itemA, itemB)
 			}
 			return 0
 		})
@@ -329,7 +329,7 @@ export default function Exchange() {
 				{offers.map((offer) => (
 					<div
 						key={offer.id}
-						className={classnames(
+						className={twMerge(
 							"border-l-3 from-1% relative border-2 border-neutral-400 bg-white bg-gradient-to-r shadow",
 							rarityBorder[offer.rarity],
 							offer.purchased && "opacity-50",
@@ -350,10 +350,7 @@ export default function Exchange() {
 									{offer.itemLevel}
 								</div>
 								<div
-									className={classnames(
-										"font-bold ",
-										rarityColor[offer.rarity],
-									)}
+									className={twMerge("font-bold ", rarityColor[offer.rarity])}
 								>
 									{offer.displayName}
 								</div>
@@ -379,7 +376,7 @@ export default function Exchange() {
 							<div className="relative m-2 mt-0">
 								<span
 									className={
-										"absolute right-0 top-0 flex items-center font-heading text-lg text-sm font-bold"
+										"absolute right-0 top-0 flex items-center font-heading text-sm font-bold"
 									}
 									title="Base item level"
 								>
@@ -447,7 +444,7 @@ export default function Exchange() {
 													) : null}
 													<div
 														aria-hidden
-														className={classnames(
+														className={twMerge(
 															"text-center leading-none",
 															!blessing.icon && "w-[128px]",
 															blessing.icon && "absolute left-0 top-0",
@@ -474,8 +471,8 @@ export default function Exchange() {
 									name="buy-item"
 									value={offer.id}
 									disabled={navigation.state != "idle" || offer.purchased}
-									className={classnames(
-										"m-2 flex inline-flex shrink cursor-pointer flex-row items-center items-center gap-2 rounded border bg-white p-2 font-bold leading-none text-amber-500 shadow hover:bg-neutral-50 disabled:cursor-not-allowed disabled:bg-neutral-200",
+									className={twMerge(
+										"m-2 inline-flex shrink cursor-pointer flex-row items-center gap-2 rounded border bg-white p-2 font-bold leading-none text-amber-500 shadow hover:bg-neutral-50 disabled:cursor-not-allowed disabled:bg-neutral-200",
 										offer.purchased && "text-neutral-400",
 									)}
 								>

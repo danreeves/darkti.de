@@ -19,8 +19,8 @@ import { getItems } from "~/data/items.server"
 import { BlessingSchema, WeaponSchema } from "~/data/schemas.server"
 import { authenticator } from "~/services/auth.server"
 import { getAccountGear } from "~/services/darktide.server"
-import { classnames } from "~/utils/classnames"
 import { getSearchParam } from "~/utils/getSearchParam"
+import { twMerge } from "tailwind-merge"
 
 export async function loader({ request, params }: LoaderArgs) {
 	let { character } = zx.parseParams(params, { character: z.string() })
@@ -137,7 +137,7 @@ export default function Inventory() {
 		<div className="relative flex h-full grow flex-row overflow-hidden">
 			<Link
 				to={`.?${searchParams}`}
-				className={classnames(
+				className={twMerge(
 					"grid h-full w-full grow auto-rows-min grid-cols-1 flex-row flex-wrap gap-4 overflow-y-scroll bg-neutral-200 p-4 shadow-inner lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4",
 					!outlet && "cursor-default",
 				)}
@@ -148,7 +148,7 @@ export default function Inventory() {
 							to={`${item.id}?${searchParams}`}
 							key={item.id}
 							className={({ isActive }) =>
-								classnames(
+								twMerge(
 									"from-1% relative h-full w-full basis-1/4 border-2 border-neutral-400 bg-white bg-gradient-to-r shadow transition",
 									rarityBorder[item.rarity],
 									outlet && !isActive && "opacity-50",
@@ -162,7 +162,7 @@ export default function Inventory() {
 							/>
 							<div className="isolate flex min-h-full flex-col">
 								<div
-									className={classnames(
+									className={twMerge(
 										"m-2 font-bold leading-none",
 										rarityColor[item.rarity],
 									)}

@@ -9,11 +9,11 @@ import { BlessingSchema, WeaponSchema } from "~/data/schemas.server"
 import { authenticator } from "~/services/auth.server"
 import { getAccountGear } from "~/services/darktide.server"
 import { motion } from "framer-motion"
-import { classnames } from "~/utils/classnames"
 import { Img } from "~/components/Img"
 import { ChevronDoubleUpIcon } from "@heroicons/react/24/outline"
 import { t } from "~/data/localization.server"
 import { getWeaponTemplate } from "~/data/weaponTemplates.server"
+import { twMerge } from "tailwind-merge"
 
 export async function loader({ request, params }: LoaderArgs) {
 	let { character: characterId, item: itemId } = zx.parseParams(params, {
@@ -125,7 +125,7 @@ export default function Item() {
 	return (
 		<motion.div
 			key={pathname}
-			className={classnames(
+			className={twMerge(
 				"absolute right-0 top-0 flex h-full w-2/3 flex-col border-l-4 bg-white",
 				rarityBorder[item.rarity],
 			)}
@@ -137,7 +137,7 @@ export default function Item() {
 			<div className="flex flex-row">
 				<div className="w-1/2">
 					<h2
-						className={classnames(
+						className={twMerge(
 							"m-6 mb-1 font-heading text-xl",
 							rarityColor[item.rarity],
 						)}
@@ -145,7 +145,7 @@ export default function Item() {
 						{item.displayName}
 					</h2>
 					<span
-						className={classnames(
+						className={twMerge(
 							"m-6 mt-0 flex items-center font-heading text-lg font-bold leading-none",
 							rarityColor[item.rarity],
 						)}
@@ -178,7 +178,7 @@ export default function Item() {
 					<div className="relative m-6 mt-0">
 						<span
 							className={
-								"absolute right-0 top-0 flex items-center font-heading text-lg text-sm font-bold"
+								"absolute right-0 top-0 flex items-center font-heading text-sm font-bold"
 							}
 							title="Base item level"
 						>

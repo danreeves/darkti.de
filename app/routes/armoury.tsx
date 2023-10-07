@@ -1,12 +1,11 @@
 import type { LoaderArgs } from "@remix-run/node"
-import { redirect } from "@remix-run/node"
-import { json } from "@remix-run/node"
+import { redirect, json } from "@remix-run/node"
 import { NavLink, Outlet, useLoaderData, useMatches } from "@remix-run/react"
 import { getAuthToken } from "~/data/authtoken.server"
 import { authenticator } from "~/services/auth.server"
 import { ExclamationCircleIcon } from "@heroicons/react/24/outline"
-import { classnames } from "~/utils/classnames"
 import { getAccountSummary } from "~/services/darktide.server"
+import { twMerge } from "tailwind-merge"
 
 let navLinks = [
 	{ label: "Trait collection", link: "traits" },
@@ -63,7 +62,7 @@ export default function Armoury() {
 									key={char.id}
 									to={route}
 									className={({ isActive }) =>
-										classnames("p-4 ", isActive ? "font-bold" : "")
+										twMerge("p-4 ", isActive ? "font-bold" : "")
 									}
 								>
 									{char.name}
@@ -78,7 +77,7 @@ export default function Armoury() {
 								key={item.link}
 								to={item.link}
 								className={({ isActive }) =>
-									classnames("p-4 ", isActive ? "font-bold" : "")
+									twMerge("p-4 ", isActive ? "font-bold" : "")
 								}
 							>
 								{item.label}

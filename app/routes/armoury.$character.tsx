@@ -1,5 +1,5 @@
 import { NavLink, Outlet } from "@remix-run/react"
-import { classnames } from "~/utils/classnames"
+import { twMerge } from "tailwind-merge"
 
 export default function Character() {
 	return (
@@ -20,7 +20,7 @@ function PageLink({ to, children }: { to: string; children: string }) {
 		<NavLink
 			to={to}
 			className={({ isActive }) =>
-				classnames("border-neutral-400 p-6", isActive && "border-r-4 font-bold")
+				twMerge("border-neutral-400 p-6", isActive && "border-r-4 font-bold")
 			}
 		>
 			{children}
