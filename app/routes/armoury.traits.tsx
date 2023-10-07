@@ -64,7 +64,19 @@ export let loader = async ({ request }: LoaderArgs) => {
 			weapon.baseName.includes(weaponPattern.weapon),
 		)
 		let displayName = weapons.map((weapon) => weapon.display_name).join(", ")
-		let tiers = [[], [], [], []]
+		type TieredTrait = {
+			id: string
+			name: string
+			icon: string
+			description: string
+			owned: boolean
+		}
+		let tiers: [TieredTrait[], TieredTrait[], TieredTrait[], TieredTrait[]] = [
+			[],
+			[],
+			[],
+			[],
+		]
 
 		for (let trait of weaponPattern.traits) {
 			let blessingTemplate = allBlessings.find(
@@ -74,14 +86,15 @@ export let loader = async ({ request }: LoaderArgs) => {
 				continue
 			}
 			for (let i = 0; i <= trait.tiers.length - 1; i++) {
-				let tier = trait.tiers[i]
-				if (tier !== "INVALID") {
-					tiers[i].push({
+				let tierState = trait.tiers[i]
+				if (tierState !== "INVALID" && tiers[i]) {
+					let tier = tiers[i]
+					tier!.push({
 						id: trait.name,
 						icon: `${blessingTemplate.icon}.png`,
 						name: blessingTemplate.display_name,
-						description: blessingTemplate.description,
-						owned: tier === "OWNED",
+						description: blessingTemplate.description || "",
+						owned: tierState === "OWNED",
 					})
 				}
 			}
@@ -132,11 +145,7 @@ export default function Traits() {
 					<div key={pattern.displayName}>
 						<h2 className="font-heading">{pattern.displayName}</h2>
 						<Tabs>
-							<TabList
-								aria-label="Tiers"
-								className="mb-1 flex flex-row"
-								defaultSelectedKey={"3"}
-							>
+							<TabList aria-label="Tiers" className="mb-1 flex flex-row">
 								{pattern.tiers.map((_, i) => (
 									<Tab
 										key={i}

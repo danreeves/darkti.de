@@ -3,7 +3,8 @@ import { Hono } from "hono"
 import { logger } from "hono/logger"
 import { serve } from "@hono/node-server"
 import { serveStatic } from "@hono/node-server/serve-static"
-import * as rh from "remix-hono/handler"
+// @ts-expect-error - no types come through?
+import { remix } from "remix-hono/handler"
 import * as build from "@remix-run/dev/server-build"
 
 if (process.env.NODE_ENV === "development") broadcastDevReady(build)
@@ -22,10 +23,10 @@ server.get(
 
 server.use(
 	"*",
-	rh.remix({
+	remix({
 		build,
 		mode: process.env.NODE_ENV,
-		getLoadContext(ctx) {
+		getLoadContext(ctx: { env: unknown }) {
 			return ctx.env
 		},
 	}),

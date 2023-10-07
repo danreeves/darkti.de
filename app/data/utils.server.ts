@@ -36,7 +36,7 @@ export function replaceAll(
 	wordsToReplace: { [key: string]: string },
 ) {
 	return Object.keys(wordsToReplace).reduce(
-		(f, s, i) => `${f}`.replace(new RegExp(s, "ig"), wordsToReplace[s]),
+		(f, s, i) => `${f}`.replace(new RegExp(s, "ig"), wordsToReplace[s] ?? ""),
 		sentence,
 	)
 }
