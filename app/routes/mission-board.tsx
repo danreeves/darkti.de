@@ -1,10 +1,7 @@
-import type { LoaderArgs } from "@remix-run/node"
-import { json, redirect } from "@remix-run/node"
-import { useLoaderData } from "@remix-run/react"
+import { json } from "@remix-run/node"
 import { reverse, sortBy } from "lodash-es"
 import { getAuthTokenBySteamId } from "~/data/authtoken.server"
 import { getMissions } from "~/services/darktide.server"
-import { MissionTimer } from "~/components/MissionTimer"
 import {
 	getMissionTemplate,
 	CircumstanceTemplates,
@@ -12,32 +9,18 @@ import {
 	Zones,
 } from "~/data/missionTemplates.server"
 import { t } from "~/data/localization.server"
-import { Img, imgUrl } from "~/components/Img"
-import type { AuthToken } from "@prisma/client"
 import { ExclamationCircleIcon } from "@heroicons/react/24/outline"
+import { useLoaderData } from "@remix-run/react"
+import { Mission, sideObjectiveToType } from "~/components/Mission"
 
-function sideObjectiveToType(sideObjectiveName: string) {
-	if (sideObjectiveName === "side_mission_grimoire") {
-		return "grimoire"
-	}
+export async function loader() {
+	let auth = await getAuthTokenBySteamId(process.env.DEFAULT_STEAM_ID!)
 
-	if (sideObjectiveName === "side_mission_tome") {
-		return "scripture"
-		// return "tome"
-	}
-
-	if (sideObjectiveName === "side_mission_consumable") {
-		return "relic"
-	}
-
-	return "unknown"
-}
-
-export async function getMissionBoardResponse(auth: AuthToken) {
 	const data = await getMissions(auth)
 	if (!data) {
-		return redirect("/armoury")
+		throw json({ message: "No missions found" })
 	}
+
 	const { missions: rawMissions } = data
 	const sortedMissions = reverse(
 		sortBy(rawMissions, ["challenge", "resistance"]),
@@ -71,22 +54,23 @@ export async function getMissionBoardResponse(auth: AuthToken) {
 				xp: mission.xp,
 				start: parseInt(mission.start, 10),
 				end: parseInt(mission.expiry, 10),
-				missionType: {
-					icon: missionType?.icon.replace("materials", "textures"), // TODO: move replace to Exporter
-				},
-				sideMission: mission.sideMission,
-				category: mission.category,
+				missionTypeIcon:
+					missionType?.icon.replace("materials", "textures") || null, // TODO: move replace to Exporter
+				sideMission: mission.sideMission ?? null,
+				category: mission.category ?? null,
 				flags: mission.flags,
+				sideMissionDescription: mission.sideMission
+					? t(
+							`loc_objective_side_mission_${sideObjectiveToType(
+								mission.sideMission,
+							)}_header`,
+					  )
+					: null,
 			}
 		})
 		.filter(Boolean)
 
 	return json({ missions })
-}
-
-export async function loader({ request }: LoaderArgs) {
-	let auth = await getAuthTokenBySteamId(process.env.DEFAULT_STEAM_ID!)
-	return getMissionBoardResponse(auth)
 }
 
 export default function Missions() {
@@ -96,175 +80,27 @@ export default function Missions() {
 		<>
 			<h1 className="sr-only">Missions</h1>
 			<div className="justify-center overflow-y-scroll">
-				<div className="my-12 flex flex-wrap justify-evenly gap-10">
+				<div className="m-12 flex flex-wrap justify-evenly gap-2">
 					{missions.map((mission) => (
-						<div
+						<Mission
 							key={mission.id}
-							data-id={mission.id}
-							className="relative h-56 w-96 rounded font-montserrat text-green-100 drop-shadow-lg"
-						>
-							<Img
-								width={512}
-								src={mission.texture}
-								className="absolute left-0 top-0 h-full w-full rounded object-cover"
-							/>
-
-							<div className="h-full transition-opacity">
-								<div
-									className="relative h-full w-full pb-2 pl-9"
-									style={{
-										background: `linear-gradient(180deg,
-											hsl(0 0% 0% / 1) 0%,
-											hsl(0 0% 0% / 0.35) 80%,
-											hsl(0 0% 0% / 0) 100%)`,
-									}}
-								>
-									<div className="flex h-8 flex-row items-center justify-between text-sm">
-										<div className="uppercase">{mission.type}</div>
-
-										<div className="mr-2 mt-2 flex h-6 w-full justify-end gap-[2px]">
-											{Array.from({ length: mission.challenge }).map((_, i) => (
-												<span
-													key={i}
-													className="h-full w-2 bg-green-100"
-												></span>
-											))}
-											{Array.from({ length: 5 - mission.challenge }).map(
-												(_, i) => (
-													<span
-														key={i}
-														className="h-full w-2 border border-green-100"
-													></span>
-												),
-											)}
-										</div>
-									</div>
-
-									<div className="-mt-1 pr-4">
-										<h2 className="font-bold !opacity-100">{mission.name}</h2>
-										<div className="-mt-1 text-xs">{mission.zone}</div>
-
-										<p className="relative mt-2 text-xs">
-											{mission.description}
-										</p>
-									</div>
-								</div>
-
-								<div className="absolute left-9 top-32 text-xs">
-									{mission.circumstance != null ? (
-										<div className="align-text-middle relative pt-[0.375rem] text-sm text-yellow-400">
-											{mission.circumstance.name}
-											<div className="absolute -left-12 -top-1 h-10 w-10 border border-yellow-400 bg-gray-900 ">
-												<div
-													className="absolute left-0 top-0 h-[124px] w-[124px] bg-yellow-400"
-													style={{
-														WebkitMaskImage: `url(https://darktide-images.vercel.app/_vercel/image?q=100&w=128&url=pngs/${mission.circumstance.icon})`,
-														maskImage: `url(https://darktide-images.vercel.app/_vercel/image?q=100&w=128&url=pngs/${mission.circumstance.icon})`,
-														transformOrigin: "top left",
-														transform:
-															"scale(calc(40 / 124 * 0.8)) translate(10%, 10%)",
-													}}
-												></div>
-											</div>
-										</div>
-									) : (
-										<div className="relative h-[1.6rem]"></div>
-									)}
-
-									<div className="relative mt-5 text-sm">
-										<ul
-											className="mt-1 flex flex-row gap-6"
-											style={{
-												textShadow: "black 0 0 3px",
-											}}
-										>
-											<li>
-												<span
-													aria-label="Credits"
-													className="absolute top-1 h-16 w-16 bg-green-100"
-													style={{
-														WebkitMaskImage: `url(${imgUrl(
-															"glyphs/objective_credits.png",
-															128,
-														)})`,
-														maskImage: `url(${imgUrl(
-															"glyphs/objective_credits.png",
-															128,
-														)})`,
-														transformOrigin: "top left",
-														transform: "scale(calc(16 / 64))",
-													}}
-												/>
-												<span className="ml-6 inline-block">
-													{mission.credits +
-														(mission.extraRewards?.circumstance?.credits || 0)}
-												</span>
-
-												{mission.extraRewards?.sideMission && (
-													<div className="relative -mt-1 ml-6 text-xs">
-														+ {mission.extraRewards.sideMission.credits}
-													</div>
-												)}
-											</li>
-											<li>
-												<span
-													aria-label="Experience"
-													className="absolute top-1 h-16 w-16 bg-green-100"
-													style={{
-														WebkitMaskImage: `url(${imgUrl(
-															"glyphs/objective_xp.png",
-															128,
-														)})`,
-														maskImage: `url(${imgUrl(
-															"glyphs/objective_xp.png",
-															128,
-														)})`,
-														transformOrigin: "top left",
-														transform: "scale(calc(16 / 64))",
-													}}
-												/>
-												<span className="ml-5 inline-block">
-													{mission.xp +
-														(mission.extraRewards?.circumstance?.xp || 0)}
-												</span>
-												{mission.extraRewards?.sideMission && (
-													<div className="relative -mt-1 ml-5 text-xs">
-														+ {mission.extraRewards.sideMission.xp}
-													</div>
-												)}
-											</li>
-										</ul>
-										{mission.sideMission ? (
-											<div className="absolute -left-12 -top-1 h-10 w-10 bg-gray-900 p-[2px]">
-												<Img
-													src={`content/ui/textures/icons/pocketables/hud/small/party_${sideObjectiveToType(
-														mission.sideMission,
-													)}.png`}
-													width={128}
-													// TODO: scripts\settings\mission_objective\templates\side_mission_objective_template.lua
-													// alt={loc(
-													// 	`loc_objective_side_mission_${sideObjectiveToType(
-													// 		mission.sideMission
-													// 	)}_header`
-													// )}
-													className="border border-solid border-gray-300 p-1"
-												/>
-											</div>
-										) : null}
-									</div>
-								</div>
-								<MissionTimer start={mission.start} end={mission.end} />
-								<div className="absolute -left-3 -top-2 h-10 w-10 bg-gray-900 p-[2px]">
-									{mission.missionType ? (
-										<Img
-											width={128}
-											src={mission.missionType.icon + ".png"}
-											className="border border-solid border-gray-300 p-1"
-										/>
-									) : null}
-								</div>
-							</div>
-						</div>
+							id={mission.id}
+							texture={mission.texture}
+							type={mission.type}
+							challenge={mission.challenge}
+							name={mission.name}
+							description={mission.description}
+							zone={mission.zone}
+							circumstance={mission.circumstance}
+							credits={mission.credits}
+							xp={mission.xp}
+							start={mission.start}
+							end={mission.end}
+							extraRewards={mission.extraRewards}
+							missionTypeIcon={mission.missionTypeIcon}
+							sideMission={mission.sideMission}
+							category={mission.category}
+						/>
 					))}
 				</div>
 			</div>
