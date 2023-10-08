@@ -1,4 +1,5 @@
 import { json } from "@remix-run/node"
+import { Button } from "~/components/ui/button"
 import exampleImage from "~/img/extension-screenshot.png"
 
 export const loader = async () => {
@@ -8,14 +9,14 @@ export const loader = async () => {
 export default function Extension() {
 	return (
 		<div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-			<div className="rounded bg-white p-6 shadow">
+			<div className="p-4 rounded-lg border bg-card text-card-foreground shadow-sm">
 				<p className="mb-6">
 					The Armoury Exchange browser extension is a community made tool for
 					accessing both the Armoury Exchange and Melk's Emporium outside of the
 					game for all your characters.
 				</p>
 				<h2 className="mb-2 font-heading text-xl">Features</h2>
-				<ul className="mb-6 ml-5 list-square">
+				<ul className="mb-6 list-inside list-square">
 					<li>View the in game stores without starting the game</li>
 					<li>Rule based item filtering</li>
 					<li>Privacy & safety focussed</li>
@@ -26,19 +27,23 @@ export default function Extension() {
 					Edge) based browsers and Firefox!
 				</p>
 				<div className="mb-6 flex items-center gap-4">
-					<a
-						className="flex-grow rounded border border-gray-200 bg-neutral-100 p-4 text-center"
-						href="https://chrome.google.com/webstore/detail/armoury-exchange/hcjihmkcnjkfkaeebhnpjcnnibpoolgc"
-					>
-						Chrome Web Store
-					</a>
+					<Button variant="outline" asChild>
+						<a
+							className="flex-grow p-4 text-center"
+							href="https://chrome.google.com/webstore/detail/armoury-exchange/hcjihmkcnjkfkaeebhnpjcnnibpoolgc"
+						>
+							Chrome Web Store
+						</a>
+					</Button>
 
-					<a
-						className="flex-grow rounded border border-gray-200 bg-neutral-100 p-4 text-center"
-						href="https://addons.mozilla.org/en-GB/firefox/addon/armoury-exchange/"
-					>
-						Firefox Addons Store
-					</a>
+					<Button variant="outline" asChild>
+						<a
+							className="flex-grow p-4 text-center"
+							href="https://addons.mozilla.org/en-GB/firefox/addon/armoury-exchange/"
+						>
+							Firefox Addons Store
+						</a>
+					</Button>
 				</div>
 
 				<h2 className="mb-2 font-heading text-xl">Contributing</h2>

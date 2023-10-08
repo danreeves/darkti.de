@@ -14,6 +14,7 @@ import { authenticator } from "~/services/auth.server"
 
 import { initJobs } from "~/jobs/index.server"
 import { useRevalidateOnFocus } from "~/hooks/revalidateOnFocus"
+import { ThemeProvider } from "./theme-provider"
 
 // Sets up Cron singletons to perform timed jobs on the server
 initJobs && initJobs()
@@ -45,7 +46,7 @@ export default function App() {
 	useRevalidateOnFocus()
 
 	return (
-		<html lang="en" className="h-screen bg-gray-100">
+		<html lang="en" className="h-screen">
 			<head>
 				<meta charSet="utf-8" />
 				<meta name="viewport" content="width=device-width,initial-scale=1" />
@@ -53,7 +54,14 @@ export default function App() {
 				<Links />
 			</head>
 			<body className="h-screen">
-				<Layout user={user} />
+				<ThemeProvider
+					attribute="class"
+					defaultTheme="system"
+					enableSystem
+					disableTransitionOnChange
+				>
+					<Layout user={user} />
+				</ThemeProvider>
 				<Scripts />
 				<LiveReload />
 			</body>

@@ -1,3 +1,4 @@
+import type { LoaderArgs } from "@remix-run/node"
 import { json } from "@remix-run/node"
 import { reverse, sortBy } from "lodash-es"
 import { getAuthTokenBySteamId } from "~/data/authtoken.server"
@@ -12,10 +13,40 @@ import { t } from "~/data/localization.server"
 import { ExclamationCircleIcon } from "@heroicons/react/24/outline"
 import { useLoaderData } from "@remix-run/react"
 import { Mission, sideObjectiveToType } from "~/components/Mission"
+import { isKeyOf } from "~/utils/isKeyOf"
+// import {
+// 	Select,
+// 	SelectContent,
+// 	SelectGroup,
+// 	SelectItem,
+// 	SelectLabel,
+// 	SelectTrigger,
+// 	SelectValue,
+// } from "~/components/ui/select"
 
-export async function loader() {
+const FILTER_BY_CATEGORY: Record<
+	string,
+	(obj: { category: string | null }) => boolean
+> = {
+	regular: ({ category }) => category === null,
+	auric: ({ category }) => category === "auric",
+} as const
+
+function filterByCategory(category: string | null) {
+	if (isKeyOf(FILTER_BY_CATEGORY, category)) {
+		let filter = FILTER_BY_CATEGORY[category]
+		if (filter) {
+			return filter
+		}
+	}
+	return () => true
+}
+
+export async function loader({ request }: LoaderArgs) {
+	const url = new URL(request.url)
+	const filterCat = url.searchParams.get("category")
+
 	let auth = await getAuthTokenBySteamId(process.env.DEFAULT_STEAM_ID!)
-
 	const data = await getMissions(auth)
 	if (!data) {
 		throw json({ message: "No missions found" })
@@ -69,6 +100,7 @@ export async function loader() {
 			}
 		})
 		.filter(Boolean)
+		.filter(filterByCategory(filterCat))
 
 	return json({ missions })
 }
@@ -80,6 +112,20 @@ export default function Missions() {
 		<>
 			<h1 className="sr-only">Missions</h1>
 			<div className="justify-center overflow-y-scroll">
+				{/* <div className="m-12">
+					<Select>
+						<SelectTrigger className="w-[180px]">
+							<SelectValue placeholder="Category" />
+						</SelectTrigger>
+						<SelectContent>
+							<SelectGroup>
+								<SelectItem value="all">All</SelectItem>
+								<SelectItem value="regular">Regular</SelectItem>
+								<SelectItem value="Auric">Auric</SelectItem>
+							</SelectGroup>
+						</SelectContent>
+					</Select>
+				</div> */}
 				<div className="m-12 flex flex-wrap justify-evenly gap-2">
 					{missions.map((mission) => (
 						<Mission
@@ -102,6 +148,7 @@ export default function Missions() {
 							category={mission.category}
 						/>
 					))}
+					d
 				</div>
 			</div>
 		</>
