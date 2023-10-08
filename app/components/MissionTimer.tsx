@@ -27,7 +27,7 @@ export function MissionTimer({ start, end }: { start: number; end: number }) {
 				}}
 			></div>
 
-			<div className="flex h-6 w-14  flex-row items-center justify-center rounded-br rounded-tl bg-gray-800 text-sm text-green-50">
+			<div className="flex h-6 px-1.5  flex-row items-center justify-center rounded-br rounded-tl bg-gray-800 text-sm text-green-50">
 				<span className="tabular-nums">{msToClockString(end - dateNow)}</span>
 			</div>
 		</div>
