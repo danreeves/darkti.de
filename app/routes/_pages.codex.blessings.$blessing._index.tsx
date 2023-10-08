@@ -20,10 +20,10 @@ export default function Skin() {
 
 	return (
 		<div className="flex flex-col items-center">
-			<div className="bg-neutral-800 shadow sm:rounded">
+			<div className="invert dark:invert-0">
 				<Img src={`${item.icon}.png`} width="128" alt={item.display_name} />
 			</div>
-			<p className="m-4 mb-0 rounded bg-white p-4 shadow md:w-1/2">
+			<p className="m-4 mb-0  text-foreground p-4  md:w-1/2">
 				{item.description}
 			</p>
 			<pre>{JSON.stringify(item, null, 4)}</pre>
