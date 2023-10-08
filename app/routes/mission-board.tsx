@@ -148,7 +148,6 @@ export default function Missions() {
 							category={mission.category}
 						/>
 					))}
-					d
 				</div>
 			</div>
 		</>
