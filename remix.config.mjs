@@ -10,6 +10,7 @@ export default {
 	},
 
 	tailwind: true,
+	postcss: true,
 
 	server: "./server/server.ts",
 	serverDependenciesToBundle: "all",

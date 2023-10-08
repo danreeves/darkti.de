@@ -55,6 +55,7 @@ export default function Weapons() {
 						>
 							<div className="pointer-events-none absolute right-0 top-0 z-0 aspect-video h-full overflow-hidden ">
 								<Img
+									data-idk={weapon.preview_image}
 									src={`${weapon.preview_image}.png`}
 									width="256"
 									className="h-full transition duration-75 group-hover:scale-105"
