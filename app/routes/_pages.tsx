@@ -6,7 +6,7 @@ export default function PageLayout() {
 
 	return (
 		<div className="h-full w-full overflow-scroll pb-16">
-			<header className="bg-background shadow">
+			<header className="bg-background ">
 				<Title title={matches.at(-1)?.data?.title} />
 				<Breadcrumbs
 					crumbs={uniqBy(matches, (match) => {
