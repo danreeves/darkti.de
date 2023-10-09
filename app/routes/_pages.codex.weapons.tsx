@@ -108,8 +108,8 @@ export default function Weapons() {
 
 			{weapons.length < 1 ? (
 				<div className="px-4 py-6 sm:px-0">
-					<div className="grid h-96 place-content-center rounded-lg border-4 border-dashed border-gray-200">
-						<span className="font-heading text-lg font-black text-neutral-400">
+					<div className="grid h-96 place-content-center rounded-lg border-4 border-dashed border-foreground/25">
+						<span className="font-heading text-lg font-black text-foreground">
 							No results
 						</span>
 					</div>
