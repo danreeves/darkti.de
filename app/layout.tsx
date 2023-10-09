@@ -31,7 +31,7 @@ export default function Layout({ user }: { user: User | null }) {
 				<Disclosure as="nav" className="border-b">
 					{({ open }) => (
 						<>
-							<div className="mx-auto max-w-7xl sm:px-4 xl:p-0">
+							<div className="mx-auto max-w-7xl px-4 xl:p-0">
 								<div className="flex h-12 items-center justify-between">
 									<div className="flex items-center">
 										<Link to="/" className="flex items-center mr-4">

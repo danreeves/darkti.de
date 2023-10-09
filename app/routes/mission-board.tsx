@@ -14,15 +14,17 @@ import { ExclamationCircleIcon } from "@heroicons/react/24/outline"
 import { useLoaderData } from "@remix-run/react"
 import { Mission, sideObjectiveToType } from "~/components/Mission"
 import { isKeyOf } from "~/utils/isKeyOf"
-// import {
-// 	Select,
-// 	SelectContent,
-// 	SelectGroup,
-// 	SelectItem,
-// 	SelectLabel,
-// 	SelectTrigger,
-// 	SelectValue,
-// } from "~/components/ui/select"
+import { Form } from "~/components/Form"
+import {
+	Select,
+	SelectContent,
+	SelectGroup,
+	SelectItem,
+	SelectLabel,
+	SelectTrigger,
+	SelectValue,
+} from "~/components/ui/select"
+import { Label } from "~/components/ui/label"
 
 const FILTER_BY_CATEGORY: Record<
 	string,
@@ -112,21 +114,24 @@ export default function Missions() {
 		<>
 			<h1 className="sr-only">Missions</h1>
 			<div className="justify-center overflow-y-scroll">
-				{/* <div className="m-12">
-					<Select>
-						<SelectTrigger className="w-[180px]">
-							<SelectValue placeholder="Category" />
-						</SelectTrigger>
-						<SelectContent>
-							<SelectGroup>
-								<SelectItem value="all">All</SelectItem>
-								<SelectItem value="regular">Regular</SelectItem>
-								<SelectItem value="Auric">Auric</SelectItem>
-							</SelectGroup>
-						</SelectContent>
-					</Select>
-				</div> */}
-				<div className="m-12 flex flex-wrap justify-evenly gap-2">
+				<Form replace className="mx-auto max-w-7xl py-6 px-6 lg:px-8">
+					<div className="grid items-center gap-1.5">
+						<Label htmlFor="name">Category</Label>
+						<Select name="category" defaultValue="all">
+							<SelectTrigger className="w-[180px]">
+								<SelectValue placeholder="Category" />
+							</SelectTrigger>
+							<SelectContent>
+								<SelectGroup>
+									<SelectItem value="all">All</SelectItem>
+									<SelectItem value="regular">Regular</SelectItem>
+									<SelectItem value="auric">Auric</SelectItem>
+								</SelectGroup>
+							</SelectContent>
+						</Select>
+					</div>
+				</Form>
+				<div className="m-12 mt-0 flex flex-wrap justify-evenly gap-2">
 					{missions.map((mission) => (
 						<Mission
 							key={mission.id}
