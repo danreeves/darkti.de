@@ -29,7 +29,7 @@ export default function Skins() {
 
 	return (
 		<>
-			<Form className="flex-row justify-between items-end">
+			<Form replace className="flex-row justify-between items-end mb-4">
 				<div className="grid w-full max-w-sm items-center gap-1.5">
 					<Label htmlFor="name">Search</Label>
 					<Input type="string" name="name" id="name" />
@@ -72,8 +72,8 @@ export default function Skins() {
 			</ul>
 			{items.length < 1 ? (
 				<div className="px-4 py-6 sm:px-0">
-					<div className="grid h-96 place-content-center rounded-lg border-4 border-dashed border-gray-200">
-						<span className="font-heading text-lg font-black text-neutral-400">
+					<div className="grid h-96 place-content-center rounded-lg border-4 border-dashed border-foreground/25">
+						<span className="font-heading text-lg font-black text-foreground">
 							No results
 						</span>
 					</div>
