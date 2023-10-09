@@ -137,17 +137,19 @@ export default function Layout({ user }: { user: User | null }) {
 											{item.name}
 										</NavLink>
 									))}
-									<div className="md:hidden">
-										{userNavigation.map((item) => (
-											<NavLink
-												key={item.href}
-												to={item.href}
-												className="aria-[current=page]:text-foreground text-foreground/60 block rounded-md px-3 py-2 text-base font-medium"
-											>
-												{item.name}
-											</NavLink>
-										))}
-									</div>
+									{user ? (
+										<div className="md:hidden">
+											{userNavigation.map((item) => (
+												<NavLink
+													key={item.href}
+													to={item.href}
+													className="aria-[current=page]:text-foreground text-foreground/60 block rounded-md px-3 py-2 text-base font-medium"
+												>
+													{item.name}
+												</NavLink>
+											))}
+										</div>
+									) : null}
 								</div>
 							</Disclosure.Panel>
 						</>
