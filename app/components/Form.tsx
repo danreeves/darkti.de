@@ -111,7 +111,7 @@ export function Form({
 			onChange={(e) => {
 				submit(e.currentTarget)
 			}}
-			className={cn(`flex items-center justify-items-stretch gap-4`, className)}
+			className={cn(`flex items-center gap-4`, className)}
 		>
 			{children}
 		</RemixForm>
