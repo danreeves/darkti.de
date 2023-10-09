@@ -1,6 +1,6 @@
-import { useSearchParams, useSubmit } from "@remix-run/react"
+import { useSearchParams, useSubmit, Form as RemixForm } from "@remix-run/react"
 import type { ReactNode } from "react"
-import { Form as RemixForm } from "@remix-run/react"
+import { cn } from "~/lib/utils"
 
 type CheckboxProps = {
 	value?: string
@@ -95,18 +95,23 @@ export function FormGroup({
 
 export function Form({
 	children,
-	dir,
+	className,
 }: {
 	children: ReactNode
-	dir: "row" | "col"
+	className?: string
 }) {
 	const submit = useSubmit()
 
 	return (
 		<RemixForm
 			method="get"
-			onChange={(e) => submit(e.currentTarget)}
-			className={`mb-2 flex flex-${dir} items-center justify-items-stretch gap-4`}
+			onChange={(e) => {
+				submit(e.currentTarget)
+			}}
+			className={cn(
+				`mb-2 flex items-center justify-items-stretch gap-4`,
+				className,
+			)}
 		>
 			{children}
 		</RemixForm>

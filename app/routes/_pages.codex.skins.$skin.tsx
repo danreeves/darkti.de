@@ -20,16 +20,14 @@ export default function Skin() {
 
 	return (
 		<div className="flex flex-col items-center">
-			<div className="bg-white shadow sm:rounded">
+			<div className="">
 				<Img
 					src={`${item.preview_image}.png`}
 					width="1920"
 					alt={item.display_name}
 				/>
 			</div>
-			<p className="m-4 mb-0 rounded bg-white p-4 shadow md:w-1/2">
-				{item.description}
-			</p>
+			<p className="m-4 mb-0  p-4  md:w-1/2">{item.description}</p>
 		</div>
 	)
 }
