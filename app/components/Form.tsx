@@ -96,22 +96,22 @@ export function FormGroup({
 export function Form({
 	children,
 	className,
+	replace,
 }: {
 	children: ReactNode
 	className?: string
+	replace?: boolean
 }) {
 	const submit = useSubmit()
 
 	return (
 		<RemixForm
+			replace={replace}
 			method="get"
 			onChange={(e) => {
 				submit(e.currentTarget)
 			}}
-			className={cn(
-				`mb-2 flex items-center justify-items-stretch gap-4`,
-				className,
-			)}
+			className={cn(`flex items-center justify-items-stretch gap-4`, className)}
 		>
 			{children}
 		</RemixForm>
