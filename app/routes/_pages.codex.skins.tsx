@@ -29,8 +29,8 @@ export default function Skins() {
 
 	return (
 		<>
-			<Form replace className="flex-row justify-between items-end mb-4">
-				<div className="grid w-full max-w-sm items-center gap-1.5">
+			<Form replace className="flex-row justify-between items-end mb-4 gap-8">
+				<div className="grid items-center gap-1.5">
 					<Label htmlFor="name">Search</Label>
 					<Input type="string" name="name" id="name" />
 				</div>
