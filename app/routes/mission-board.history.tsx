@@ -65,7 +65,6 @@ let headers = [
 	"Circumstance",
 	"Side objective",
 	"Started at",
-	"Expires at",
 	"ID",
 ]
 
@@ -112,8 +111,9 @@ let columns: Column[] = [
 				className="border border-solid border-gray-300 p-1"
 			/>
 		) : null,
-	({ start }) => start,
-	({ expires }) => expires,
+	({ start }) => (
+		<span suppressHydrationWarning>{new Date(start).toLocaleString()}</span>
+	),
 	({ id }) => (
 		<Button
 			onClick={() => {
