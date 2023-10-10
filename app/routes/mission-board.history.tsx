@@ -75,8 +75,8 @@ let columns: Column[] = [
 				<span
 					key={i}
 					className={cn(
-						"h-full w-2 bg-green-100",
-						category === "auric" && "bg-amber-100",
+						"h-full w-2 dark:bg-green-100 bg-green-500",
+						category === "auric" && "dark:bg-amber-100 bg-amber-500",
 					)}
 				></span>
 			))}
@@ -84,8 +84,8 @@ let columns: Column[] = [
 				<span
 					key={i}
 					className={cn(
-						"h-full w-2 border border-green-100",
-						category === "auric" && "border-amber-100",
+						"h-full w-2 border dark:border-green-100 border-green-500",
+						category === "auric" && "dark:border-amber-100 border-amber-500",
 					)}
 				></span>
 			))}
@@ -95,7 +95,11 @@ let columns: Column[] = [
 	({ circumstance }) =>
 		circumstance != null ? (
 			<div className="flex items-center">
-				<Img src={circumstance.icon} width={128} className="w-8 h-8 mr-4" />
+				<Img
+					src={circumstance.icon}
+					width={128}
+					className="w-8 h-8 mr-4 invert dark:invert-0"
+				/>
 				{circumstance.name}
 			</div>
 		) : null,
@@ -108,7 +112,7 @@ let columns: Column[] = [
 				width={128}
 				// TODO: scripts\settings\mission_objective\templates\side_mission_objective_template.lua
 				alt={""}
-				className="border border-solid border-gray-300 p-1"
+				className="invert dark:invert-0"
 			/>
 		) : null,
 	({ start }) => (
