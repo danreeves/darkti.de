@@ -24,6 +24,4 @@ export function initJobs() {
 			console.log("Next mission refresh at", global.missionFetcher.nextRun())
 			return true
 		})
-
-	fetchMissions()
 }
