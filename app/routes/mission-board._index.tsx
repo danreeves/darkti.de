@@ -11,7 +11,7 @@ import {
 } from "~/data/missionTemplates.server"
 import { t } from "~/data/localization.server"
 import { ExclamationCircleIcon } from "@heroicons/react/24/outline"
-import { useLoaderData } from "@remix-run/react"
+import { Link, useLoaderData } from "@remix-run/react"
 import { Mission, sideObjectiveToType } from "~/components/Mission"
 import { isKeyOf } from "~/utils/isKeyOf"
 import { Form } from "~/components/Form"
@@ -24,6 +24,7 @@ import {
 	SelectValue,
 } from "~/components/ui/select"
 import { Label } from "~/components/ui/label"
+import { Button } from "~/components/ui/button"
 
 const FILTER_BY_CATEGORY: Record<
 	string,
@@ -84,6 +85,7 @@ export async function loader({ request }: LoaderArgs) {
 				credits: mission.credits,
 				extraRewards: mission.extraRewards,
 				xp: mission.xp,
+				// TODO: parseInt on the client
 				start: parseInt(mission.start, 10),
 				end: parseInt(mission.expiry, 10),
 				missionTypeIcon:
@@ -113,7 +115,10 @@ export default function Missions() {
 		<>
 			<h1 className="sr-only">Missions</h1>
 			<div className="justify-center overflow-y-scroll">
-				<Form replace className="mx-auto max-w-7xl py-6 px-6 lg:px-8">
+				<Form
+					replace
+					className="mx-auto max-w-7xl py-6 px-6 lg:px-8 place-content-between items-end"
+				>
 					<div className="grid items-center gap-1.5">
 						<Label htmlFor="name">Category</Label>
 						<Select name="category" defaultValue="all">
@@ -129,6 +134,10 @@ export default function Missions() {
 							</SelectContent>
 						</Select>
 					</div>
+
+					<Button variant="outline" asChild>
+						<Link to="history">View mission history</Link>
+					</Button>
 				</Form>
 				<div className="m-12 mt-0 flex flex-wrap justify-evenly gap-2">
 					{missions.map((mission) => (
