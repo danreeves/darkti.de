@@ -28,13 +28,25 @@ import {
 	DropdownMenuContent,
 	DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu"
+import type { MissionInstance } from "@prisma/client"
+import { isKeyOf } from "~/utils/isKeyOf"
+
+let FILTERS = [
+	"circumstance",
+	"sideMission",
+	"challenge",
+	"map",
+] satisfies (keyof MissionInstance)[]
 
 export async function loader({ request }: LoaderArgs) {
 	let searchParams = new URL(request.url).searchParams
-	let circumstanceFilter = searchParams.getAll("circumstance")
-	let sideMissionFilter = searchParams.getAll("sideMission")
-	let challengeFilter = searchParams.getAll("challenge")
-	let mapFilter = searchParams.getAll("map")
+
+	let filters: Record<string, string[]> = {}
+	for (let filter of FILTERS) {
+		filters[filter] = searchParams.getAll(filter).filter(Boolean)
+	}
+
+	console.log(filters)
 
 	let rawMissions = await getMissionHistory()
 
@@ -68,27 +80,17 @@ export async function loader({ request }: LoaderArgs) {
 		.filter(Boolean)
 		.sort((a, b) => (a.label > b.label ? 1 : -1))
 
-	let filteredMissions = rawMissions
-		.filter((mission) => {
-			if (
-				!circumstanceFilter.length &&
-				!sideMissionFilter.length &&
-				!mapFilter.length
-			)
-				return true
-
-			return (
-				circumstanceFilter.includes(mission.circumstance) ||
-				sideMissionFilter.includes(
-					sideObjectiveToType(mission.sideMission ?? ""),
-				) ||
-				mapFilter.includes(mission.map)
-			)
-		})
-		.filter((mission) => {
-			if (!challengeFilter.length) return true
-			return challengeFilter.includes(mission.challenge.toString())
-		})
+	let filteredMissions = rawMissions.filter((mission) => {
+		for (let filter in filters) {
+			let selected = filters[filter]
+			if (isKeyOf(mission, filter)) {
+				if (selected?.length && !selected?.includes(String(mission[filter]))) {
+					return false
+				}
+			}
+		}
+		return true
+	})
 
 	let missions = filteredMissions.map((mission) => {
 		const circumstance = CircumstanceTemplates[mission.circumstance]
@@ -271,8 +273,8 @@ export default function MissionHistory() {
 			param="sideMission"
 			label="Side objective"
 			items={[
-				{ label: "Scriptures", value: "scripture" },
-				{ label: "Grimoire", value: "grimoire" },
+				{ label: "Scriptures", value: "side_mission_tome" },
+				{ label: "Grimoire", value: "side_mission_grimoire" },
 			]}
 		/>,
 		"Started at",
