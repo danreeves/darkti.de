@@ -1,4 +1,5 @@
-import { Link, useLoaderData } from "@remix-run/react"
+import { Link, useLoaderData, useSearchParams } from "@remix-run/react"
+import type { LoaderArgs } from "@remix-run/server-runtime"
 import { json } from "@remix-run/server-runtime"
 import { getMissionHistory } from "~/data/missionInstances.server"
 
@@ -20,11 +21,76 @@ import { t } from "~/data/localization.server"
 import { Img } from "~/components/Img"
 import { Button } from "~/components/ui/button"
 import { sideObjectiveToType } from "~/components/Mission"
+import { ChevronDown } from "lucide-react"
+import {
+	DropdownMenu,
+	DropdownMenuCheckboxItem,
+	DropdownMenuContent,
+	DropdownMenuTrigger,
+} from "~/components/ui/dropdown-menu"
 
-export async function loader() {
+export async function loader({ request }: LoaderArgs) {
+	let searchParams = new URL(request.url).searchParams
+	let circumstanceFilter = searchParams.getAll("circumstance")
+	let sideMissionFilter = searchParams.getAll("sideMission")
+	let challengeFilter = searchParams.getAll("challenge")
+	let mapFilter = searchParams.getAll("map")
+
 	let rawMissions = await getMissionHistory()
 
-	let missions = rawMissions.map((mission) => {
+	let circumstances = Array.from(
+		new Set(rawMissions.map((mission) => mission.circumstance)),
+	)
+		.map((circumstance) => {
+			const template = CircumstanceTemplates[circumstance]
+			if (template) {
+				return {
+					value: circumstance,
+					label: t(template.display_name),
+				}
+			}
+			return false
+		})
+		.filter(Boolean)
+		.sort((a, b) => (a.label > b.label ? 1 : -1))
+
+	let maps = Array.from(new Set(rawMissions.map((mission) => mission.map)))
+		.map((map) => {
+			const template = getMissionTemplate(map)
+			if (template) {
+				return {
+					value: map,
+					label: t(template.display_name),
+				}
+			}
+			return false
+		})
+		.filter(Boolean)
+		.sort((a, b) => (a.label > b.label ? 1 : -1))
+
+	let filteredMissions = rawMissions
+		.filter((mission) => {
+			if (
+				!circumstanceFilter.length &&
+				!sideMissionFilter.length &&
+				!mapFilter.length
+			)
+				return true
+
+			return (
+				circumstanceFilter.includes(mission.circumstance) ||
+				sideMissionFilter.includes(
+					sideObjectiveToType(mission.sideMission ?? ""),
+				) ||
+				mapFilter.includes(mission.map)
+			)
+		})
+		.filter((mission) => {
+			if (!challengeFilter.length) return true
+			return challengeFilter.includes(mission.challenge.toString())
+		})
+
+	let missions = filteredMissions.map((mission) => {
 		const circumstance = CircumstanceTemplates[mission.circumstance]
 		const template = getMissionTemplate(mission.map)
 
@@ -45,7 +111,7 @@ export async function loader() {
 		}
 	})
 
-	return json({ missions })
+	return json({ missions, circumstances, maps })
 }
 
 type Column = (data: {
@@ -58,15 +124,6 @@ type Column = (data: {
 	category: string | null
 	sideMission: string | null
 }) => ReactNode
-
-let headers = [
-	"Difficulty",
-	"Map",
-	"Circumstance",
-	"Side objective",
-	"Started at",
-	"ID",
-]
 
 let columns: Column[] = [
 	({ category, challenge }) => (
@@ -143,8 +200,85 @@ let columns: Column[] = [
 	),
 ]
 
+function SearchParamsDropdownMenu({
+	label,
+	param,
+	items,
+}: {
+	label: string
+	param: string
+	items: { label: string; value: string }[]
+}) {
+	const [searchParams, setSearchParams] = useSearchParams()
+
+	return (
+		<DropdownMenu>
+			<DropdownMenuTrigger asChild>
+				<Button variant="ghost" className="ml-auto">
+					{label} <ChevronDown className="ml-2 h-4 w-4" />
+				</Button>
+			</DropdownMenuTrigger>
+			<DropdownMenuContent align="end">
+				{items.map((item) => {
+					return (
+						<DropdownMenuCheckboxItem
+							key={item.value}
+							className="capitalize"
+							checked={searchParams.getAll(param).includes(item.value)}
+							onCheckedChange={(checked) => {
+								if (checked) {
+									searchParams.append(param, item.value)
+								} else {
+									searchParams.delete(param, item.value)
+								}
+								setSearchParams(searchParams.toString())
+							}}
+						>
+							{item.label}
+						</DropdownMenuCheckboxItem>
+					)
+				})}
+			</DropdownMenuContent>
+		</DropdownMenu>
+	)
+}
+
 export default function MissionHistory() {
-	const { missions } = useLoaderData<typeof loader>()
+	const { missions, circumstances, maps } = useLoaderData<typeof loader>()
+
+	let headers = [
+		<SearchParamsDropdownMenu
+			key="challenge"
+			param="challenge"
+			label="Difficulty"
+			items={[
+				{ label: "Damnation", value: "5" },
+				{ label: "Heresy", value: "4" },
+				{ label: "Malice", value: "3" },
+				{ label: "Uprising", value: "2" },
+				{ label: "Sedition", value: "1" },
+			]}
+		/>,
+		<SearchParamsDropdownMenu key="map" param="map" label="Map" items={maps} />,
+		<SearchParamsDropdownMenu
+			key="circumstance"
+			param="circumstance"
+			label="Circumstance"
+			items={circumstances}
+		/>,
+		<SearchParamsDropdownMenu
+			key="sideMission"
+			param="sideMission"
+			label="Side objective"
+			items={[
+				{ label: "Scriptures", value: "scripture" },
+				{ label: "Grimoire", value: "grimoire" },
+			]}
+		/>,
+		"Started at",
+		"ID",
+	]
+
 	return (
 		<div className="p-4 overflow-y-scroll">
 			<div className="max-w-7xl mx-auto mb-4 flex flex-row-reverse p-6">
@@ -156,8 +290,8 @@ export default function MissionHistory() {
 				<Table>
 					<TableHeader>
 						<TableRow>
-							{headers.map((col) => (
-								<TableHead key={col}>{col}</TableHead>
+							{headers.map((col, i) => (
+								<TableHead key={i}>{col}</TableHead>
 							))}
 						</TableRow>
 					</TableHeader>

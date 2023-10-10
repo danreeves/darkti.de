@@ -8,7 +8,7 @@ export async function getMissionHistory() {
 	return await prisma.missionInstance.findMany({
 		where: { start: { gte: dayAgoString } },
 		orderBy: {
-			start: "asc",
+			start: "desc",
 		},
 	})
 }
