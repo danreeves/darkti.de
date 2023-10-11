@@ -1,15 +1,33 @@
 import type { LoaderArgs } from "@remix-run/node"
 import { redirect, json } from "@remix-run/node"
-import { NavLink, Outlet, useLoaderData, useMatches } from "@remix-run/react"
+import {
+	NavLink,
+	Outlet,
+	useLoaderData,
+	useMatches,
+	useNavigate,
+} from "@remix-run/react"
 import { getAuthToken } from "~/data/authtoken.server"
 import { authenticator } from "~/services/auth.server"
 import { ExclamationCircleIcon } from "@heroicons/react/24/outline"
 import { getAccountSummary } from "~/services/darktide.server"
-import { twMerge } from "tailwind-merge"
+import {
+	Popover,
+	PopoverContent,
+	PopoverTrigger,
+} from "~/components/ui/popover"
+import { Command, CommandGroup, CommandItem } from "~/components/ui/command"
+import { ChevronsUpDown } from "lucide-react"
+import { Button } from "~/components/ui/button"
+import { cn } from "~/lib/utils"
+import { Separator } from "~/components/ui/separator"
 
-let navLinks = [
-	{ label: "Trait collection", link: "traits" },
-	// { label: "Mission board", link: "mission-board" },
+let navLinks = [{ label: "Trait collection", link: "traits" }]
+let charLinks = [
+	{ link: "inventory", label: "Inventory" },
+	{ link: "exchange", label: "Armoury Exchange" },
+	{ link: "requisitorium", label: "Requisitorium" },
+	{ link: "contracts", label: "Contracts" },
 ]
 
 export let loader = async ({ request, params }: LoaderArgs) => {
@@ -20,12 +38,7 @@ export let loader = async ({ request, params }: LoaderArgs) => {
 	let account = await getAccountSummary(auth)
 
 	let firstCharId = account?.summary?.characters[0]?.id
-	if (
-		firstCharId &&
-		!params.character &&
-		!request.url.includes("traits") &&
-		!request.url.includes("mission-board")
-	) {
+	if (firstCharId && !params.character && !request.url.includes("traits")) {
 		return redirect(`/armoury/${firstCharId}/inventory`)
 	}
 
@@ -34,55 +47,103 @@ export let loader = async ({ request, params }: LoaderArgs) => {
 
 export default function Armoury() {
 	let { characters } = useLoaderData<typeof loader>()
-
+	let navigate = useNavigate()
 	let matches = useMatches()
 	let currentPage = matches.at(-1)
-	let currentRoute = currentPage?.id.replace("routes", "").replaceAll(".", "/") ?? ""
+	let currentRoute =
+		currentPage?.id.replace("routes", "").replaceAll(".", "/") ?? ""
 	let currentRouteParams = currentPage?.params
+
+	let currentChar = characters.find(
+		(char) => char.id === currentRouteParams?.character,
+	)
+	let currentNavLink = navLinks.find(
+		(nav) => nav.link === currentRoute.replace("/armoury/", ""),
+	)
 
 	return (
 		<>
-			<div className="relative z-40 w-full bg-white p-4 shadow">
-				<div className="mx-auto flex max-w-7xl justify-between">
-					<nav>
-						{characters.map((char) => {
-							let route = currentRoute
-							let params = { ...currentRouteParams, character: char.id }
-
-							for (const [key, value] of Object.entries(params)) {
-								route = route.replace(`$${key}`, value)
-							}
-
-							if (!route.includes(char.id)) {
-								route = `/armoury/${char.id}/inventory`
-							}
-
-							return (
-								<NavLink
-									key={char.id}
-									to={route}
-									className={({ isActive }) =>
-										twMerge("p-4 ", isActive ? "font-bold" : "")
-									}
-								>
-									{char.name}
-								</NavLink>
-							)
-						})}
-					</nav>
-
-					<nav>
-						{navLinks.map((item) => (
-							<NavLink
-								key={item.link}
-								to={item.link}
-								className={({ isActive }) =>
-									twMerge("p-4 ", isActive ? "font-bold" : "")
-								}
+			<div className="w-full">
+				<div className="mx-auto max-w-7xl flex flex-grow h-16 items-center px-4 lg:px-0 gap-4">
+					<Popover>
+						<PopoverTrigger asChild>
+							<Button
+								variant="outline"
+								role="combobox"
+								className={cn(
+									"w-[200px] justify-between",
+									!true && "text-muted-foreground",
+								)}
 							>
-								{item.label}
-							</NavLink>
-						))}
+								{currentChar?.name ||
+									currentNavLink?.label ||
+									"Select character"}
+								<ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+							</Button>
+						</PopoverTrigger>
+						<PopoverContent className="w-[200px] p-0">
+							<Command>
+								<CommandGroup>
+									{characters.map((char) => {
+										let route = currentRoute
+										let params = { ...currentRouteParams, character: char.id }
+
+										for (const [key, value] of Object.entries(params)) {
+											route = route.replace(`$${key}`, value)
+										}
+
+										if (!route.includes(char.id)) {
+											route = `/armoury/${char.id}/inventory`
+										}
+
+										return (
+											<CommandItem
+												value={char.name}
+												key={char.id}
+												onSelect={() => {
+													navigate(route)
+												}}
+												className={cn(
+													currentChar?.id === char.id && "font-medium",
+												)}
+											>
+												{/* TODO: Add archetype icon */}
+												{char.name}
+											</CommandItem>
+										)
+									})}
+								</CommandGroup>
+								<Separator />
+								<CommandGroup>
+									{navLinks.map((link) => (
+										<CommandItem
+											key={link.link}
+											onSelect={() => {
+												navigate(link.link)
+											}}
+											className={cn(
+												currentNavLink?.link === link.link && "font-medium",
+											)}
+										>
+											{link.label}
+										</CommandItem>
+									))}
+								</CommandGroup>
+							</Command>
+						</PopoverContent>
+					</Popover>
+
+					<nav className="flex gap-4">
+						{currentChar &&
+							charLinks.map((item) => (
+								<NavLink
+									key={item.link}
+									to={`${currentChar?.id}/${item.link}`}
+									className="aria-[current=page]:text-foreground aria-[current=page]:font-bold text-foreground/60 text-base"
+								>
+									{item.label}
+								</NavLink>
+							))}
 					</nav>
 				</div>
 			</div>
