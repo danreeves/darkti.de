@@ -128,9 +128,9 @@ export function Mission({
 
 				<div className="absolute left-9 top-32 text-xs">
 					{circumstance != null ? (
-						<div className="align-text-middle relative pt-[0.375rem] text-sm text-yellow-400">
+						<div className="flex flex-col justify-center relative h-10 text-sm text-yellow-400">
 							{circumstance.name}
-							<div className="absolute -left-12 -top-1 h-10 w-10 border border-yellow-400 bg-gray-900 ">
+							<div className="absolute -left-12 h-10 w-10 border border-yellow-400 bg-gray-900 ">
 								<div
 									className="absolute left-0 top-0 h-[124px] w-[124px] bg-yellow-400"
 									style={{
@@ -147,9 +147,9 @@ export function Mission({
 						<div className="relative h-[1.6rem]"></div>
 					)}
 
-					<div className="relative mt-5 text-sm">
+					<div className="relative mt-2 text-sm">
 						<ul
-							className="mt-1 flex flex-row gap-6"
+							className="flex flex-row gap-6"
 							style={{
 								textShadow: "black 0 0 3px",
 							}}
