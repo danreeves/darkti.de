@@ -28,7 +28,7 @@ export const WeaponSchema = z
 	})
 	.transform((item) => {
 		let baseName = item.id.split("/").at(-1)!
-		let slug = baseName?.replaceAll("_", "-")!
+		let slug = baseName.replaceAll("_", "-")!
 		let item_type = item.item_type.replace("WEAPON_", "").toLowerCase()
 		let slots =
 			Array.isArray(item.slots) && item.slots.length
@@ -67,7 +67,7 @@ export const CurioSchema = z
 	})
 	.transform((item) => {
 		let baseName = item.id.split("/").at(-1)!
-		let slug = baseName?.replaceAll("_", "-")!
+		let slug = baseName.replaceAll("_", "-")!
 		let display_name = t(item.display_name)
 		let item_type = item.item_type.toLowerCase()
 		return {
@@ -93,7 +93,7 @@ export const SkinSchema = z
 	})
 	.transform((item) => {
 		let baseName = item.id.split("/").at(-1)!
-		let slug = baseName?.replaceAll("_", "-")!
+		let slug = baseName.replaceAll("_", "-")!
 		let display_name = t(item.display_name)
 		let description = item.description ? t(item.description) : undefined
 		return {
@@ -128,7 +128,7 @@ export const TraitSchema = z
 	})
 	.transform((item) => {
 		let baseName = item.id.split("/").at(-1)!
-		let slug = baseName?.replaceAll("_", "-")!
+		let slug = baseName.replaceAll("_", "-")!
 		let display_name = t(item.display_name)
 		let description = item.description ? t(item.description) : undefined
 		return {
