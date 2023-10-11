@@ -212,18 +212,18 @@ export function Mission({
 							</li>
 						</ul>
 						{sideMission ? (
-							<div className="absolute -left-12 -top-1 h-10 w-10 bg-gray-900 p-[2px]">
-								<Img
-									src={`content/ui/textures/icons/pocketables/hud/small/party_${sideObjectiveToType(
-										sideMission,
-									)}.png`}
-									width={128}
-									// TODO: scripts\settings\mission_objective\templates\side_mission_objective_template.lua
-									alt={""}
-									className="border border-solid border-gray-300 p-1"
-								/>
-							</div>
-						) : null}
+							<Img
+								src={`content/ui/textures/icons/pocketables/hud/small/party_${sideObjectiveToType(
+									sideMission,
+								)}.png`}
+								width={128}
+								// TODO: scripts\settings\mission_objective\templates\side_mission_objective_template.lua
+								alt={""}
+								className="absolute -left-12 -top-[5px] h-10 w-10 bg-gray-900 border border-solid border-gray-300 p-[5px]"
+							/>
+						) : (
+							<div className="absolute -left-12 -top-[5px] h-10 w-10"></div>
+						)}
 					</div>
 				</div>
 				<MissionTimer start={start} end={end} />
