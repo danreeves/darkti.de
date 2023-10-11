@@ -52,7 +52,7 @@ export default function Layout({ user }: { user: User | null }) {
 													<NavLink
 														key={item.name}
 														to={item.href}
-														className="aria-[current=page]:text-foreground aria-[current=page]:font-bold text-foreground/75 block text-base font-medium"
+														className="aria-[current=page]:text-foreground aria-[current=page]:font-bold text-foreground/60 block text-base"
 													>
 														{item.name}
 													</NavLink>
