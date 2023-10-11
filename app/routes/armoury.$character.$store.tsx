@@ -497,7 +497,7 @@ export default function Exchange() {
 					</div>
 				) : null}
 
-				<Form dir="col">
+				<Form>
 					<FormGroup label="Filter Type">
 						<Checkbox name="type" value="melee" label="Melee" />
 						<Checkbox name="type" value="ranged" label="Ranged" />

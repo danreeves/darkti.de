@@ -196,7 +196,7 @@ export default function Inventory() {
 				})}
 			</Link>
 			<div className="w-52 p-4">
-				<Form dir="col" key={character}>
+				<Form key={character}>
 					<TextInput label="Search" name="name" />
 
 					<FormGroup label="Item type">
