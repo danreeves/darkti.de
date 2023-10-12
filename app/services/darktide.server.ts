@@ -538,6 +538,138 @@ export async function getCharacterStore(
 	}
 }
 
+// let resp = {
+// 	_links: {
+// 		self: {
+// 			href: "/store/xxxx/wallets/xxxxx/purchases",
+// 		},
+// 	},
+// 	amount: { amount: 17800, type: "credits" },
+// 	offer: {
+// 		offerId: "xxxxx",
+// 		sku: {
+// 			id: "xxxxx",
+// 			displayPriority: 0,
+// 			internalName: "credit_store_all_rewards_psyker_psykinetic",
+// 			name: "credit_store_all_rewards_psyker_psykinetic",
+// 			description: "credit_store_all_rewards_psyker_psykinetic",
+// 			category: "item_instance",
+// 			assetId: "",
+// 			tags: [],
+// 			dlcReq: [],
+// 		},
+// 		entitlement: {
+// 			id: "xxxxx",
+// 			limit: 0,
+// 			type: "Permanent",
+// 		},
+// 		price: {
+// 			amount: { amount: 17800, type: "credits" },
+// 			id: "xxxxx",
+// 			priority: 1,
+// 			priceFormula: "dynamic_price_formula",
+// 		},
+// 		state: "completed",
+// 		description: {
+// 			id: "content/items/weapons/player/ranged/autogun_p3_m3",
+// 			gearId: "xxxx",
+// 			rotation: "day",
+// 			type: "weapon",
+// 			properties: {},
+// 			overrides: {
+// 				ver: 2,
+// 				rarity: 3,
+// 				characterLevel: 30,
+// 				itemLevel: 434,
+// 				baseItemLevel: 379,
+// 				traits: [
+// 					{
+// 						id: "content/items/traits/bespoke_autogun_p3/crit_chance_based_on_ammo_left",
+// 						rarity: 2,
+// 					},
+// 				],
+// 				perks: [
+// 					{
+// 						id: "content/items/perks/ranged_common/wield_increase_super_armor_damage",
+// 						rarity: 3,
+// 					},
+// 				],
+// 				base_stats: [
+// 					{ name: "autogun_p3_m1_dps_stat", value: 0.78 },
+// 					{ name: "autogun_p3_m1_stability_stat", value: 0.76 },
+// 					{ name: "autogun_p3_m1_power_stat", value: 0.76 },
+// 					{ name: "autogun_p3_m1_mobility_stat", value: 0.68 },
+// 					{ name: "autogun_p3_m1_ammo_stat", value: 0.79 },
+// 				],
+// 			},
+// 		},
+// 		media: [],
+// 	},
+// 	items: [
+// 		{
+// 			uuid: "xxxxx",
+// 			slots: ["slot_secondary"],
+// 			characterId: "xxxx",
+// 			masterDataInstance: {
+// 				id: "content/items/weapons/player/ranged/autogun_p3_m3",
+// 				overrides: {
+// 					ver: 2,
+// 					rarity: 3,
+// 					characterLevel: 30,
+// 					itemLevel: 434,
+// 					baseItemLevel: 379,
+// 					traits: [
+// 						{
+// 							id: "content/items/traits/bespoke_autogun_p3/crit_chance_based_on_ammo_left",
+// 							rarity: 2,
+// 						},
+// 					],
+// 					perks: [
+// 						{
+// 							id: "content/items/perks/ranged_common/wield_increase_super_armor_damage",
+// 							rarity: 3,
+// 						},
+// 					],
+// 					base_stats: [
+// 						{ name: "autogun_p3_m1_dps_stat", value: 0.78 },
+// 						{ name: "autogun_p3_m1_stability_stat", value: 0.76 },
+// 						{ name: "autogun_p3_m1_power_stat", value: 0.76 },
+// 						{ name: "autogun_p3_m1_mobility_stat", value: 0.68 },
+// 						{ name: "autogun_p3_m1_ammo_stat", value: 0.79 },
+// 					],
+// 				},
+// 			},
+// 			gearId: "xxx",
+// 			id: "content/items/weapons/player/ranged/autogun_p3_m3",
+// 			overrides: {
+// 				ver: 2,
+// 				rarity: 3,
+// 				characterLevel: 30,
+// 				itemLevel: 434,
+// 				baseItemLevel: 379,
+// 				traits: [
+// 					{
+// 						id: "content/items/traits/bespoke_autogun_p3/crit_chance_based_on_ammo_left",
+// 						rarity: 2,
+// 					},
+// 				],
+// 				perks: [
+// 					{
+// 						id: "content/items/perks/ranged_common/wield_increase_super_armor_damage",
+// 						rarity: 3,
+// 					},
+// 				],
+// 				base_stats: [
+// 					{ name: "autogun_p3_m1_dps_stat", value: 0.78 },
+// 					{ name: "autogun_p3_m1_stability_stat", value: 0.76 },
+// 					{ name: "autogun_p3_m1_power_stat", value: 0.76 },
+// 					{ name: "autogun_p3_m1_mobility_stat", value: 0.68 },
+// 					{ name: "autogun_p3_m1_ammo_stat", value: 0.79 },
+// 				],
+// 			},
+// 		},
+// 	],
+// }
 let PurchaseSchema = z.object({
 	amount: z.object({ amount: z.number(), type: z.string() }),
 	offer: z.object({
@@ -590,8 +722,9 @@ type PurchaseRequest = {
 export async function purchaseItem(
 	auth: AuthToken,
 	purchaseRequest: PurchaseRequest,
+	walletOwner: string,
 ) {
-	let url = `https://bsp-td-prod.atoma.cloud/store/${auth.sub}/wallets/${purchaseRequest.characterId}/purchases`
+	let url = `https://bsp-td-prod.atoma.cloud/store/${auth.sub}/wallets/${auth.sub}/purchases`
 
 	let response = await fetch(url, {
 		method: "POST",
@@ -601,6 +734,8 @@ export async function purchaseItem(
 			authorization: `Bearer ${auth.accessToken}`,
 		},
 	})
+
+	// console.log(await response.text())
 
 	if (response.ok) {
 		let data = await response.json()
