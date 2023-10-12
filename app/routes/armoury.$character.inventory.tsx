@@ -1,9 +1,4 @@
-import {
-	NavLink,
-	useLoaderData,
-	useParams,
-	useSearchParams,
-} from "@remix-run/react"
+import { useLoaderData, useParams } from "@remix-run/react"
 import type { LoaderArgs } from "@remix-run/server-runtime"
 import { json } from "@remix-run/server-runtime"
 import { z } from "zod"
@@ -30,7 +25,7 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "~/components/ui/select"
-import { filter, uniqBy } from "lodash-es"
+import { uniqBy } from "lodash-es"
 
 export async function loader({ request, params }: LoaderArgs) {
 	let { character } = zx.parseParams(params, { character: z.string() })
