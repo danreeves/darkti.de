@@ -27,8 +27,11 @@ const userNavigation = [
 export default function Layout({ user }: { user: User | null }) {
 	return (
 		<>
-			<div className="flex h-screen flex-col overflow-hidden bg-background">
-				<Disclosure as="nav" className="border-b">
+			<div className="flex h-screen flex-col bg-background">
+				<Disclosure
+					as="nav"
+					className="border-b sticky top-0 z-50 bg-background"
+				>
 					{({ open }) => (
 						<>
 							<div className="mx-auto max-w-7xl px-4 xl:p-0">

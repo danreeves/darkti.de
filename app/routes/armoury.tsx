@@ -63,8 +63,8 @@ export default function Armoury() {
 
 	return (
 		<>
-			<div className="w-full">
-				<div className="mx-auto max-w-7xl flex flex-grow h-16 items-center px-4 lg:px-0 gap-4">
+			<div className="w-full relative">
+				<div className="w-full mx-auto max-w-7xl flex flex-grow h-16 items-center px-4 lg:px-0 gap-4 ">
 					<Popover>
 						<PopoverTrigger asChild>
 							<Button
