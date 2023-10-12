@@ -11,7 +11,7 @@ import {
 	completeCharacterContract,
 	deleteCharacterTask,
 	getCharacterContracts,
-	getCharacterWallet,
+	getAccountWallet,
 } from "~/services/darktide.server"
 import { twMerge } from "tailwind-merge"
 
@@ -78,7 +78,7 @@ export async function loader({ params, request }: LoaderArgs) {
 
 	let [contract, wallet] = await Promise.all([
 		getCharacterContracts(auth, characterId, true),
-		getCharacterWallet(auth, characterId),
+		getAccountWallet(auth),
 	])
 	if (!contract) {
 		return json(null)

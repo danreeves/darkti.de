@@ -190,8 +190,8 @@ let CharacterWalletSchema = z
 		}
 	})
 
-export async function getCharacterWallet(auth: AuthToken, characterId: string) {
-	let url = `https://bsp-td-prod.atoma.cloud/data/${auth.sub}/characters/${characterId}/wallets`
+export async function getAccountWallet(auth: AuthToken) {
+	let url = `https://bsp-td-prod.atoma.cloud/data/${auth.sub}/account/wallets`
 
 	let response = await fetch(url, {
 		headers: {
