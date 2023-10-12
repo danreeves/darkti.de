@@ -1,13 +1,9 @@
-import { Checkbox, Form, FormGroup, Select } from "~/components/Form"
+import { Form } from "~/components/Form"
 import {
 	Form as RemixForm,
 	useLoaderData,
 	useNavigation,
 } from "@remix-run/react"
-import {
-	ChevronDoubleUpIcon,
-	CircleStackIcon,
-} from "@heroicons/react/24/outline"
 import type { ActionArgs, LoaderArgs } from "@remix-run/node"
 import { redirect, json } from "@remix-run/node"
 import { z } from "zod"
@@ -28,6 +24,20 @@ import { Img } from "~/components/Img"
 import { t } from "~/data/localization.server"
 import { getWeaponTemplate } from "~/data/weaponTemplates.server"
 import { twMerge } from "tailwind-merge"
+import { Checkbox } from "~/components/ui/checkbox"
+import { Label } from "~/components/ui/label"
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from "~/components/ui/select"
+import { SelectGroup } from "@radix-ui/react-select"
+import { titleCase } from "~/utils/titleCase"
+import { ChevronsUp, Database } from "lucide-react"
+import { Button } from "~/components/ui/button"
+import { cn } from "~/lib/utils"
 
 let storeSlugToType: Record<string, "credits" | "marks"> = {
 	exchange: "credits",
@@ -299,15 +309,15 @@ export async function loader({ request, params }: LoaderArgs) {
 }
 
 let rarityBorder: Record<string, string> = {
-	1: "border-l-neutral-600 from-neutral-100",
-	2: "border-l-green-600 from-green-50",
-	3: "border-l-blue-600 from-blue-50",
-	4: "border-l-purple-600 from-purple-50",
-	5: "border-l-orange-600 from-orange-50",
+	1: "border-l-foreground/60",
+	2: "border-l-green-600",
+	3: "border-l-blue-600",
+	4: "border-l-purple-600",
+	5: "border-l-orange-600",
 }
 
 let rarityColor: Record<string, string> = {
-	1: "text-neutral-800",
+	1: "text-foreground/60",
 	2: "text-green-800",
 	3: "text-blue-800",
 	4: "text-purple-800",
@@ -321,16 +331,60 @@ export default function Exchange() {
 	let { offers, wallet } = useLoaderData<typeof loader>()
 
 	return (
-		<>
+		<div className="relative flex flex-col max-w-7xl mx-auto grow">
+			<Form className="flex max-w-7xl flex-row gap-4 m-2">
+				<div className="grid items-center gap-1.5">
+					<Label>Item type</Label>
+					<div className="flex gap-4">
+						{["melee", "ranged", "curio"].map((kind) => (
+							<div key={kind} className="flex items-center space-x-2 h-10">
+								<Checkbox id={kind} name="type" value={kind} />
+								<label
+									htmlFor={kind}
+									className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+								>
+									{titleCase(kind)}
+								</label>
+							</div>
+						))}
+					</div>
+				</div>
+
+				<div className="grid items-center gap-1.5">
+					<Label htmlFor="sort">Sort by</Label>
+					<Select name="sort" defaultValue="">
+						<SelectTrigger className="w-[180px]">
+							<SelectValue placeholder="Any" />
+						</SelectTrigger>
+						<SelectContent>
+							<SelectGroup>
+								<SelectItem value="baseItemLevel">Base Rating</SelectItem>
+								<SelectItem value="itemLevel">Total Rating</SelectItem>
+								<SelectItem value="price">Price</SelectItem>
+							</SelectGroup>
+						</SelectContent>
+					</Select>
+				</div>
+
+				{wallet && wallet.balance ? (
+					<div className="flex h-full place-items-start ml-auto text-sm font-medium leading-none mb-4 text-amber-500">
+						<div className="flex items-center">
+							<Database className="mr-1 h-4 w-4" aria-hidden="true" />
+							{wallet.balance.amount.toLocaleString()} {wallet.balance.type}
+						</div>
+					</div>
+				) : null}
+			</Form>
+
 			<RemixForm
 				method="post"
-				className="grid w-full grow grid-cols-2 gap-4 overflow-y-scroll bg-neutral-200 p-4 shadow-inner"
+				className="grid w-full grow grid-cols-2 gap-4 mb-4"
 			>
 				{offers.map((offer) => (
 					<div
 						key={offer.id}
 						className={twMerge(
-							"border-l-3 from-1% relative border-2 border-neutral-400 bg-white bg-gradient-to-r shadow",
+							"rounded-lg border bg-card text-card-foreground shadow-sm relative",
 							rarityBorder[offer.rarity],
 							offer.purchased && "opacity-50",
 						)}
@@ -343,10 +397,7 @@ export default function Exchange() {
 						<div className="isolate flex min-h-full flex-col">
 							<div className="m-2 flex flex-row font-heading">
 								<div className="mr-1 flex items-center font-heading font-bold ">
-									<ChevronDoubleUpIcon
-										className="mr-0.5 h-4 w-4"
-										aria-hidden="true"
-									/>
+									<ChevronsUp className="mr-0.5 h-4 w-4" aria-hidden="true" />
 									{offer.itemLevel}
 								</div>
 								<div
@@ -380,10 +431,7 @@ export default function Exchange() {
 									}
 									title="Base item level"
 								>
-									<ChevronDoubleUpIcon
-										className="mr-0.5 h-3 w-3"
-										aria-hidden="true"
-									/>
+									<ChevronsUp className="mr-0.5 h-3 w-3" aria-hidden="true" />
 									{offer.baseItemLevel}
 								</span>
 								<div
@@ -398,9 +446,9 @@ export default function Exchange() {
 													<div className="relative w-full border border-amber-400 p-px">
 														<div
 															style={{ width: stat.value * 100 + "%" }}
-															className="z-2 absolute left-0 top-0 h-full border border-white bg-amber-400"
+															className="z-2 absolute left-0 top-0 h-full border border-background bg-amber-400"
 														/>
-														<div className="z-1 isolate m-px mx-1 font-heading text-xs leading-none text-white">
+														<div className="z-1 isolate m-px mx-1 font-heading text-xs leading-none text-background">
 															{Math.round(stat.value * 100)}%
 														</div>
 													</div>
@@ -435,7 +483,7 @@ export default function Exchange() {
 												<div className="relative flex aspect-square w-16 shrink-0 flex-row items-center">
 													{blessing.icon ? (
 														<Img
-															className="aspect-square rounded invert"
+															className="aspect-square rounded invert dark:invert-0"
 															alt={`Tier ${blessing.rarity} ${blessing.displayName}`}
 															title={`Tier ${blessing.rarity} ${blessing.displayName}`}
 															src={blessing.icon}
@@ -466,51 +514,25 @@ export default function Exchange() {
 							) : null}
 
 							<div className="mt-auto">
-								<button
+								<Button
 									type="submit"
 									name="buy-item"
 									value={offer.id}
 									disabled={navigation.state != "idle" || offer.purchased}
-									className={twMerge(
-										"m-2 inline-flex shrink cursor-pointer flex-row items-center gap-2 rounded border bg-white p-2 font-bold leading-none text-amber-500 shadow hover:bg-neutral-50 disabled:cursor-not-allowed disabled:bg-neutral-200",
-										offer.purchased && "text-neutral-400",
-									)}
+									className="m-2 gap-2"
 								>
-									<CircleStackIcon className="h-4 w-4" aria-hidden="true" />
+									<Database className="h-4 w-4" aria-hidden="true" />
 									{offer.purchased
 										? "Purchased"
 										: `Buy for ${offer.price.amount.amount.toLocaleString()} ${
 												offer.price.amount.type
 										  }`}
-								</button>
+								</Button>
 							</div>
 						</div>
 					</div>
 				))}
 			</RemixForm>
-
-			<div className="p-4">
-				{wallet && wallet.balance ? (
-					<div className="mb-4 flex items-center font-bold leading-none text-amber-500">
-						<CircleStackIcon className="mr-1 h-4 w-4" aria-hidden="true" />
-						{wallet.balance.amount.toLocaleString()} {wallet.balance.type}
-					</div>
-				) : null}
-
-				<Form>
-					<FormGroup label="Filter Type">
-						<Checkbox name="type" value="melee" label="Melee" />
-						<Checkbox name="type" value="ranged" label="Ranged" />
-						<Checkbox name="type" value="gadget" label="Curio" />
-					</FormGroup>
-
-					<Select label="Sort by" name="sort" className="w-full">
-						<option value="baseItemLevel">Base Rating</option>
-						<option value="itemLevel">Total Rating</option>
-						<option value="price">Price</option>
-					</Select>
-				</Form>
-			</div>
-		</>
+		</div>
 	)
 }
