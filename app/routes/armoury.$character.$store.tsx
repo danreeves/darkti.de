@@ -16,7 +16,7 @@ import { authenticator } from "~/services/auth.server"
 import {
 	getAccountSummary,
 	getCharacterStore,
-	getCharacterWallet,
+	getAccountWallet,
 	purchaseItem,
 } from "~/services/darktide.server"
 import { getSearchParam } from "~/utils/getSearchParam"
@@ -83,7 +83,7 @@ export async function action({ params, request }: ActionArgs) {
 		return json({ error: "Couldn't fetch store" })
 	}
 
-	let wallet = await getCharacterWallet(auth, currentCharacter.id)
+	let wallet = await getAccountWallet(auth)
 	if (!wallet) {
 		return json({ error: "Couldn't fetch wallet" })
 	}
@@ -163,7 +163,7 @@ export async function loader({ request, params }: LoaderArgs) {
 		getItems(WeaponSchema),
 		getItems(CurioSchema),
 		getItems(TraitSchema),
-		getCharacterWallet(auth, currentCharacter.id),
+		getAccountWallet(auth),
 	])
 
 	if (!currentShop) {
@@ -336,7 +336,7 @@ export default function Exchange() {
 				<div className="grid items-center gap-1.5">
 					<Label>Item type</Label>
 					<div className="flex gap-4">
-						{["melee", "ranged", "curio"].map((kind) => (
+						{["melee", "ranged", "gadget"].map((kind) => (
 							<div key={kind} className="flex items-center space-x-2 h-10">
 								<Checkbox id={kind} name="type" value={kind} />
 								<label
@@ -352,9 +352,9 @@ export default function Exchange() {
 
 				<div className="grid items-center gap-1.5">
 					<Label htmlFor="sort">Sort by</Label>
-					<Select name="sort" defaultValue="">
+					<Select name="sort" defaultValue="baseItemLevel">
 						<SelectTrigger className="w-[180px]">
-							<SelectValue placeholder="Any" />
+							<SelectValue placeholder="Base Rating" />
 						</SelectTrigger>
 						<SelectContent>
 							<SelectGroup>
