@@ -116,20 +116,20 @@ export default function Statistics() {
 					</TableRow>
 
 					<TableRow>
-						<TableCell>Total kills</TableCell>
+						<TableCell>Team total kills</TableCell>
 						<TableCell>{formatNumber(get(stats, "team_kills.none"))}</TableCell>
 					</TableRow>
 
 					<TableRow>
-						<TableCell>Monster kills</TableCell>
-						<TableCell>{formatNumber(get(stats, "kill_boss.none"))}</TableCell>
-					</TableRow>
-
-					<TableRow>
-						<TableCell>Total deaths</TableCell>
+						<TableCell>Team total deaths</TableCell>
 						<TableCell>
 							{formatNumber(get(stats, "team_deaths.none"))}
 						</TableCell>
+					</TableRow>
+
+					<TableRow>
+						<TableCell>Team monster kills</TableCell>
+						<TableCell>{formatNumber(get(stats, "kill_boss.none"))}</TableCell>
 					</TableRow>
 				</StatsTable>
 			</div>
