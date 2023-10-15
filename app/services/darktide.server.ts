@@ -732,3 +732,38 @@ export async function completeCharacterContract(
 		console.log(response)
 	}
 }
+
+let StatsSchema = z.object({
+	statistics: z.array(
+		z.object({
+			value: z.record(z.string(), z.number()),
+			typePath: z.array(z.string()),
+		}),
+	),
+})
+export async function getCharacterStats(
+	auth: AuthToken,
+	characterId: string,
+	statKey: "mission" | "kill" | "team",
+) {
+	let url = `https://bsp-td-prod.atoma.cloud/data/${auth.sub}/characters/${characterId}/statistics/${statKey}`
+
+	let response = await fetch(url, {
+		method: "GET",
+		headers: {
+			authorization: `Bearer ${auth.accessToken}`,
+		},
+	})
+
+	if (response.ok) {
+		let data = await response.json()
+		let result = StatsSchema.safeParse(data)
+		if (result.success) {
+			return result.data.statistics
+		} else {
+			console.log(result.error)
+		}
+	} else {
+		console.log(response)
+	}
+}
