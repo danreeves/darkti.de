@@ -46,7 +46,7 @@ export default function App() {
 	useRevalidateOnFocus()
 
 	return (
-		<html lang="en" className="h-screen">
+		<html lang="en" className="h-screen" suppressHydrationWarning>
 			<head>
 				<meta charSet="utf-8" />
 				<meta name="viewport" content="width=device-width,initial-scale=1" />
