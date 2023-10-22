@@ -44,3 +44,10 @@ model MissionInstance {
   expiry       DateTime
   sideMission  String?
 }
+
+model GameplaySession {
+  createdAt   DateTime @default(now())
+  accountId   String
+  characterId String
+  sessionId   String   @unique
+}

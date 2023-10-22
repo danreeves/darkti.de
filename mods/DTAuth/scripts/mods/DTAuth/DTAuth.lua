@@ -62,3 +62,18 @@ function mod.authenticate_steam()
         end
     end)
 end
+
+mod:hook_safe("GameplaySession", "poll_for_end_of_round", function(_self, session_id, participant)
+    local url = domain .. "/api/gameplay_session"
+    local parts = string.split(participant, "|")
+    Managers.backend:url_request(url, {
+        method = "POST",
+        body = {
+            session_id = session_id,
+            account_id = parts[1],
+            character_id = parts[2]
+        }
+    })
+end)
+
+mod.start_authentication()
