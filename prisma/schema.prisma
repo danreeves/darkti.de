@@ -49,5 +49,7 @@ model GameplaySession {
   createdAt   DateTime @default(now())
   accountId   String
   characterId String
-  sessionId   String   @unique
+  sessionId   String
+
+  @@unique([accountId, characterId, sessionId])
 }
