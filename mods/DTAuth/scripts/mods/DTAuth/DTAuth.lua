@@ -75,5 +75,3 @@ mod:hook_safe("GameplaySession", "poll_for_end_of_round", function(_self, sessio
         }
     })
 end)
-
-mod.start_authentication()
