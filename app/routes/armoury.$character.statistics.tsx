@@ -15,7 +15,7 @@ import {
 	TableRow,
 } from "~/components/ui/table"
 import { zipObjectDeep, get, orderBy } from "lodash-es"
-import { isRecord } from "~/utils/isRecord"
+import { is, record, string, unknown } from "valibot"
 
 type Stats = { typePath: string[]; value: Record<string, number> }[]
 function zipStats(stats: Stats) {
@@ -28,7 +28,7 @@ function zipStats(stats: Stats) {
 function explodeKeyTable(keyTable: unknown): Record<string, unknown>[] {
 	let result = []
 
-	if (isRecord(keyTable)) {
+	if (is(record(string(), unknown()), keyTable)) {
 		for (let key in keyTable) {
 			let value = keyTable[key]
 			let row: Record<string, unknown> = { value }
@@ -76,7 +76,7 @@ export async function loader({ params, request }: LoaderArgs) {
 	)
 	let m = "mission" in mission ? mission.mission : {}
 	let justMissions = {}
-	if (isRecord(m)) {
+	if (is(record(string(), unknown()), m)) {
 		justMissions = { ...m }
 		if ("playtime" in justMissions) {
 			delete justMissions.playtime
@@ -215,7 +215,7 @@ function AutoTable({
 					{rows.map((row, i) => (
 						<TableRow key={i}>
 							{cols.map((col) => (
-								<TableCell key={col.key}>{row[col.key]}</TableCell>
+								<TableCell key={col.key}>{String(row[col.key])}</TableCell>
 							))}
 						</TableRow>
 					))}

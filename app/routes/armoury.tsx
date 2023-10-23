@@ -29,6 +29,7 @@ let charLinks = [
 	{ link: "requisitorium", label: "Requisitorium" },
 	{ link: "contracts", label: "Contracts" },
 	{ link: "statistics", label: "Statistics" },
+	{ link: "sessions", label: "History" },
 ]
 
 export let loader = async ({ request, params }: LoaderArgs) => {

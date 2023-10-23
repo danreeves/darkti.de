@@ -38,6 +38,7 @@ import { titleCase } from "~/utils/titleCase"
 import { ChevronsUp, Database } from "lucide-react"
 import { Button } from "~/components/ui/button"
 import { cn } from "~/lib/utils"
+import useLocale from "~/hooks/locale"
 
 let storeSlugToType: Record<string, "credits" | "marks"> = {
 	exchange: "credits",
@@ -328,6 +329,7 @@ const raritySymbol = ["0", "Ⅰ", "Ⅱ", "Ⅲ", "Ⅳ", "Ⅴ"]
 
 export default function Exchange() {
 	let navigation = useNavigation()
+	let locale = useLocale()
 	let { offers, wallet } = useLoaderData<typeof loader>()
 
 	return (
@@ -370,7 +372,8 @@ export default function Exchange() {
 					<div className="flex h-full place-items-start ml-auto text-sm font-medium leading-none mb-4 text-amber-500">
 						<div className="flex items-center">
 							<Database className="mr-1 h-4 w-4" aria-hidden="true" />
-							{wallet.balance.amount.toLocaleString()} {wallet.balance.type}
+							{wallet.balance.amount.toLocaleString(locale)}{" "}
+							{wallet.balance.type}
 						</div>
 					</div>
 				) : null}
@@ -524,9 +527,9 @@ export default function Exchange() {
 									<Database className="h-4 w-4" aria-hidden="true" />
 									{offer.purchased
 										? "Purchased"
-										: `Buy for ${offer.price.amount.amount.toLocaleString()} ${
-												offer.price.amount.type
-										  }`}
+										: `Buy for ${offer.price.amount.amount.toLocaleString(
+												locale,
+										  )} ${offer.price.amount.type}`}
 								</Button>
 							</div>
 						</div>
