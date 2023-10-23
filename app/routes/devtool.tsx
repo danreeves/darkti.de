@@ -3,7 +3,7 @@ import { json } from "@remix-run/server-runtime"
 import type { ActionArgs, LoaderArgs } from "@remix-run/server-runtime"
 import { Button } from "~/components/ui/button"
 import { Input } from "~/components/ui/input"
-import { getAuthToken } from "~/data/authtoken.server"
+import { getAuthToken } from "~/services/db/authtoken.server"
 import { authenticator } from "~/services/auth.server"
 
 export async function loader({ request }: LoaderArgs) {

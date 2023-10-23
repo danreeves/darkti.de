@@ -14,7 +14,7 @@ import { authenticator } from "~/services/auth.server"
 
 import { initJobs } from "~/jobs/index.server"
 import { useRevalidateOnFocus } from "~/hooks/revalidateOnFocus"
-import { ThemeProvider } from "./theme-provider"
+import { ThemeProvider } from "./hooks/themeProvider"
 import acceptLanguage from "accept-language-parser"
 import { LocaleProvider } from "./hooks/locale"
 

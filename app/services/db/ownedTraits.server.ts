@@ -1,4 +1,4 @@
-import { prisma } from "~/data/db.server"
+import { prisma } from "~/services/prisma.server"
 import { z } from "zod"
 
 let OwnedTraitsSchema = z.array(

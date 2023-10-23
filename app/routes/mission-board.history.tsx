@@ -1,7 +1,7 @@
 import { Link, useLoaderData, useSearchParams } from "@remix-run/react"
 import type { LoaderArgs } from "@remix-run/server-runtime"
 import { json } from "@remix-run/server-runtime"
-import { getMissionHistory } from "~/data/missionInstances.server"
+import { getMissionHistory } from "~/services/db/missionInstances.server"
 
 import {
 	Table,
@@ -11,7 +11,7 @@ import {
 	TableHeader,
 	TableRow,
 } from "~/components/ui/table"
-import { cn } from "~/lib/utils"
+import { cn } from "~/utils/cn"
 import type { ReactNode } from "react"
 import {
 	CircumstanceTemplates,

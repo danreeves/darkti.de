@@ -1,6 +1,6 @@
 import { getMissions } from "~/services/darktide.server"
-import { saveMissions } from "~/data/missionInstances.server"
-import { getAuthTokenBySteamId } from "~/data/authtoken.server"
+import { saveMissions } from "~/services/db/missionInstances.server"
+import { getAuthTokenBySteamId } from "~/services/db/authtoken.server"
 
 export async function fetchMissions() {
 	console.log("Starting mission refresh...")

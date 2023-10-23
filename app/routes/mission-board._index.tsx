@@ -1,7 +1,7 @@
 import type { LoaderArgs } from "@remix-run/node"
 import { json } from "@remix-run/node"
 import { reverse, sortBy } from "lodash-es"
-import { getAuthTokenBySteamId } from "~/data/authtoken.server"
+import { getAuthTokenBySteamId } from "~/services/db/authtoken.server"
 import { getMissions } from "~/services/darktide.server"
 import {
 	getMissionTemplate,

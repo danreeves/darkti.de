@@ -1,6 +1,6 @@
 import type { ActionArgs, LoaderArgs } from "@remix-run/node"
 import { json } from "@remix-run/node"
-import { deleteAuthToken, getAuthToken } from "~/data/authtoken.server"
+import { deleteAuthToken, getAuthToken } from "~/services/db/authtoken.server"
 import { authenticator } from "~/services/auth.server"
 import { Form, useLoaderData } from "@remix-run/react"
 

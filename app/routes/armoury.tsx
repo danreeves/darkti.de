@@ -7,7 +7,7 @@ import {
 	useMatches,
 	useNavigate,
 } from "@remix-run/react"
-import { getAuthToken } from "~/data/authtoken.server"
+import { getAuthToken } from "~/services/db/authtoken.server"
 import { authenticator } from "~/services/auth.server"
 import { ExclamationCircleIcon } from "@heroicons/react/24/outline"
 import { getAccountSummary } from "~/services/darktide.server"
@@ -19,7 +19,7 @@ import {
 import { Command, CommandGroup, CommandItem } from "~/components/ui/command"
 import { ChevronsUpDown } from "lucide-react"
 import { Button } from "~/components/ui/button"
-import { cn } from "~/lib/utils"
+import { cn } from "~/utils/cn"
 import { Separator } from "~/components/ui/separator"
 
 let navLinks = [{ label: "Trait collection", link: "traits" }]

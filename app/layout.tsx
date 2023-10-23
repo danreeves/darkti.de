@@ -4,7 +4,7 @@ import { Link, NavLink, Outlet } from "@remix-run/react"
 import type { User } from "./services/auth.server"
 import { ThemeToggle } from "~/components/ThemeToggle"
 import { Button, buttonVariants } from "~/components/ui/button"
-import { cn } from "~/lib/utils"
+import { cn } from "~/utils/cn"
 import {
 	DropdownMenu,
 	DropdownMenuTrigger,

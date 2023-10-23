@@ -5,7 +5,7 @@ import { json } from "@remix-run/node"
 import { useEffect, useState } from "react"
 import { z } from "zod"
 import { zx } from "zodix"
-import { getAuthToken } from "~/data/authtoken.server"
+import { getAuthToken } from "~/services/db/authtoken.server"
 import { authenticator } from "~/services/auth.server"
 import {
 	completeCharacterContract,
