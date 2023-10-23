@@ -33,7 +33,9 @@
 		"@remix-run/server-runtime": "^1.19.1",
 		"@tailwindcss/forms": "^0.5.4",
 		"@thoughtbot/tailwindcss-aria-attributes": "^0.2.0",
+		"@types/accept-language-parser": "^1.5.5",
 		"@types/memoizee": "^0.4.8",
+		"accept-language-parser": "^1.5.0",
 		"class-variance-authority": "^0.7.0",
 		"clsx": "^2.0.0",
 		"cmdk": "^0.2.0",
@@ -63,6 +65,7 @@
 		"tailwind-merge": "^1.14.0",
 		"tailwindcss": "^3.3.3",
 		"tailwindcss-animate": "^1.0.7",
+		"valibot": "^0.19.0",
 		"zod": "^3.21.4",
 		"zodix": "^0.4.1"
 	},

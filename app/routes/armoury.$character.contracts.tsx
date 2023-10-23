@@ -14,6 +14,7 @@ import {
 	getAccountWallet,
 } from "~/services/darktide.server"
 import { twMerge } from "tailwind-merge"
+import useLocale from "~/hooks/locale"
 
 export async function action({ params, request }: ActionArgs) {
 	let { character: characterId } = zx.parseParams(params, {
@@ -161,6 +162,7 @@ function timeUntil(date: number) {
 export default function Contracts() {
 	let data = useLoaderData<typeof loader>()
 	let navigation = useNavigation()
+	let locale = useLocale()
 
 	let [timeLeft, setTimeLeft] = useState(
 		timeUntil(parseInt(data?.refreshTime ?? "0", 10)),
@@ -190,12 +192,14 @@ export default function Contracts() {
 				<div className="flex flex-row gap-4">
 					<div className="flex items-center">
 						<CircleStackIcon className="mr-1 h-4 w-4" aria-hidden />{" "}
-						{data.wallet?.credits?.balance.amount.toLocaleString() ?? "--"}{" "}
+						{data.wallet?.credits?.balance.amount.toLocaleString(locale) ??
+							"--"}{" "}
 						credits
 					</div>
 					<div className="flex items-center">
 						<Square2StackIcon className="mr-1 h-4 w-4" aria-hidden />{" "}
-						{data.wallet?.marks?.balance.amount.toLocaleString() ?? "--"} marks
+						{data.wallet?.marks?.balance.amount.toLocaleString(locale) ?? "--"}{" "}
+						marks
 					</div>
 				</div>
 			</div>

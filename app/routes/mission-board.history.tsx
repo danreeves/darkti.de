@@ -30,6 +30,7 @@ import {
 } from "~/components/ui/dropdown-menu"
 import type { MissionInstance } from "@prisma/client"
 import { isKeyOf } from "~/utils/isKeyOf"
+import useLocale from "~/hooks/locale"
 
 let FILTERS = [
 	"circumstance",
@@ -174,9 +175,14 @@ let columns: Column[] = [
 				className="invert dark:invert-0"
 			/>
 		) : null,
-	({ start }) => (
-		<span suppressHydrationWarning>{new Date(start).toLocaleString()}</span>
-	),
+	({ start }) => {
+		let locale = useLocale()
+		return (
+			<span suppressHydrationWarning>
+				{new Date(start).toLocaleString(locale)}
+			</span>
+		)
+	},
 	({ id }) => (
 		<Button
 			onClick={() => {
@@ -300,8 +306,10 @@ export default function MissionHistory() {
 					<TableBody>
 						{missions.map((mission) => (
 							<TableRow key={mission.id}>
-								{columns.map((col, i) => (
-									<TableCell key={i}>{col(mission)}</TableCell>
+								{columns.map((Col, i) => (
+									<TableCell key={i}>
+										<Col {...mission} />
+									</TableCell>
 								))}
 							</TableRow>
 						))}
