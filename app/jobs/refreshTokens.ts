@@ -2,7 +2,7 @@ import {
 	deleteAuthToken,
 	getExpiringTokens,
 	updateAuthToken,
-} from "~/data/authtoken.server"
+} from "~/services/db/authtoken.server"
 import { refreshToken } from "~/services/darktide.server"
 
 export async function refreshTokens(inNext = 30) {

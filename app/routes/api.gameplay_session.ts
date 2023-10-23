@@ -1,7 +1,7 @@
 import type { ActionArgs } from "@remix-run/server-runtime"
 import { json } from "@remix-run/server-runtime"
 import { z } from "zod"
-import { saveGameplaySession } from "~/data/gameplaySessions.server"
+import { saveGameplaySession } from "~/services/db/gameplaySessions.server"
 
 let GameplaySessionSchema = z.object({
 	account_id: z.string(),

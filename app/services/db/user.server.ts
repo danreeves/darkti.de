@@ -1,4 +1,4 @@
-import { prisma } from "~/data/db.server"
+import { prisma } from "~/services/prisma.server"
 import { nanoid } from "~/utils/nanoid"
 
 export async function getUserBySteamId(steamId: string) {

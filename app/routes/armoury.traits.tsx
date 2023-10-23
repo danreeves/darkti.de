@@ -2,7 +2,7 @@ import type { ActionArgs, LoaderArgs } from "@remix-run/node"
 import { Tabs, TabList, Tab, TabPanel } from "react-aria-components"
 import { json } from "@remix-run/node"
 import { useLoaderData, useNavigation, Form } from "@remix-run/react"
-import { getAuthToken } from "~/data/authtoken.server"
+import { getAuthToken } from "~/services/db/authtoken.server"
 import { getItems } from "~/data/items.server"
 import { BlessingSchema, WeaponSchema } from "~/data/schemas.server"
 import { authenticator } from "~/services/auth.server"
@@ -10,7 +10,7 @@ import { getAccountTrait } from "~/services/darktide.server"
 import {
 	getUserOwnedTraits,
 	setUserOwnedTraits,
-} from "~/data/ownedTraits.server"
+} from "~/services/db/ownedTraits.server"
 import { getWeaponTemplates } from "~/data/weaponTemplates.server"
 import type { AuthToken } from "@prisma/client"
 import { ArrowPathIcon } from "@heroicons/react/24/outline"

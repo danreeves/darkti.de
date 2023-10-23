@@ -3,7 +3,7 @@ import type { LoaderArgs } from "@remix-run/server-runtime"
 import { json } from "@remix-run/server-runtime"
 import { z } from "zod"
 import { zx } from "zodix"
-import { getAuthToken } from "~/data/authtoken.server"
+import { getAuthToken } from "~/services/db/authtoken.server"
 import { authenticator } from "~/services/auth.server"
 import { getCharacterStats } from "~/services/darktide.server"
 import {

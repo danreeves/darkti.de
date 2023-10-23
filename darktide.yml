@@ -26,6 +26,10 @@ globals:
   cjson.decode:
     args:
       - type: string
+  string.split:
+    args:
+     - type: string
+     - type: string
   string.starts_with:
     args:
       - type: string

@@ -1,7 +1,7 @@
 import type { LoaderArgs } from "@remix-run/node"
 import { json } from "@remix-run/node"
-import { updateAuthToken } from "~/data/authtoken.server"
-import { getUserBySteamId } from "~/data/user.server"
+import { updateAuthToken } from "~/services/db/authtoken.server"
+import { getUserBySteamId } from "~/services/db/user.server"
 import { checkToken, joinQueue } from "~/services/darktide.server"
 import { sleep } from "~/utils/sleep"
 

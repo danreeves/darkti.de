@@ -1,7 +1,7 @@
 import type { AuthToken } from "@prisma/client"
 import memoizee from "memoizee"
 import { json } from "@remix-run/node"
-import { prisma } from "~/data/db.server"
+import { prisma } from "~/services/prisma.server"
 
 type UpdateArgs = Omit<AuthToken, "id">
 export async function updateAuthToken(payload: UpdateArgs) {
