@@ -17,6 +17,7 @@ import { useRevalidateOnFocus } from "~/hooks/revalidateOnFocus"
 import { ThemeProvider } from "./hooks/themeProvider"
 import acceptLanguage from "accept-language-parser"
 import { LocaleProvider } from "./hooks/locale"
+import { Toaster } from "~/components/ui/toaster"
 
 // Sets up Cron singletons to perform timed jobs on the server
 initJobs && initJobs()
@@ -88,6 +89,7 @@ export default function App() {
 						disableTransitionOnChange
 					>
 						<Layout user={user} />
+						<Toaster />
 					</ThemeProvider>
 					<Scripts />
 					<LiveReload />
