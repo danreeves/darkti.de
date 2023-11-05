@@ -12,7 +12,7 @@ import {
 	TableRow,
 } from "~/components/ui/table"
 import { cn } from "~/utils/cn"
-import type { ReactNode } from "react"
+import { useState, type ReactNode, useEffect } from "react"
 import {
 	CircumstanceTemplates,
 	getMissionTemplate,
@@ -21,7 +21,7 @@ import { t } from "~/data/localization.server"
 import { Img } from "~/components/Img"
 import { Button } from "~/components/ui/button"
 import { sideObjectiveToType } from "~/components/Mission"
-import { ChevronDown } from "lucide-react"
+import { Check, ChevronDown } from "lucide-react"
 import {
 	DropdownMenu,
 	DropdownMenuCheckboxItem,
@@ -31,6 +31,7 @@ import {
 import type { MissionInstance } from "@prisma/client"
 import { isKeyOf } from "~/utils/isKeyOf"
 import useLocale from "~/hooks/locale"
+import { useToast } from "~/components/ui/use-toast"
 
 let FILTERS = [
 	"circumstance",
@@ -183,29 +184,55 @@ let columns: Column[] = [
 			</span>
 		)
 	},
-	({ id }) => (
-		<Button
-			onClick={() => {
-				navigator.permissions
-					// @ts-expect-error - clipboard-write is not in the types?
-					.query({ name: "clipboard-write" })
-					.then((result) => {
-						if (result.state === "granted" || result.state === "prompt") {
-							navigator.clipboard.writeText(id).then(
-								() => {
-									/* clipboard successfully set */
-								},
-								() => {
-									/* clipboard write failed */
-								},
-							)
-						}
-					})
-			}}
-		>
-			Copy ID
-		</Button>
-	),
+	({ id }) => {
+		let [copied, setCopied] = useState(false)
+		let { toast } = useToast()
+
+		useEffect(() => {
+			let timeoutId: ReturnType<typeof setTimeout> | undefined
+			if (copied) {
+				timeoutId = setTimeout(() => {
+					setCopied(false)
+				}, 2500)
+			}
+			return () => {
+				if (timeoutId) {
+					clearInterval(timeoutId)
+				}
+			}
+		}, [copied])
+
+		if (copied) {
+			return (
+				<span className="flex gap-2 h-10 items-center">
+					<Check /> Copied
+				</span>
+			)
+		}
+
+		return (
+			<Button
+				onClick={() => {
+					navigator.clipboard.writeText(id).then(
+						() => {
+							setCopied(true)
+							toast({ title: "Copied to clipboard", description: id })
+						},
+						(error) => {
+							setCopied(false)
+							toast({
+								title: "Failed to copy",
+								description: error.message,
+								variant: "destructive",
+							})
+						},
+					)
+				}}
+			>
+				Copy ID
+			</Button>
+		)
+	},
 ]
 
 function SearchParamsDropdownMenu({
