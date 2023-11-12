@@ -4,7 +4,7 @@ import {
 	useLoaderData,
 	useNavigation,
 } from "@remix-run/react"
-import type { ActionArgs, LoaderArgs } from "@remix-run/node"
+import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node"
 import { redirect, json } from "@remix-run/node"
 import { z } from "zod"
 import { zx } from "zodix"
@@ -45,7 +45,7 @@ let storeSlugToType: Record<string, "credits" | "marks"> = {
 	requisitorium: "marks",
 }
 
-export async function action({ params, request }: ActionArgs) {
+export async function action({ params, request }: ActionFunctionArgs) {
 	let { character: characterId, store: storeSlug } = zx.parseParams(params, {
 		character: z.string(),
 		store: z.string(),
@@ -117,7 +117,7 @@ let sort = function (a: number, b: number) {
 
 let EMPTY_RESULT = { offers: [], wallet: undefined }
 
-export async function loader({ request, params }: LoaderArgs) {
+export async function loader({ request, params }: LoaderFunctionArgs) {
 	let { character, store } = zx.parseParams(params, {
 		character: z.string(),
 		store: z.string(),

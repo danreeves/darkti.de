@@ -1,4 +1,4 @@
-import type { ActionArgs } from "@remix-run/server-runtime"
+import type { ActionFunctionArgs } from "@remix-run/server-runtime"
 import { json } from "@remix-run/server-runtime"
 import { z } from "zod"
 import { saveGameplaySession } from "~/services/db/gameplaySessions.server"
@@ -9,7 +9,7 @@ let GameplaySessionSchema = z.object({
 	session_id: z.string(),
 })
 
-export async function action({ request }: ActionArgs) {
+export async function action({ request }: ActionFunctionArgs) {
 	let body = await request.json()
 	let { account_id, character_id, session_id } =
 		GameplaySessionSchema.parse(body)

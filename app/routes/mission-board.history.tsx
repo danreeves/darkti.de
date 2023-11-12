@@ -1,5 +1,5 @@
 import { Link, useLoaderData, useSearchParams } from "@remix-run/react"
-import type { LoaderArgs } from "@remix-run/server-runtime"
+import type { LoaderFunctionArgs } from "@remix-run/server-runtime"
 import { json } from "@remix-run/server-runtime"
 import { getMissionHistory } from "~/services/db/missionInstances.server"
 
@@ -40,7 +40,7 @@ let FILTERS = [
 	"map",
 ] satisfies (keyof MissionInstance)[]
 
-export async function loader({ request }: LoaderArgs) {
+export async function loader({ request }: LoaderFunctionArgs) {
 	let searchParams = new URL(request.url).searchParams
 
 	let filters: Record<string, string[]> = {}
@@ -118,16 +118,18 @@ export async function loader({ request }: LoaderArgs) {
 	return json({ missions, circumstances, maps })
 }
 
-type Column = (data: {
-	id: string
-	challenge: number
-	map: string
-	circumstance: { name: string; icon: string } | null
-	start: string
-	expires: string
-	category: string | null
-	sideMission: string | null
-}) => ReactNode
+type Column = (
+	data: {
+		id: string
+		challenge: number
+		map: string
+		circumstance: { name: string; icon: string } | null
+		start: string
+		expires: string
+		category: string | null
+		sideMission: string | null
+	},
+) => ReactNode
 
 let columns: Column[] = [
 	({ category, challenge }) => (
@@ -235,15 +237,17 @@ let columns: Column[] = [
 	},
 ]
 
-function SearchParamsDropdownMenu({
-	label,
-	param,
-	items,
-}: {
-	label: string
-	param: string
-	items: { label: string; value: string }[]
-}) {
+function SearchParamsDropdownMenu(
+	{
+		label,
+		param,
+		items,
+	}: {
+		label: string
+		param: string
+		items: { label: string; value: string }[]
+	},
+) {
 	const [searchParams, setSearchParams] = useSearchParams()
 
 	return (

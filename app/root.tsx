@@ -1,4 +1,4 @@
-import type { LinksFunction, LoaderArgs } from "@remix-run/node"
+import type { LinksFunction, LoaderFunctionArgs } from "@remix-run/node"
 import { json } from "@remix-run/node"
 import {
 	Links,
@@ -60,7 +60,7 @@ function getLocale(request: Request): string {
 	return `${firstLang.code}-${firstLang.region.toLowerCase()}`
 }
 
-export let loader = async ({ request }: LoaderArgs) => {
+export let loader = async ({ request }: LoaderFunctionArgs) => {
 	const user = await authenticator.isAuthenticated(request)
 	const locale = getLocale(request)
 

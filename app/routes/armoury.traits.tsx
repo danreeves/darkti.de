@@ -1,4 +1,4 @@
-import type { ActionArgs, LoaderArgs } from "@remix-run/node"
+import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node"
 import { Tabs, TabList, Tab, TabPanel } from "react-aria-components"
 import { json } from "@remix-run/node"
 import { useLoaderData, useNavigation, Form } from "@remix-run/react"
@@ -29,7 +29,7 @@ async function getTraitsForPattern(auth: AuthToken, pattern: string) {
 	}
 }
 
-export let action = async ({ request }: ActionArgs) => {
+export let action = async ({ request }: ActionFunctionArgs) => {
 	let user = await authenticator.isAuthenticated(request, {
 		failureRedirect: "/login",
 	})
@@ -47,7 +47,7 @@ export let action = async ({ request }: ActionArgs) => {
 	return json({ ok: true })
 }
 
-export let loader = async ({ request }: LoaderArgs) => {
+export let loader = async ({ request }: LoaderFunctionArgs) => {
 	let user = await authenticator.isAuthenticated(request, {
 		failureRedirect: "/login",
 	})

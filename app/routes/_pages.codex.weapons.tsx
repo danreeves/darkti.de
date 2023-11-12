@@ -1,4 +1,4 @@
-import type { LoaderArgs } from "@remix-run/node"
+import type { LoaderFunctionArgs } from "@remix-run/node"
 import { json } from "@remix-run/node"
 import { Link, useLoaderData, useOutlet } from "@remix-run/react"
 import { TagList } from "~/components/TagList"
@@ -13,7 +13,7 @@ import { Checkbox } from "~/components/ui/checkbox"
 import { titleCase } from "~/utils/titleCase"
 import { Button } from "~/components/ui/button"
 
-export const loader = async ({ request }: LoaderArgs) => {
+export const loader = async ({ request }: LoaderFunctionArgs) => {
 	const url = new URL(request.url)
 	const item_type = getSearchParam(url.searchParams, "type", [
 		"melee",

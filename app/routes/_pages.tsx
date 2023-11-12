@@ -1,20 +1,29 @@
 import { Link, Outlet, useMatches } from "@remix-run/react"
 import { uniqBy } from "lodash-es"
+import { object, optional, string, parse } from "valibot"
+
+let PageData = object({
+	title: optional(string()),
+})
 
 export default function PageLayout() {
 	const matches = useMatches()
 
+	let currentPage = matches.at(-1) ?? { data: { title: "Home" } }
+	let currentPageData = parse(PageData, currentPage.data)
+
 	return (
 		<div className="h-full w-full overflow-scroll pb-16">
 			<header className="bg-background ">
-				<Title title={matches.at(-1)?.data?.title} />
+				<Title title={currentPageData.title} />
 				<Breadcrumbs
 					crumbs={uniqBy(matches, (match) => {
 						return match.pathname.replace(/\/$/, "")
 					}).map((match) => {
+						let pageData = parse(PageData, match.data)
 						return {
 							to: match.pathname,
-							label: match.data?.title || "Home",
+							label: pageData.title || "Home",
 						}
 					})}
 				/>
@@ -67,15 +76,9 @@ function Breadcrumbs({ crumbs }: { crumbs: { to: string; label: string }[] }) {
 	)
 }
 
-function Breadcrumb({
-	to,
-	label,
-	last,
-}: {
-	to: string
-	label: string
-	last?: boolean
-}) {
+function Breadcrumb(
+	{ to, label, last }: { to: string; label: string; last?: boolean },
+) {
 	return (
 		<li className="flex items-center">
 			<Link

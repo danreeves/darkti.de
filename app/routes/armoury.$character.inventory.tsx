@@ -1,5 +1,5 @@
 import { useLoaderData, useParams } from "@remix-run/react"
-import type { LoaderArgs } from "@remix-run/server-runtime"
+import type { LoaderFunctionArgs } from "@remix-run/server-runtime"
 import { json } from "@remix-run/server-runtime"
 import { z } from "zod"
 import { zx } from "zodix"
@@ -27,7 +27,7 @@ import {
 } from "~/components/ui/select"
 import { uniqBy } from "lodash-es"
 
-export async function loader({ request, params }: LoaderArgs) {
+export async function loader({ request, params }: LoaderFunctionArgs) {
 	let { character } = zx.parseParams(params, { character: z.string() })
 	let url = new URL(request.url)
 	let filterItemTypes = getSearchParam(url.searchParams, "type", [

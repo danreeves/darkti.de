@@ -1,6 +1,6 @@
 import { CircleStackIcon, Square2StackIcon } from "@heroicons/react/24/outline"
 import { Form, useLoaderData, useNavigation } from "@remix-run/react"
-import type { ActionArgs, LoaderArgs } from "@remix-run/node"
+import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node"
 import { json } from "@remix-run/node"
 import { useEffect, useState } from "react"
 import { z } from "zod"
@@ -16,7 +16,7 @@ import {
 import { twMerge } from "tailwind-merge"
 import useLocale from "~/hooks/locale"
 
-export async function action({ params, request }: ActionArgs) {
+export async function action({ params, request }: ActionFunctionArgs) {
 	let { character: characterId } = zx.parseParams(params, {
 		character: z.string(),
 	})
@@ -67,7 +67,7 @@ function criteriaToDescription(criteria) {
 	}
 }
 
-export async function loader({ params, request }: LoaderArgs) {
+export async function loader({ params, request }: LoaderFunctionArgs) {
 	let { character: characterId } = zx.parseParams(params, {
 		character: z.string(),
 	})

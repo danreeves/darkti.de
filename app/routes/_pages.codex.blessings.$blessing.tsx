@@ -1,11 +1,11 @@
-import type { LoaderArgs } from "@remix-run/node"
+import type { LoaderFunctionArgs } from "@remix-run/node"
 import { json } from "@remix-run/node"
 import { useLoaderData } from "@remix-run/react"
 import { Img } from "~/components/Img"
 import { getItem } from "~/data/items.server"
 import { BlessingSchema } from "~/data/schemas.server"
 
-export const loader = async ({ params }: LoaderArgs) => {
+export const loader = async ({ params }: LoaderFunctionArgs) => {
 	let item = await getItem(BlessingSchema, params.blessing || "NO PARAM?")
 	if (!item) {
 		throw new Response("Not Found", {

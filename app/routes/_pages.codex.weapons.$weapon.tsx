@@ -1,10 +1,10 @@
-import type { LoaderArgs } from "@remix-run/node"
+import type { LoaderFunctionArgs } from "@remix-run/node"
 import { json } from "@remix-run/node"
 import { useLoaderData } from "@remix-run/react"
 import { getItem } from "~/data/items.server"
 import { WeaponSchema } from "~/data/schemas.server"
 
-export const loader = async ({ params }: LoaderArgs) => {
+export const loader = async ({ params }: LoaderFunctionArgs) => {
 	let weapon = await getItem(WeaponSchema, params.weapon || "NO WEAPON PARAM?")
 	if (!weapon) {
 		throw new Response("Not Found", {
