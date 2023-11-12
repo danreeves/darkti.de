@@ -1,5 +1,5 @@
 import { useLoaderData } from "@remix-run/react"
-import type { LoaderArgs } from "@remix-run/server-runtime"
+import type { LoaderFunctionArgs } from "@remix-run/server-runtime"
 import { json } from "@remix-run/server-runtime"
 import { z } from "zod"
 import { zx } from "zodix"
@@ -50,7 +50,7 @@ function explodeKeyTable(keyTable: unknown): Record<string, unknown>[] {
 	return result
 }
 
-export async function loader({ params, request }: LoaderArgs) {
+export async function loader({ params, request }: LoaderFunctionArgs) {
 	let { character: characterId } = zx.parseParams(params, {
 		character: z.string(),
 	})
@@ -190,13 +190,15 @@ function StatsTable({ children }: { children: React.ReactNode }) {
 	)
 }
 
-function AutoTable({
-	rows,
-	cols,
-}: {
-	rows: Record<string, unknown>[]
-	cols: { label: string; key: string }[]
-}) {
+function AutoTable(
+	{
+		rows,
+		cols,
+	}: {
+		rows: Record<string, unknown>[]
+		cols: { label: string; key: string }[]
+	},
+) {
 	if (!rows.length) {
 		return <div className="rounded-md border ">No results</div>
 	}

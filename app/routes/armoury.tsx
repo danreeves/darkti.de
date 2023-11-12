@@ -1,4 +1,4 @@
-import type { LoaderArgs } from "@remix-run/node"
+import type { LoaderFunctionArgs } from "@remix-run/node"
 import { redirect, json } from "@remix-run/node"
 import {
 	NavLink,
@@ -32,7 +32,7 @@ let charLinks = [
 	{ link: "sessions", label: "History" },
 ]
 
-export let loader = async ({ request, params }: LoaderArgs) => {
+export let loader = async ({ request, params }: LoaderFunctionArgs) => {
 	let user = await authenticator.isAuthenticated(request, {
 		failureRedirect: "/login",
 	})

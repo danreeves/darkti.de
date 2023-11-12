@@ -1,11 +1,11 @@
-import type { LoaderArgs } from "@remix-run/node"
+import type { LoaderFunctionArgs } from "@remix-run/node"
 import { json } from "@remix-run/node"
 import { updateAuthToken } from "~/services/db/authtoken.server"
 import { getUserBySteamId } from "~/services/db/user.server"
 import { checkToken, joinQueue } from "~/services/darktide.server"
 import { sleep } from "~/utils/sleep"
 
-export let loader = async ({ request, params }: LoaderArgs) => {
+export let loader = async ({ request, params }: LoaderFunctionArgs) => {
 	let steamSessionTicket = request.headers.get("steam-auth-session-ticket")
 	if (!params.steamId || !steamSessionTicket) {
 		return json({ error: "Invalid request" }, { status: 400 })

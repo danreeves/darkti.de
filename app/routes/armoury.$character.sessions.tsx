@@ -1,5 +1,5 @@
 import { Link, useLoaderData, useOutlet } from "@remix-run/react"
-import type { LoaderArgs } from "@remix-run/server-runtime"
+import type { LoaderFunctionArgs } from "@remix-run/server-runtime"
 import { json } from "@remix-run/server-runtime"
 import { z } from "zod"
 import { zx } from "zodix"
@@ -16,7 +16,7 @@ import {
 import { getGameplaySessions } from "~/services/db/gameplaySessions.server"
 import useLocale from "~/hooks/locale"
 
-export async function loader({ params, request }: LoaderArgs) {
+export async function loader({ params, request }: LoaderFunctionArgs) {
 	let { character: characterId } = zx.parseParams(params, {
 		character: z.string(),
 	})

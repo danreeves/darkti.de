@@ -1,5 +1,5 @@
 import { Authenticator } from "remix-auth"
-import { SteamStrategy } from "remix-auth-steam"
+import { SteamStrategy } from "@danreeves/remix-auth-steam"
 import { sessionStorage } from "~/services/session.server"
 import { getOrCreateSteamUser } from "~/services/db/user.server"
 

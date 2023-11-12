@@ -1,4 +1,4 @@
-import type { LoaderArgs } from "@remix-run/node"
+import type { LoaderFunctionArgs } from "@remix-run/node"
 import { json } from "@remix-run/node"
 import { reverse, sortBy } from "lodash-es"
 import { getAuthTokenBySteamId } from "~/services/db/authtoken.server"
@@ -44,7 +44,7 @@ function filterByCategory(category: string | null) {
 	return () => true
 }
 
-export async function loader({ request }: LoaderArgs) {
+export async function loader({ request }: LoaderFunctionArgs) {
 	const url = new URL(request.url)
 	const filterCat = url.searchParams.get("category")
 

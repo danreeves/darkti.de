@@ -1,5 +1,5 @@
 import { json } from "@remix-run/node"
-import type { LoaderArgs } from "@remix-run/node"
+import type { LoaderFunctionArgs } from "@remix-run/node"
 import { Link, useLoaderData, useOutlet } from "@remix-run/react"
 import { Form } from "~/components/Form"
 import { getItems } from "~/data/items.server"
@@ -10,7 +10,7 @@ import { Input } from "~/components/ui/input"
 import { Checkbox } from "~/components/ui/checkbox"
 import { Button } from "~/components/ui/button"
 
-export const loader = async ({ request }: LoaderArgs) => {
+export const loader = async ({ request }: LoaderFunctionArgs) => {
 	const url = new URL(request.url)
 	const name = url.searchParams.get("name") ?? undefined
 	const showDescriptions = url.searchParams.has("descriptions")

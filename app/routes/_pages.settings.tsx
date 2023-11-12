@@ -1,4 +1,4 @@
-import type { ActionArgs, LoaderArgs } from "@remix-run/node"
+import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node"
 import { json } from "@remix-run/node"
 import { deleteAuthToken, getAuthToken } from "~/services/db/authtoken.server"
 import { authenticator } from "~/services/auth.server"
@@ -7,7 +7,7 @@ import { Form, useLoaderData } from "@remix-run/react"
 import { TrashIcon } from "@heroicons/react/24/outline"
 import { Button } from "~/components/ui/button"
 
-export async function loader({ request }: LoaderArgs) {
+export async function loader({ request }: LoaderFunctionArgs) {
 	let user = await authenticator.isAuthenticated(request, {
 		failureRedirect: "/login",
 	})
@@ -24,7 +24,7 @@ export async function loader({ request }: LoaderArgs) {
 	return json({ title: "Settings", hasAuthToken })
 }
 
-export async function action({ request }: ActionArgs) {
+export async function action({ request }: ActionFunctionArgs) {
 	let user = await authenticator.isAuthenticated(request, {
 		failureRedirect: "/login",
 	})

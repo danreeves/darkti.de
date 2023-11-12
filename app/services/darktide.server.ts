@@ -590,7 +590,6 @@ type PurchaseRequest = {
 export async function purchaseItem(
 	auth: AuthToken,
 	purchaseRequest: PurchaseRequest,
-	walletOwner: string,
 ) {
 	let url = `https://bsp-td-prod.atoma.cloud/store/${auth.sub}/wallets/${auth.sub}/purchases`
 

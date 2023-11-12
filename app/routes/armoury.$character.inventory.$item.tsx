@@ -1,5 +1,5 @@
 // import { useLoaderData, useLocation } from "@remix-run/react"
-// import type { LoaderArgs } from "@remix-run/node"
+// import type { LoaderFunctionArgs } from "@remix-run/node"
 // import { redirect, json } from "@remix-run/node"
 // import { z } from "zod"
 // import { zx } from "zodix"
@@ -15,7 +15,7 @@
 // import { getWeaponTemplate } from "~/data/weaponTemplates.server"
 // import { twMerge } from "tailwind-merge"
 
-// export async function loader({ request, params }: LoaderArgs) {
+// export async function loader({ request, params }: LoaderFunctionArgs) {
 // 	let { character: characterId, item: itemId } = zx.parseParams(params, {
 // 		character: z.string(),
 // 		item: z.string(),

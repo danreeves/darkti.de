@@ -1,8 +1,8 @@
-import type { LoaderArgs } from "@remix-run/node"
+import type { LoaderFunctionArgs } from "@remix-run/node"
 import { json } from "@remix-run/node"
 import { getAuthTokenBySteamId } from "~/services/db/authtoken.server"
 
-export async function loader({ params }: LoaderArgs) {
+export async function loader({ params }: LoaderFunctionArgs) {
 	if (params.steamId) {
 		try {
 			await getAuthTokenBySteamId(params.steamId)
