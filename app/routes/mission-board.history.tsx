@@ -280,10 +280,8 @@ function SearchParamsDropdownMenu(
 	)
 }
 
-export default function MissionHistory() {
-	const { missions, circumstances, maps } = useLoaderData<typeof loader>()
-
-	let headers = [
+let headers = [
+	() => (
 		<SearchParamsDropdownMenu
 			key="challenge"
 			param="challenge"
@@ -295,14 +293,31 @@ export default function MissionHistory() {
 				{ label: "Uprising", value: "2" },
 				{ label: "Sedition", value: "1" },
 			]}
-		/>,
-		<SearchParamsDropdownMenu key="map" param="map" label="Map" items={maps} />,
-		<SearchParamsDropdownMenu
-			key="circumstance"
-			param="circumstance"
-			label="Circumstance"
-			items={circumstances}
-		/>,
+		/>
+	),
+	() => {
+		const { maps } = useLoaderData<typeof loader>()
+		return (
+			<SearchParamsDropdownMenu
+				key="map"
+				param="map"
+				label="Map"
+				items={maps}
+			/>
+		)
+	},
+	() => {
+		const { circumstances } = useLoaderData<typeof loader>()
+		return (
+			<SearchParamsDropdownMenu
+				key="circumstance"
+				param="circumstance"
+				label="Circumstance"
+				items={circumstances}
+			/>
+		)
+	},
+	() => (
 		<SearchParamsDropdownMenu
 			key="sideMission"
 			param="sideMission"
@@ -311,10 +326,14 @@ export default function MissionHistory() {
 				{ label: "Scriptures", value: "side_mission_tome" },
 				{ label: "Grimoire", value: "side_mission_grimoire" },
 			]}
-		/>,
-		"Started at",
-		"ID",
-	]
+		/>
+	),
+	() => "Started at",
+	() => "ID",
+]
+
+export default function MissionHistory() {
+	const { missions } = useLoaderData<typeof loader>()
 
 	return (
 		<div className="p-4 overflow-y-scroll">
@@ -327,8 +346,10 @@ export default function MissionHistory() {
 				<Table>
 					<TableHeader>
 						<TableRow>
-							{headers.map((col, i) => (
-								<TableHead key={i}>{col}</TableHead>
+							{headers.map((Header, i) => (
+								<TableHead key={i}>
+									<Header />
+								</TableHead>
 							))}
 						</TableRow>
 					</TableHeader>
