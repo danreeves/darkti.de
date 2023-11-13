@@ -1,12 +1,20 @@
-import { serve } from "@hono/node-server"
-import { serveStatic } from "@hono/node-server/serve-static"
-import * as build from "@remix-run/dev/server-build"
-import { broadcastDevReady } from "@remix-run/node"
-import { Hono } from "hono"
-import { logger } from "hono/logger"
-import { remix } from "remix-hono/handler"
+// must come first
+import "dotenv/config"
+
+import {
+	unstable_createViteServer,
+	unstable_loadViteServerBuild,
+} from "@remix-run/dev"
+import { createRequestHandler } from "@remix-run/express"
+import { installGlobals } from "@remix-run/node"
+import compression from "compression"
+import express from "express"
+import morgan from "morgan"
 import type { Output } from "valibot"
 import { object, parse, string } from "valibot"
+
+// Sets up Cron singletons to perform timed jobs on the server
+import "../app/jobs/index.server"
 
 const EnvVariables = object({
 	STEAM_API_KEY: string(
@@ -27,34 +35,57 @@ declare global {
 
 parse(EnvVariables, process.env)
 
-if (process.env.NODE_ENV === "development") broadcastDevReady(build)
+installGlobals()
 
-const server = new Hono()
+let vite =
+	process.env.NODE_ENV === "production"
+		? undefined
+		: await unstable_createViteServer()
 
-server.use("*", logger())
+let app = express()
 
-server.get(
-	"*",
-	serveStatic({
-		root: "./public",
-		rewriteRequestPath: (path) => path.replace(/^\/public/, "/"),
+// http://expressjs.com/en/advanced/best-practice-security.html#at-a-minimum-disable-x-powered-by-header
+app.disable("x-powered-by")
+
+app.use(morgan("tiny"))
+
+app.use(
+	compression({
+		// Only compress the static assets
+		filter: (req) => req.url.includes("/assets/"),
 	}),
 )
 
-server.use(
+// handle asset requests
+if (vite) {
+	app.use(vite.middlewares)
+} else {
+	app.use(
+		"/build",
+		express.static("public/build", {
+			immutable: true,
+			maxAge: "1y",
+		}),
+	)
+}
+
+// handle static files
+app.use(express.static("public", { maxAge: "1h" }))
+
+// handle SSR requests
+app.all(
 	"*",
-	remix({
-		// @ts-expect-error -- remix-hono types out of date
-		build,
-		mode: process.env.NODE_ENV === "production" ? "production" : "development",
-		getLoadContext(ctx) {
-			return ctx.env
-		},
+	createRequestHandler({
+		// @ts-expect-error
+		build: vite
+			? () => unstable_loadViteServerBuild(vite!)
+			: await import("../build/index.js"),
 	}),
 )
 
-serve(server, (info) => {
+let port = 3000
+app.listen(port, () => {
 	console.log(
-		`Listening on http://localhost:${info.port} in ${process.env.NODE_ENV} mode`,
+		`Listening on http://localhost:${port} in ${process.env.NODE_ENV} mode`,
 	)
 })

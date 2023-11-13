@@ -37,7 +37,6 @@ import { SelectGroup } from "@radix-ui/react-select"
 import { titleCase } from "~/utils/titleCase"
 import { ChevronsUp, Database } from "lucide-react"
 import { Button } from "~/components/ui/button"
-import { cn } from "~/utils/cn"
 import useLocale from "~/hooks/locale"
 
 let storeSlugToType: Record<string, "credits" | "marks"> = {
