@@ -48,8 +48,6 @@ export async function loader({ request }: LoaderFunctionArgs) {
 		filters[filter] = searchParams.getAll(filter).filter(Boolean)
 	}
 
-	console.log(filters)
-
 	let rawMissions = await getMissionHistory()
 
 	let circumstances = Array.from(

@@ -9,21 +9,16 @@ import {
 } from "@remix-run/react"
 import Layout from "~/layout"
 
-import tailwind from "~/tailwind.css"
+import "~/tailwind.css"
 import { authenticator } from "~/services/auth.server"
 
-import { initJobs } from "~/jobs/index.server"
 import { useRevalidateOnFocus } from "~/hooks/revalidateOnFocus"
 import { ThemeProvider } from "./hooks/themeProvider"
 import acceptLanguage from "accept-language-parser"
 import { LocaleProvider } from "./hooks/locale"
 import { Toaster } from "~/components/ui/toaster"
 
-// Sets up Cron singletons to perform timed jobs on the server
-initJobs && initJobs()
-
 export const links: LinksFunction = () => [
-	{ rel: "stylesheet", href: tailwind },
 	{
 		rel: "preconnect",
 		href: "https://fonts.bunny.net",
@@ -91,8 +86,8 @@ export default function App() {
 						<Layout user={user} />
 						<Toaster />
 					</ThemeProvider>
-					<Scripts />
 					<LiveReload />
+					<Scripts />
 				</body>
 			</html>
 		</LocaleProvider>
