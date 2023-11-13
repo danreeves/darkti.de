@@ -2,11 +2,11 @@ import type { MissionInstance } from "@prisma/client"
 import { prisma } from "~/services/prisma.server"
 
 export async function getMissionHistory() {
-	let twelveHoursAgo = Date.now() - 12 * 60 * 60 * 1000
-	let twelveHoursAgoString = new Date(twelveHoursAgo).toISOString()
+	let timeLimit = Date.now() - 24 * 60 * 60 * 1000
+	let timeLimitString = new Date(timeLimit).toISOString()
 
 	return await prisma.missionInstance.findMany({
-		where: { start: { gte: twelveHoursAgoString } },
+		where: { start: { gte: timeLimitString } },
 		orderBy: {
 			start: "desc",
 		},
