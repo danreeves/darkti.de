@@ -88,6 +88,7 @@ export default function App() {
 					</ThemeProvider>
 					<LiveReload />
 					<Scripts />
+					<script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "7bd1efa3de75440dbeadcc776055eef2"}'></script>
 				</body>
 			</html>
 		</LocaleProvider>
