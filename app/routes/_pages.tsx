@@ -37,7 +37,7 @@ export default function PageLayout() {
 			<footer className="mx-auto max-w-7xl px-4 pb-4 pt-6 sm:px-8 lg:px-10">
 				<div className="flex items-center justify-center gap-4 p-4 rounded-lg border bg-card text-card-foreground shadow-sm">
 					<a href="https://github.com/danreeves/darkti.de">Source Code</a>
-					<a href="https://plausible.io/darkti.de">Site Analytics</a>
+					{/* <a href="#TODO">Site Analytics</a> */}
 				</div>
 			</footer>
 		</div>
