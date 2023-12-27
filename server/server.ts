@@ -11,19 +11,21 @@ import compression from "compression"
 import express from "express"
 import morgan from "morgan"
 import type { Output } from "valibot"
-import { object, parse, string } from "valibot"
+import { object, parse, string, ValiError } from "valibot"
 
 // Sets up Cron singletons to perform timed jobs on the server
 import "../app/jobs/index.server"
 
 const EnvVariables = object({
 	STEAM_API_KEY: string(
-		"Steam API Key from https://steamcommunity.com/dev/apikey",
+		"STEAM_API_KEY: Steam API Key from https://steamcommunity.com/dev/apikey",
 	),
-	SECRETSECRET: string("Random secret string for cookie encryption"),
-	DATABASE_URL: string("Planetscale DB URL"),
+	SECRETSECRET: string(
+		"SECRETSECRET: Random secret string for cookie encryption",
+	),
+	DATABASE_URL: string("DATABASE_URL: Planetscale DB URL"),
 	DEFAULT_STEAM_ID: string(
-		"A default Steam ID to use the auth token for public pages like the mission board",
+		"DEFAULT_STEAM_ID: A default Steam ID to use the auth token for public pages like the mission board",
 	),
 })
 
@@ -33,7 +35,15 @@ declare global {
 	}
 }
 
-parse(EnvVariables, process.env)
+try {
+	parse(EnvVariables, process.env)
+} catch (error: unknown) {
+	if (error instanceof ValiError) {
+		console.error("Invalid environment variables:")
+		console.error(error.issues.map((issue) => "\t" + issue.message).join("\n"))
+	}
+	process.exit(1)
+}
 
 installGlobals()
 
@@ -76,7 +86,6 @@ app.use(express.static("public", { maxAge: "1h" }))
 app.all(
 	"*",
 	createRequestHandler({
-		// @ts-expect-error
 		build: vite
 			? () => unstable_loadViteServerBuild(vite!)
 			: await import("../build/index.js"),

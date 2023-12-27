@@ -4,8 +4,8 @@ import { deleteAuthToken, getAuthToken } from "~/services/db/authtoken.server"
 import { authenticator } from "~/services/auth.server"
 import { Form, useLoaderData } from "@remix-run/react"
 
-import { TrashIcon } from "@heroicons/react/24/outline"
 import { Button } from "~/components/ui/button"
+import { Trash2 } from "lucide-react"
 
 export async function loader({ request }: LoaderFunctionArgs) {
 	let user = await authenticator.isAuthenticated(request, {
@@ -39,7 +39,7 @@ export default function Settings() {
 		<div className="p-4 rounded-lg border bg-card text-card-foreground shadow-smw">
 			<Form method="post" className="flex flex-row items-center gap-6">
 				<Button variant="destructive" type="submit" disabled={!hasAuthToken}>
-					<TrashIcon className="block h-6 w-6" aria-hidden="true" />
+					<Trash2 className="block h-6 w-6" aria-hidden="true" />
 					Delete authentication token
 				</Button>
 

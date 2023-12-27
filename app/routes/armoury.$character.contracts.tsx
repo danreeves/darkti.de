@@ -1,4 +1,3 @@
-import { CircleStackIcon, Square2StackIcon } from "@heroicons/react/24/outline"
 import { Form, useLoaderData, useNavigation } from "@remix-run/react"
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node"
 import { json } from "@remix-run/node"
@@ -15,6 +14,7 @@ import {
 } from "~/services/darktide.server"
 import { twMerge } from "tailwind-merge"
 import useLocale from "~/hooks/locale"
+import { Coins, Layers3 } from "lucide-react"
 
 export async function action({ params, request }: ActionFunctionArgs) {
 	let { character: characterId } = zx.parseParams(params, {
@@ -191,13 +191,13 @@ export default function Contracts() {
 				<div>Refreshes in {timeLeft}</div>
 				<div className="flex flex-row gap-4">
 					<div className="flex items-center">
-						<CircleStackIcon className="mr-1 h-4 w-4" aria-hidden />{" "}
+						<Coins className="mr-1 h-4 w-4" aria-hidden />{" "}
 						{data.wallet?.credits?.balance.amount.toLocaleString(locale) ??
 							"--"}{" "}
 						credits
 					</div>
 					<div className="flex items-center">
-						<Square2StackIcon className="mr-1 h-4 w-4" aria-hidden />{" "}
+						<Layers3 className="mr-1 h-4 w-4" aria-hidden />{" "}
 						{data.wallet?.marks?.balance.amount.toLocaleString(locale) ?? "--"}{" "}
 						marks
 					</div>

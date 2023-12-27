@@ -17,7 +17,6 @@
 	"dependencies": {
 		"@danreeves/remix-auth-steam": "^2.0.0",
 		"@headlessui/react": "^1.7.17",
-		"@heroicons/react": "^2.0.18",
 		"@hono/node-server": "^1.2.2",
 		"@prisma/client": "^5.5.2",
 		"@radix-ui/react-checkbox": "^1.0.4",

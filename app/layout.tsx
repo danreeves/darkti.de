@@ -1,5 +1,4 @@
 import { Disclosure } from "@headlessui/react"
-import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline"
 import { Link, NavLink, Outlet } from "@remix-run/react"
 import type { User } from "./services/auth.server"
 import { ThemeToggle } from "~/components/ThemeToggle"
@@ -11,6 +10,7 @@ import {
 	DropdownMenuContent,
 	DropdownMenuItem,
 } from "~/components/ui/dropdown-menu"
+import { X, Menu } from "lucide-react"
 
 const navigation = [
 	{ name: "Armoury", href: "/armoury" },
@@ -112,15 +112,9 @@ export default function Layout({ user }: { user: User | null }) {
 											>
 												<span className="sr-only">Open main menu</span>
 												{open ? (
-													<XMarkIcon
-														className="block h-6 w-6"
-														aria-hidden="true"
-													/>
+													<X className="block h-6 w-6" aria-hidden="true" />
 												) : (
-													<Bars3Icon
-														className="block h-6 w-6"
-														aria-hidden="true"
-													/>
+													<Menu className="block h-6 w-6" aria-hidden="true" />
 												)}
 											</Disclosure.Button>
 										</div>
