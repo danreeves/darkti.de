@@ -13,7 +13,7 @@ import {
 } from "~/services/db/ownedTraits.server"
 import { getWeaponTemplates } from "~/data/weaponTemplates.server"
 import type { AuthToken } from "@prisma/client"
-import { ArrowPathIcon } from "@heroicons/react/24/outline"
+import { RotateCw } from "lucide-react"
 import { Img } from "~/components/Img"
 import { twMerge } from "tailwind-merge"
 
@@ -114,7 +114,7 @@ export let loader = async ({ request }: LoaderFunctionArgs) => {
 
 function LoadingSpinner({ loading }: { loading: boolean }) {
 	if (!loading) return null
-	return <ArrowPathIcon className="h-3 w-3 animate-spin " />
+	return <RotateCw className="h-3 w-3 animate-spin " />
 }
 
 const raritySymbol = ["0", "Ⅰ", "Ⅱ", "Ⅲ", "Ⅳ", "Ⅴ"]

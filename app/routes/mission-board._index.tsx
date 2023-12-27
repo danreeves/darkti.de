@@ -10,7 +10,6 @@ import {
 	Zones,
 } from "~/data/missionTemplates.server"
 import { t } from "~/data/localization.server"
-import { ExclamationCircleIcon } from "@heroicons/react/24/outline"
 import { Link, useLoaderData } from "@remix-run/react"
 import { Mission, sideObjectiveToType } from "~/components/Mission"
 import { isKeyOf } from "~/utils/isKeyOf"
@@ -25,6 +24,7 @@ import {
 } from "~/components/ui/select"
 import { Label } from "~/components/ui/label"
 import { Button } from "~/components/ui/button"
+import { AlertTriangle } from "lucide-react"
 
 const FILTER_BY_CATEGORY: Record<
 	string,
@@ -174,10 +174,7 @@ export function ErrorBoundary() {
 				className="flex rounded-lg bg-yellow-100 p-4 text-sm text-yellow-700"
 				role="alert"
 			>
-				<ExclamationCircleIcon
-					className="mr-3 inline h-5 w-5"
-					aria-hidden="true"
-				/>
+				<AlertTriangle className="mr-3 inline h-5 w-5" aria-hidden="true" />
 				<div>
 					<span className="font-medium">Sorry!</span> We're having trouble
 					authenticating with the server.

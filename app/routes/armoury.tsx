@@ -9,7 +9,6 @@ import {
 } from "@remix-run/react"
 import { getAuthToken } from "~/services/db/authtoken.server"
 import { authenticator } from "~/services/auth.server"
-import { ExclamationCircleIcon } from "@heroicons/react/24/outline"
 import { getAccountSummary } from "~/services/darktide.server"
 import {
 	Popover,
@@ -17,7 +16,7 @@ import {
 	PopoverTrigger,
 } from "~/components/ui/popover"
 import { Command, CommandGroup, CommandItem } from "~/components/ui/command"
-import { ChevronsUpDown } from "lucide-react"
+import { AlertTriangle, ChevronsUpDown } from "lucide-react"
 import { Button } from "~/components/ui/button"
 import { cn } from "~/utils/cn"
 import { Separator } from "~/components/ui/separator"
@@ -161,10 +160,7 @@ export function ErrorBoundary() {
 				className="flex rounded-lg bg-yellow-100 p-4 text-sm text-yellow-700"
 				role="alert"
 			>
-				<ExclamationCircleIcon
-					className="mr-3 inline h-5 w-5"
-					aria-hidden="true"
-				/>
+				<AlertTriangle className="mr-3 inline h-5 w-5" aria-hidden="true" />
 				<div>
 					<span className="font-medium">No Auth Token Found!</span> You need to
 					authorise your account with the game before you can access this
