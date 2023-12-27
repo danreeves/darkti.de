@@ -36,8 +36,17 @@ export default function PageLayout() {
 
 			<footer className="mx-auto max-w-7xl px-4 pb-4 pt-6 sm:px-8 lg:px-10">
 				<div className="flex items-center justify-center gap-4 p-4 rounded-lg border bg-card text-card-foreground shadow-sm">
-					<a href="https://github.com/danreeves/darkti.de">Source Code</a>
 					{/* <a href="#TODO">Site Analytics</a> */}
+					<span className="text-foreground/50">
+						Build{" "}
+						<a
+							className="underline"
+							href={`https://github.com/danreeves/darkti.de/tree/${GIT_SHA}`}
+						>
+							{GIT_SHA}
+						</a>{" "}
+						deployed at {BUILD_TIME}
+					</span>
 				</div>
 			</footer>
 		</div>
@@ -76,9 +85,15 @@ function Breadcrumbs({ crumbs }: { crumbs: { to: string; label: string }[] }) {
 	)
 }
 
-function Breadcrumb(
-	{ to, label, last }: { to: string; label: string; last?: boolean },
-) {
+function Breadcrumb({
+	to,
+	label,
+	last,
+}: {
+	to: string
+	label: string
+	last?: boolean
+}) {
 	return (
 		<li className="flex items-center">
 			<Link
