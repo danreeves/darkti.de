@@ -100,6 +100,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 							)}_header`,
 					  )
 					: null,
+				missionGiver: mission.missionGiver,
 			}
 		})
 		.filter(Boolean)

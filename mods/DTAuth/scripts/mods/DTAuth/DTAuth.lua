@@ -9,6 +9,10 @@ mod:command("login", "Open the https://darkti.de/login page in your browser", fu
 	Application.open_url_in_browser(domain .. "/login")
 end)
 
+mod:command("auth", "Attempt to authenticate the Darkti.de server with your account", function()
+	mod.start_authentication()
+end)
+
 function mod.start_authentication()
 	Managers.event:unregister(mod, "event_player_authenticated", "start_authentication")
 
@@ -46,13 +50,14 @@ function mod.authenticate_steam()
 				else
 					mod:info("Failed with unknown error")
 				end
+				mod:echo("failed fetch")
 			end)
 	end
 
 	getHasToken():next(function(data)
 		if data and data.body and data.body.hasToken == false then
 			mod:echo("Authenticating...")
-			local id = Steam.retrieve_auth_session_ticket()
+			local id = Steam.retrieve_auth_session_ticket("AzurePlayFab")
 			mod.update = function()
 				local app_ticket = Steam.poll_auth_session_ticket(id)
 				if app_ticket then
