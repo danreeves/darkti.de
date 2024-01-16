@@ -121,7 +121,8 @@ globals:
   Backend.AUTH_METHOD_STEAM:
     any: true
   Steam.retrieve_auth_session_ticket:
-    args: []
+    args:
+      - type: string
   Steam.poll_auth_session_ticket:
     args:
       - type: number
