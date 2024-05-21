@@ -1,8 +1,6 @@
-import { json } from "@remix-run/node"
+import { loader } from "../root"
 
-export const loader = async () => {
-	return json({ title: "Darkti.de - unofficial community tools" })
-}
+export { loader }
 
 export default function Home() {
 	return (

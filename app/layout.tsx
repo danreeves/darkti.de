@@ -1,30 +1,29 @@
 import { Disclosure } from "@headlessui/react"
-import { Link, NavLink, Outlet } from "@remix-run/react"
-import type { User } from "./services/auth.server"
+import { Link, NavLink, Outlet, useMatches } from "@remix-run/react"
 import { ThemeToggle } from "~/components/ThemeToggle"
-import { Button, buttonVariants } from "~/components/ui/button"
+import { buttonVariants } from "~/components/ui/button"
 import { cn } from "~/utils/cn"
-import {
-	DropdownMenu,
-	DropdownMenuTrigger,
-	DropdownMenuContent,
-	DropdownMenuItem,
-} from "~/components/ui/dropdown-menu"
 import { X, Menu } from "lucide-react"
+import { object, optional, parse, string } from "valibot"
+import uniqBy from "lodash-es/uniqBy"
 
 const navigation = [
-	{ name: "Armoury", href: "/armoury" },
 	{ name: "Mission Board", href: "/mission-board" },
 	{ name: "Codex", href: "/codex" },
 	{ name: "Extension", href: "/extension" },
 	{ name: "Modding", href: "/modding" },
 ] as const
-const userNavigation = [
-	{ name: "Settings", href: "/settings" },
-	{ name: "Sign out", href: "/logout" },
-] as const
 
-export default function Layout({ user }: { user: User | null }) {
+let PageData = object({
+	title: optional(string()),
+})
+
+export default function Layout() {
+	const matches = useMatches()
+
+	let currentPage = matches.at(-1) ?? { data: { title: "Home" } }
+	let currentPageData = parse(PageData, currentPage.data)
+
 	return (
 		<>
 			<div className="flex h-screen flex-col bg-background">
@@ -64,44 +63,6 @@ export default function Layout({ user }: { user: User | null }) {
 										</div>
 									</div>
 									<div className="flex gap-1">
-										{user ? (
-											<div className="hidden md:block">
-												<div className="ml-4 flex items-center md:ml-6">
-													{/* Profile dropdown */}
-													<DropdownMenu>
-														<DropdownMenuTrigger asChild>
-															<Button variant="outline" size="icon">
-																<span className="sr-only">Open user menu</span>
-																<img
-																	className="rounded-md"
-																	src={user?.avatar}
-																	alt=""
-																/>
-															</Button>
-														</DropdownMenuTrigger>
-														<DropdownMenuContent align="end">
-															{userNavigation.map((item) => (
-																<DropdownMenuItem asChild key={item.href}>
-																	<NavLink
-																		to={item.href}
-																		className="aria-[current=page]:text-foreground text-foreground/60 w-full h-full flex px-4 py-2 text-sm"
-																	>
-																		{item.name}
-																	</NavLink>
-																</DropdownMenuItem>
-															))}
-														</DropdownMenuContent>
-													</DropdownMenu>
-												</div>
-											</div>
-										) : (
-											<NavLink
-												to="/login"
-												className="aria-[current=page]:text-foreground text-foreground/60 block rounded-md px-3 py-2 text-base font-medium"
-											>
-												Sign In
-											</NavLink>
-										)}
 										<ThemeToggle />
 										<div className="-mr-2 flex md:hidden">
 											{/* Mobile menu button */}
@@ -134,27 +95,103 @@ export default function Layout({ user }: { user: User | null }) {
 											{item.name}
 										</NavLink>
 									))}
-									{user ? (
-										<div className="md:hidden">
-											{userNavigation.map((item) => (
-												<NavLink
-													key={item.href}
-													to={item.href}
-													className="aria-[current=page]:text-foreground text-foreground/60 block rounded-md px-3 py-2 text-base font-medium"
-												>
-													{item.name}
-												</NavLink>
-											))}
-										</div>
-									) : null}
 								</div>
 							</Disclosure.Panel>
 						</>
 					)}
 				</Disclosure>
+				<div className="h-full w-full overflow-scroll pb-16">
+					<header className="bg-background ">
+						<Title title={currentPageData.title} />
+						<Breadcrumbs
+							crumbs={uniqBy(matches, (match) => {
+								return match.pathname.replace(/\/$/, "")
+							}).map((match) => {
+								let pageData = parse(PageData, match.data)
+								return {
+									to: match.pathname,
+									label: pageData.title ?? "hh",
+								}
+							})}
+						/>
+					</header>
+					<main>
+						<div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
+							<Outlet />
+						</div>
+					</main>
 
-				<Outlet />
+					<footer className="mx-auto max-w-7xl px-4 pb-4 pt-6 sm:px-8 lg:px-10">
+						<div className="flex items-center justify-center gap-4 p-4 rounded-lg border bg-card text-card-foreground shadow-sm">
+							{/* <a href="#TODO">Site Analytics</a> */}
+							<span className="text-foreground/50">
+								Build{" "}
+								<a
+									className="underline"
+									href={`https://github.com/danreeves/darkti.de/tree/${GIT_SHA}`}
+								>
+									{GIT_SHA}
+								</a>{" "}
+								deployed at {BUILD_TIME}
+							</span>
+						</div>
+					</footer>
+				</div>
 			</div>
 		</>
+	)
+}
+
+function Title({ title }: { title?: string }) {
+	if (!title) {
+		return null
+	}
+	return (
+		<div className="mx-auto max-w-7xl px-4 pb-4 pt-6 sm:px-6 lg:px-8">
+			<h1 className="font-heading text-4xl font-black uppercase tracking-tight text-foreground">
+				{title}
+			</h1>
+		</div>
+	)
+}
+
+function Breadcrumbs({ crumbs }: { crumbs: { to: string; label: string }[] }) {
+	if (crumbs.length < 2) {
+		return null
+	}
+	return (
+		<div className="mx-auto max-w-7xl px-4 pb-4 sm:px-6 lg:px-8">
+			<ul className="flex items-center">
+				{crumbs.map((crumb, i) => (
+					<Breadcrumb
+						key={crumb.to}
+						{...crumb}
+						last={i === crumbs.length - 1}
+					/>
+				))}
+			</ul>
+		</div>
+	)
+}
+
+function Breadcrumb({
+	to,
+	label,
+	last,
+}: {
+	to: string
+	label: string
+	last?: boolean
+}) {
+	return (
+		<li className="flex items-center">
+			<Link
+				to={to}
+				className="text-body-color hover:text-primary text-base font-semibold"
+			>
+				{label}
+			</Link>
+			{last ? null : <span className="px-3">{"/"}</span>}
+		</li>
 	)
 }
