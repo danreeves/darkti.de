@@ -1,7 +1,6 @@
 import type { LoaderFunctionArgs } from "@remix-run/node"
 import { json } from "@remix-run/node"
 import { reverse, sortBy } from "lodash-es"
-import { getAuthTokenBySteamId } from "~/services/db/authtoken.server"
 import { getMissions } from "~/services/darktide.server"
 import {
 	getMissionTemplate,
@@ -48,10 +47,16 @@ export async function loader({ request }: LoaderFunctionArgs) {
 	const url = new URL(request.url)
 	const filterCat = url.searchParams.get("category")
 
-	let auth = await getAuthTokenBySteamId(process.env.DEFAULT_STEAM_ID!)
+	const auth = {
+		userId: 1,
+		accessToken: "1",
+		refreshToken: "1",
+		sub: "1",
+		expiresAt: new Date(),
+	}
 	const data = await getMissions(auth)
 	if (!data) {
-		throw json({ message: "No missions found" })
+		return json({ title: "Missions", missions: [] })
 	}
 
 	const { missions: rawMissions } = data
@@ -106,15 +111,15 @@ export async function loader({ request }: LoaderFunctionArgs) {
 		.filter(Boolean)
 		.filter(filterByCategory(filterCat))
 
-	return json({ missions })
+	return json({ title: "Missions", missions })
 }
 
 export default function Missions() {
-	const { missions } = useLoaderData<typeof loader>()
+	const { title, missions } = useLoaderData<typeof loader>()
 
 	return (
 		<>
-			<h1 className="sr-only">Missions</h1>
+			<h1 className="sr-only">{title}</h1>
 			<div className="justify-center overflow-y-scroll">
 				<Form
 					replace

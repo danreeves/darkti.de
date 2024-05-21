@@ -17,5 +17,5 @@ if (typeof requestIdleCallback === "function") {
 } else {
 	// Safari doesn't support requestIdleCallback
 	// https://caniuse.com/requestidlecallback
-	setTimeout(hydrate, 1)
+	setTimeout(hydrate, 0)
 }

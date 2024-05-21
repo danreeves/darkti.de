@@ -2,15 +2,14 @@ import type { LinksFunction, LoaderFunctionArgs } from "@remix-run/node"
 import { json } from "@remix-run/node"
 import {
 	Links,
-	LiveReload,
 	Meta,
 	Scripts,
+	ScrollRestoration,
 	useLoaderData,
 } from "@remix-run/react"
 import Layout from "~/layout"
 
 import "~/tailwind.css"
-import { authenticator } from "~/services/auth.server"
 
 import { useRevalidateOnFocus } from "~/hooks/revalidateOnFocus"
 import { ThemeProvider } from "./hooks/themeProvider"
@@ -56,14 +55,13 @@ function getLocale(request: Request): string {
 }
 
 export let loader = async ({ request }: LoaderFunctionArgs) => {
-	const user = await authenticator.isAuthenticated(request)
 	const locale = getLocale(request)
 
-	return json({ user, locale })
+	return json({ locale, title: "Home" })
 }
 
 export default function App() {
-	const { user, locale } = useLoaderData<typeof loader>()
+	const { locale } = useLoaderData<typeof loader>()
 
 	useRevalidateOnFocus()
 
@@ -83,12 +81,16 @@ export default function App() {
 						enableSystem
 						disableTransitionOnChange
 					>
-						<Layout user={user} />
+						<Layout />
 						<Toaster />
 					</ThemeProvider>
-					<LiveReload />
+					<ScrollRestoration />
 					<Scripts />
-					<script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "7bd1efa3de75440dbeadcc776055eef2"}'></script>
+					{/* <script
+						defer
+						src="https://static.cloudflareinsights.com/beacon.min.js"
+						data-cf-beacon='{"token": "7bd1efa3de75440dbeadcc776055eef2"}'
+					></script> */}
 				</body>
 			</html>
 		</LocaleProvider>

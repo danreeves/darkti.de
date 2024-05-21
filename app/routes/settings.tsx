@@ -1,12 +1,5 @@
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node"
 import { json } from "@remix-run/node"
-import {
-	deleteAuthToken,
-	getAuthToken,
-	updateAuthToken,
-} from "~/services/db/authtoken.server"
-import type { User } from "~/services/auth.server"
-import { authenticator } from "~/services/auth.server"
 import { Form, useLoaderData } from "@remix-run/react"
 
 import { Button } from "~/components/ui/button"
@@ -17,20 +10,7 @@ import { number, object, parse, string } from "valibot"
 import { refreshToken } from "~/services/darktide.server"
 
 export async function loader({ request }: LoaderFunctionArgs) {
-	let user = await authenticator.isAuthenticated(request, {
-		failureRedirect: "/login",
-	})
-
-	let hasAuthToken = false
-
-	try {
-		await getAuthToken(user.id)
-		hasAuthToken = true
-	} catch (e) {
-		hasAuthToken = false
-	}
-
-	return json({ title: "Settings", hasAuthToken })
+	return json({ title: "Settings", hasAuthToken: false })
 }
 
 const AuthDataSchema = object({
@@ -42,50 +22,9 @@ const AuthDataSchema = object({
 	RefreshAt: number(),
 })
 
-async function authoriseUser(userdata: string, user: User) {
-	let json: unknown
-
-	try {
-		json = JSON.parse(userdata)
-	} catch (e) {
-		throw new Error("Invalid JSON")
-	}
-
-	let data = parse(AuthDataSchema, json)
-
-	let newToken = await refreshToken(data.RefreshToken)
-
-	if (newToken) {
-		let expiresAt = new Date()
-		expiresAt.setSeconds(expiresAt.getSeconds() + newToken.ExpiresIn)
-
-		await updateAuthToken({
-			userId: user.id,
-			expiresAt: expiresAt,
-			sub: newToken.Sub,
-			accessToken: newToken.AccessToken,
-			refreshToken: newToken.RefreshToken,
-		})
-	}
-}
-
 export async function action({ request }: ActionFunctionArgs) {
-	let user = await authenticator.isAuthenticated(request, {
-		failureRedirect: "/login",
-	})
-
 	const formData = await request.clone().formData()
-	const action = formData.get("_action")
-
-	if (action === "DELETE_AUTH") {
-		await deleteAuthToken(user.id)
-	}
-
-	if (action === "ADD_AUTH") {
-		authoriseUser(String(formData.get("userdata")), user)
-	}
-
-	return true
+	return formData.get("userdata")
 }
 
 export default function Settings() {
