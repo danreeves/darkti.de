@@ -1,4 +1,4 @@
-import { json } from "@remix-run/node"
+import { json } from "@remix-run/cloudflare"
 import { Link, useLoaderData, useOutlet } from "@remix-run/react"
 import { Img } from "~/components/Img"
 import { Button } from "~/components/ui/button"

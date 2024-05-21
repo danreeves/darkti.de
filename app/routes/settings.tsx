@@ -1,5 +1,8 @@
-import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node"
-import { json } from "@remix-run/node"
+import type {
+	ActionFunctionArgs,
+	LoaderFunctionArgs,
+} from "@remix-run/cloudflare"
+import { json } from "@remix-run/cloudflare"
 import { Form, useLoaderData } from "@remix-run/react"
 
 import { Button } from "~/components/ui/button"

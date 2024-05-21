@@ -1,5 +1,5 @@
-import type { LoaderFunctionArgs } from "@remix-run/node"
-import { json } from "@remix-run/node"
+import type { LoaderFunctionArgs } from "@remix-run/cloudflare"
+import { json } from "@remix-run/cloudflare"
 import { Link, useLoaderData, useOutlet } from "@remix-run/react"
 import { TagList } from "~/components/TagList"
 import { getItems } from "~/data/items.server"

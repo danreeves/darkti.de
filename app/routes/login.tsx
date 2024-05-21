@@ -1,4 +1,4 @@
-import { json } from "@remix-run/node"
+import { json } from "@remix-run/cloudflare"
 import { Link } from "@remix-run/react"
 import { AlertTriangle } from "lucide-react"
 import { Button } from "~/components/ui/button"

@@ -1,5 +1,5 @@
 import { Link, useOutlet } from "@remix-run/react"
-import { json } from "@remix-run/node"
+import { json } from "@remix-run/cloudflare"
 import { Button } from "~/components/ui/button"
 import { Img } from "~/components/Img"
 import { twMerge } from "tailwind-merge"
