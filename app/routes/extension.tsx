@@ -1,4 +1,4 @@
-import { json } from "@remix-run/node"
+import { json } from "@remix-run/cloudflare"
 import { Button } from "~/components/ui/button"
 import exampleImage from "~/img/extension-screenshot.png"
 

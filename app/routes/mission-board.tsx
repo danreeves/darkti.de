@@ -1,5 +1,5 @@
-import type { LoaderFunctionArgs } from "@remix-run/node"
-import { json } from "@remix-run/node"
+import type { LoaderFunctionArgs } from "@remix-run/cloudflare"
+import { json } from "@remix-run/cloudflare"
 import { reverse, sortBy } from "lodash-es"
 import { getMissions } from "~/services/darktide.server"
 import {
