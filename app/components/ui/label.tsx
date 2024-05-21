@@ -1,5 +1,5 @@
 import * as React from "react"
-import * as LabelPrimitive from "@radix-ui/react-label"
+import { Label as RACLabel } from "react-aria-components"
 import { cva, type VariantProps } from "class-variance-authority"
 
 import { cn } from "~/utils/cn"
@@ -9,16 +9,12 @@ const labelVariants = cva(
 )
 
 const Label = React.forwardRef<
-	React.ElementRef<typeof LabelPrimitive.Root>,
-	React.ComponentPropsWithoutRef<typeof LabelPrimitive.Root> &
+	React.ElementRef<typeof RACLabel>,
+	React.ComponentPropsWithoutRef<typeof RACLabel> &
 		VariantProps<typeof labelVariants>
 >(({ className, ...props }, ref) => (
-	<LabelPrimitive.Root
-		ref={ref}
-		className={cn(labelVariants(), className)}
-		{...props}
-	/>
+	<RACLabel ref={ref} className={cn(labelVariants(), className)} {...props} />
 ))
-Label.displayName = LabelPrimitive.Root.displayName
+Label.displayName = "Label"
 
 export { Label }

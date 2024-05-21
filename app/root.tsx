@@ -15,7 +15,6 @@ import { useRevalidateOnFocus } from "~/hooks/revalidateOnFocus"
 import { ThemeProvider } from "./hooks/themeProvider"
 import acceptLanguage from "accept-language-parser"
 import { LocaleProvider } from "./hooks/locale"
-import { Toaster } from "~/components/ui/toaster"
 
 export const links: LinksFunction = () => [
 	{
@@ -82,7 +81,6 @@ export default function App() {
 						disableTransitionOnChange
 					>
 						<Layout />
-						<Toaster />
 					</ThemeProvider>
 					<ScrollRestoration />
 					<Scripts />
