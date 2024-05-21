@@ -13,14 +13,14 @@ import { Link, useLoaderData } from "@remix-run/react"
 import { Mission, sideObjectiveToType } from "~/components/Mission"
 import { isKeyOf } from "~/utils/isKeyOf"
 import { Form } from "~/components/Form"
-import {
-	Select,
-	SelectContent,
-	SelectGroup,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
-} from "~/components/ui/select"
+// import {
+// 	Select,
+// 	SelectContent,
+// 	SelectGroup,
+// 	SelectItem,
+// 	SelectTrigger,
+// 	SelectValue,
+// } from "~/components/ui/select"
 import { Label } from "~/components/ui/label"
 import { Button } from "~/components/ui/button"
 import { AlertTriangle } from "lucide-react"
@@ -85,7 +85,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 					? {
 							name: t(circumstance.display_name),
 							icon: circumstance.icon.replace("materials", "textures") + ".png", // TODO: move replace to Exporter
-					  }
+						}
 					: null,
 				credits: mission.credits,
 				extraRewards: mission.extraRewards,
@@ -103,7 +103,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 							`loc_objective_side_mission_${sideObjectiveToType(
 								mission.sideMission,
 							)}_header`,
-					  )
+						)
 					: null,
 				missionGiver: mission.missionGiver,
 			}
@@ -127,7 +127,7 @@ export default function Missions() {
 				>
 					<div className="grid items-center gap-1.5">
 						<Label htmlFor="name">Category</Label>
-						<Select name="category" defaultValue="all">
+						{/* <Select name="category" defaultValue="all">
 							<SelectTrigger className="w-[180px]">
 								<SelectValue placeholder="Category" />
 							</SelectTrigger>
@@ -138,10 +138,10 @@ export default function Missions() {
 									<SelectItem value="auric">Auric</SelectItem>
 								</SelectGroup>
 							</SelectContent>
-						</Select>
+						</Select> */}
 					</div>
 
-					<Button variant="outline" asChild>
+					<Button variant="outline">
 						<Link to="history">View mission history</Link>
 					</Button>
 				</Form>
