@@ -17,7 +17,6 @@
 		"@remix-run/cloudflare": "^2.9.2",
 		"@remix-run/cloudflare-pages": "^2.9.2",
 		"@remix-run/react": "^2.9.2",
-		"isbot": "^4.1.0",
 		"miniflare": "^3.20240404.0",
 		"react": "18.3.1",
 		"react-dom": "18.3.1",
@@ -36,7 +35,6 @@
 		"@radix-ui/react-toast": "^1.1.5",
 		"@remix-run/dev": "^2.8.1",
 		"@remix-run/node": "^2.8.1",
-		"@remix-run/react": "^2.8.1",
 		"@remix-run/serve": "^2.8.1",
 		"@remix-run/server-runtime": "^2.8.1",
 		"@tailwindcss/forms": "^0.5.7",
@@ -64,20 +62,13 @@
 		"node-fetch-cache": "^4.1.0",
 		"prettier": "^3.2.5",
 		"prisma": "^5.12.1",
-		"react": "^18.2.0",
-		"react-aria-components": "^1.1.1",
-		"react-dom": "^18.2.0",
 		"remix-auth": "^3.6.0",
 		"remix-hono": "^0.0.16",
 		"remix-utils": "^7.5.0",
 		"replace-in-file": "^7.1.0",
 		"tailwind-merge": "^2.2.2",
 		"tailwindcss": "^3.4.3",
-		"next-themes": "^0.2.1",
 		"react-aria-components": "1.2.1",
-		"remix-utils": "^7.1.0",
-		"tailwind-merge": "^2.0.0",
-		"tailwindcss": "^3.3.5",
 		"tailwindcss-animate": "^1.0.7",
 		"tsx": "^4.7.2",
 		"valibot": "^0.30.0",
@@ -110,9 +101,6 @@
 		"npm-run-all": "^4.1.5",
 		"prettier-plugin-tailwindcss": "^0.5.13",
 		"typescript": "5.4"
-	},
-	"engines": {
-		"node": "18.16.0"
 	},
 	"prettier": {
 		"semi": false
