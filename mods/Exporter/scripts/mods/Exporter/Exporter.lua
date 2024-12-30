@@ -32,10 +32,8 @@ mod:register_view({
 mod:hook("UIManager", "create_single_icon_renderer", function(func, self, render_type, id, settings)
 	if render_type == "weapon" or render_type == "icon" then
 		return func(self, render_type, id, {
-			target_resolution_width = 3840 * 1.5,
-			target_resolution_height = 2160 * 1.5,
-			weapon_width = 3840,
-			weapon_height = 2160,
+			width = 1920,
+			height = 1080,
 		})
 	end
 	return func(self, render_type, id, settings)
@@ -45,11 +43,11 @@ mod:command("export", "Dump all the data", function()
 	mod.export_files()
 end)
 
-mod:command("capture_images", "Automatically dump images of all items", function()
+mod:command("capture_images", "Automatically dump images of all items", function(item_type)
 	-- Setup icon renderers again because the above hook isn't
 	-- available when it's initially called
 	Managers.ui:_setup_icon_renderers()
-	Managers.ui:open_view("item_preview_view")
+	Managers.ui:open_view("item_preview_view", nil, nil, nil, nil, { item_type = item_type })
 end)
 
 function mod.write_file(relative_path, contents)
@@ -93,6 +91,20 @@ function mod.array_join(tbl, joiner)
 		end
 	end
 	return str
+end
+
+function mod.replace_functions(tbl)
+	for k, v in pairs(tbl) do
+		if type(v) == "function" then
+			mod:echo("AAAAA " .. k)
+			local info = debug.getinfo(v, "n")
+			mod:echo(cjson.encode(info))
+			tbl[k] = ""
+		end
+		if type(v) == "table" then
+			mod.replace_functions(v)
+		end
+	end
 end
 
 function mod.export_files()
@@ -182,33 +194,11 @@ function mod.export_files()
 		table.insert(weapon_templates, mod.copy_keys(weapon_template, allowed_weapon_template_keys))
 	end
 
+	mod.replace_functions(weapon_templates)
+
 	preprocess(weapon_templates)
 
-	local WeaponUnlockSettings = require("scripts/settings/weapon_unlock_settings")
-	local ArchetypeSpecializations = require(
-		"scripts/settings/ability/archetype_specializations/archetype_specializations"
-	)
-	local specialization_to_archetype = {}
-	for archetype, specializations in pairs(ArchetypeSpecializations) do
-		for specialization, _ in pairs(specializations) do
-			specialization_to_archetype[specialization] = archetype
-		end
-	end
-
-	-- These are missing in the game code (because they are granted by the server/you start with them?)
-	WeaponUnlockSettings.veteran_2[1] = {
-		"content/items/weapons/player/ranged/autopistol_p1_m1",
-		"content/items/weapons/player/ranged/lasgun_p1_m2",
-	}
-	WeaponUnlockSettings.zealot_2[1] = {
-		"content/items/weapons/player/ranged/autopistol_p1_m1",
-		"content/items/weapons/player/melee/combatsword_p1_m1",
-		"content/items/weapons/player/melee/combataxe_p1_m2",
-	}
-	WeaponUnlockSettings.psyker_2[1] = {
-		"content/items/weapons/player/ranged/autopistol_p1_m1",
-		"content/items/weapons/player/melee/combatsword_p1_m1",
-	}
+	local WeaponUnlockSettings = require("scripts/settings/weapon_unlock_settings_new")
 
 	local item_master_list = {}
 	local cached_items = Managers.backend.interfaces.master_data:items_cache():get_cached()
@@ -237,6 +227,7 @@ function mod.export_files()
 
 	for id, item in pairs(cached_items) do
 		local is_npc = item.archetypes and item.archetypes[1] == "npc"
+		mod:echo(item.archetypes)
 		if table.array_contains(allowed_item_types, item.item_type) then
 			if not is_npc then
 				local tbl = mod.copy_keys(item, allowed_item_keys)
@@ -253,23 +244,12 @@ function mod.export_files()
 					for _, items in ipairs(unlock_settings) do
 						for _, item_id in ipairs(items) do
 							if item_id == id then
-								archetypes[#archetypes + 1] = specialization_to_archetype[specialization]
+								archetypes[#archetypes + 1] = specialization
 							end
 						end
 					end
 				end
 				tbl.archetypes = archetypes
-
-				-- If a specialization has a weapon as a unique weapon its archetypes should only include that
-				for _, specialization in pairs(ArchetypeSpecializations) do
-					if specialization.unique_weapons then
-						for _, unique_weapon in ipairs(specialization.unique_weapons) do
-							if id == unique_weapon.item then
-								tbl.archetypes = { specialization.archetype }
-							end
-						end
-					end
-				end
 
 				if #tbl.archetypes < 1 and item.archetypes and #item.archetypes then
 					tbl.archetypes = item.archetypes
@@ -318,23 +298,9 @@ function mod.export_files()
 		"meta_stat_buffs",
 	}
 	local buff_templates = {}
-
-	local function replace_functions(tbl)
-		for k, v in pairs(tbl) do
-			if type(v) == "function" then
-				mod:echo("AAAAA " .. k)
-				local info = debug.getinfo(v, "n")
-				mod:echo(cjson.encode(info))
-				tbl[k] = ""
-			end
-			if type(v) == "table" then
-				replace_functions(v)
-			end
-		end
-	end
 	for _, buff_template in pairs(BuffTemplates) do
 		local tbl = mod.copy_keys(buff_template, allowed_buff_keys)
-		replace_functions(tbl)
+		mod.replace_functions(tbl)
 		table.insert(buff_templates, tbl)
 	end
 
