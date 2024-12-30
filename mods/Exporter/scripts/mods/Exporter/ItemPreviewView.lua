@@ -2,7 +2,7 @@ local mod = get_mod("Exporter")
 
 local UIWidget = require("scripts/managers/ui/ui_widget")
 local UIWorkspaceSettings = require("scripts/settings/ui/ui_workspace_settings")
-local BaseView = require("scripts/ui/views/base_view") -- needs to be required before creating a class from it
+local _BaseView = require("scripts/ui/views/base_view") -- needs to be required before creating a class from it
 local generate_blueprints_function = require("scripts/ui/view_content_blueprints/item_blueprints")
 
 local size = {
@@ -11,6 +11,8 @@ local size = {
 }
 local item_blueprints = generate_blueprints_function(size)
 local template = item_blueprints.item_icon
+
+template.size = size
 
 local BLACK = { 255, 0, 0, 0 }
 local WHITE = { 255, 255, 255, 255 }
@@ -21,10 +23,7 @@ local passes = {
 		style_id = "bg",
 		style = {
 			color = BLACK,
-			size = {
-				1920,
-				1080,
-			},
+			size = size,
 		},
 	},
 	{
@@ -36,10 +35,7 @@ local passes = {
 			vertical_alignment = "top",
 			horizontal_alignment = "center",
 			material_values = {},
-			size = {
-				1920,
-				1080,
-			},
+			size = size,
 			offset = {
 				0,
 				0,
@@ -61,16 +57,18 @@ local passes = {
 
 local ItemPreviewView = class("ItemPreviewView", "BaseView")
 
+local definitions = {
+	scenegraph_definition = {
+		screen = UIWorkspaceSettings.screen,
+	},
+	widget_definitions = {},
+}
 function ItemPreviewView:init(settings, context)
-	local definitions = {
-		scenegraph_definition = {
-			screen = UIWorkspaceSettings.screen,
-		},
-		widget_definitions = {},
-	}
 	ItemPreviewView.super.init(self, definitions, settings)
 
+	self._item_type_filter = context.item_type
 	self._item_master_list = Managers.backend.interfaces.master_data:items_cache():get_cached()
+
 	self._next = pairs(self._item_master_list)
 	self._current_item_key = nil
 	self._weapon_widget = nil
@@ -86,23 +84,33 @@ function ItemPreviewView:_next_item()
 	local next = self._next
 	local current_key = self._current_item_key
 
-	local key = next(list, current_key)
+	local key, item = next(list, current_key)
 
-	while not self:_is_wieldable(list[key]) do
-		key = next(list, key)
-		if key == nil then
-			Managers.ui:close_view("item_preview_view")
-			break
-		end
+	while key and item and not self:_is_valid_next_item(item) do
+		key, item = next(list, key)
+	end
+
+	if not key or not item then
+		Managers.ui:close_view("item_preview_view")
+		return
 	end
 
 	self._current_item_key = key
 end
 
-function ItemPreviewView:_is_wieldable(item)
+function ItemPreviewView:_is_valid_next_item(item)
+	if not item then
+		return false
+	end
+
+	if self._item_type_filter and item.item_type ~= self._item_type_filter then
+		return false
+	end
+
 	if item.item_type == "WEAPON_SKIN" or item.item_type == "GADGET" then
 		return true
 	end
+
 	if item.item_type == "WEAPON_MELEE" or item.item_type == "WEAPON_RANGED" then
 		if item.slots and #item.slots > 0 then
 			if item.archetypes and item.archetypes[1] ~= "npc" then
@@ -110,11 +118,12 @@ function ItemPreviewView:_is_wieldable(item)
 			end
 		end
 	end
+
 	return false
 end
 
+local optional_style = {}
 function ItemPreviewView:_setup_weapon_widget()
-	local optional_style = {}
 	local scenegraph_id = "screen"
 	local widget_definition = UIWidget.create_definition(passes, scenegraph_id, nil, size, optional_style)
 	local weapon_widget = self:_create_widget("weapon_widget", widget_definition)
@@ -122,12 +131,25 @@ function ItemPreviewView:_setup_weapon_widget()
 	self._weapon_widget = weapon_widget
 end
 
+local broken_items = { "ogryn_hammer_2h", "shotgun_p3_ml01" }
+local config = {
+	item = nil,
+}
 function ItemPreviewView:_load_icon()
 	local list = self._item_master_list
 	local key = self._current_item_key
 	local item = list[key]
-	if not item then
+
+	if not item or item == nil then
+		mod:echo("Item not found: " .. key)
 		return
+	end
+
+	for _, broken_item in ipairs(broken_items) do
+		if string.find(item.name, broken_item) then
+			mod:echo("Broken/Unreleased: " .. key)
+			return
+		end
 	end
 
 	if not self._weapon_widget then
@@ -138,21 +160,18 @@ function ItemPreviewView:_load_icon()
 
 	template.unload_icon(self, weapon_widget, nil, self._ui_renderer)
 
-	-- typo. missing ogryn in name
-	if item.preview_item == "content/items/weapons/player/melee/powermaul_p1_m1" then
-		item.preview_item = "content/items/weapons/player/melee/ogryn_powermaul_p1_m1"
-	end
+	-- -- typo. missing ogryn in name
+	-- if item.preview_item == "content/items/weapons/player/melee/powermaul_p1_m1" then
+	-- 	item.preview_item = "content/items/weapons/player/melee/ogryn_powermaul_p1_m1"
+	-- end
 
-	-- og club p2 m2 not in item list
-	local og_club_2 = "content/items/weapons/player/melee/ogryn_club_p1_m2"
-	if item.preview_item == og_club_2 and not list[og_club_2] then
-		item.preview_item = "content/items/weapons/player/melee/ogryn_club_p1_m1"
-	end
+	-- -- og club p2 m2 not in item list
+	-- local og_club_2 = "content/items/weapons/player/melee/ogryn_club_p1_m2"
+	-- if item.preview_item == og_club_2 and not list[og_club_2] then
+	-- 	item.preview_item = "content/items/weapons/player/melee/ogryn_club_p1_m1"
+	-- end
 
-	local config = {
-		item = item,
-	}
-
+	config.item = item
 	-- template.init(self, weapon_widget, config, nil, nil, self._ui_renderer)
 	template.load_icon(self, weapon_widget, config)
 end

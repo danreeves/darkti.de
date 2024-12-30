@@ -45,7 +45,7 @@ export let CircumstanceTemplates = CircumstanceSchema.parse(
 let MissionTypeSchema = z.record(
 	z.string(),
 	z.object({
-		id: z.number(),
+		index: z.number().optional(),
 		name: z.string(),
 		icon: z.string(),
 	}),
