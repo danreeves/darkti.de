@@ -1,0 +1,26 @@
+@import "tailwindcss";
+
+@font-face {
+	font-family: "machine";
+	src:
+		url("/machine.woff2") format("woff2"),
+		url("/machine.woff") format("woff");
+	font-weight: normal;
+	font-style: normal;
+}
+
+@theme {
+	--font-machine: "machine", ui-sans-serif, system-ui, sans-serif;
+}
+
+html,
+body {
+	@apply bg-black font-mono;
+}
+
+@layer components {
+	.halftone {
+		filter: grayscale(100%) sepia(100%) hue-rotate(10deg) saturate(300%)
+			brightness(0.8);
+	}
+}

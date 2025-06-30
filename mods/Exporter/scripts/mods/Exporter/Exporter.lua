@@ -96,10 +96,8 @@ end
 function mod.replace_functions(tbl)
 	for k, v in pairs(tbl) do
 		if type(v) == "function" then
-			mod:echo("AAAAA " .. k)
-			local info = debug.getinfo(v, "n")
-			mod:echo(cjson.encode(info))
-			tbl[k] = ""
+			-- mod:echo(k .. " is a function, removing it")
+			tbl[k] = nil
 		end
 		if type(v) == "table" then
 			mod.replace_functions(v)
@@ -150,14 +148,14 @@ function mod.export_files()
 
 			-- Fix non-json values
 			if math.is_nan(value) then
-				mod:echo(k .. " is nan")
+				-- mod:echo(k .. " is nan")
 				t[k] = nil
 			end
 
 			-- need to check for inf, not math.huge(? i forget)
 			-- selene: allow(divide_by_zero)
 			if value == 1 / 0 then
-				mod:echo(k .. " is inf")
+				-- mod:echo(k .. " is inf")
 				t[k] = nil
 			end
 		end)
@@ -198,7 +196,7 @@ function mod.export_files()
 
 	preprocess(weapon_templates)
 
-	local WeaponUnlockSettings = require("scripts/settings/weapon_unlock_settings_new")
+	local WeaponUnlockSettings = require("scripts/settings/weapon_unlock_settings")
 
 	local item_master_list = {}
 	local cached_items = Managers.backend.interfaces.master_data:items_cache():get_cached()
@@ -217,7 +215,7 @@ function mod.export_files()
 		"archetypes",
 		"wieldable_slot_scripts",
 		"preview_item",
-		"weapon_template_restriction",
+		"weapon_template_restriction", -- TODO: This can be empty and it gets serialized as an object
 		"weapon_type_restriction",
 		"trait",
 		"icon",
@@ -227,7 +225,7 @@ function mod.export_files()
 
 	for id, item in pairs(cached_items) do
 		local is_npc = item.archetypes and item.archetypes[1] == "npc"
-		mod:echo(item.archetypes)
+		mod:echo(cjson.encode(item.archetypes))
 		if table.array_contains(allowed_item_types, item.item_type) then
 			if not is_npc then
 				local tbl = mod.copy_keys(item, allowed_item_keys)

@@ -1,0 +1,27 @@
+{
+  "version": "7",
+  "dialect": "sqlite",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "6",
+      "when": 1732083994982,
+      "tag": "0000_outstanding_trauma",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1743963383319,
+      "tag": "0001_loving_lizard",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1743978896841,
+      "tag": "0002_yielding_nick_fury",
+      "breakpoints": true
+    }
+  ]
+}

@@ -1,22 +1,77 @@
-# [DARKTI.DE](https://darkti.de/)
+# Welcome to React Router!
 
-<p align="center">
-	<a href="https://ko-fi.com/P5P44MNYZ"><img alt="ko-fi" src="https://ko-fi.com/img/githubbutton_sm.svg" /></a>
-</p>
+A modern, production-ready template for building full-stack React applications using React Router.
 
-An unofficial community-driven site for Fatsharks Warhammer 40,000: Darktide.
+## Features
 
-## Development
+- 🚀 Server-side rendering
+- ⚡️ Hot Module Replacement (HMR)
+- 📦 Asset bundling and optimization
+- 🔄 Data loading and mutations
+- 🔒 TypeScript by default
+- 🎉 TailwindCSS for styling
+- 📖 [React Router docs](https://reactrouter.com/)
 
-### Prerequisites
+## Getting Started
 
-1. Install node, npm, [planetscale cli](https://planetscale.com/features/cli)
-2. Create a planetscale account, create a database called `darktide` and a branch called `development`
-3. Copy `.env.example` to `.env` and fill in the env vars
-4. Run `npm install` to install dependencies
-5. Run `pscale auth login` to log into planetscale
-6. Run `npm run update-db` to sync the schema to your db and generate TypeScript TypeScript
+### Installation
 
-Run `npm run dev` to run the server locally. It will be on port 3000 by default.
+Install the dependencies:
 
-Darktide cannot request URLs with ports so in order to auth your local server you'll need to expose it to the internet using a tool like localtunnel, ngrok, or tunnelmole. If you set the `DTAUTHDATA_PATH` path in the `.env` file the server will automatically set up a localtunnel tunnel and replace the line in the DTAuth mod to point it to that domain.
+```bash
+npm install
+```
+
+### Development
+
+Run an initial database migration:
+
+```bash
+npm run db:migrate
+```
+
+Start the development server with HMR:
+
+```bash
+npm run dev
+```
+
+Your application will be available at `http://localhost:5173`.
+
+## Building for Production
+
+Create a production build:
+
+```bash
+npm run build
+```
+
+## Deployment
+
+Deployment is done using the Wrangler CLI.
+
+To deploy directly to production:
+
+```sh
+npx wrangler deploy
+```
+
+To deploy a preview URL:
+
+```sh
+npx wrangler versions upload
+```
+
+You can then promote a version to production after verification or roll it out progressively.
+
+```sh
+npx wrangler versions deploy
+```
+
+## Styling
+
+This template comes with [Tailwind CSS](https://tailwindcss.com/) already configured for a simple default starting experience. You can use whatever CSS framework you prefer.
+
+---
+
+Built with ❤️ using React Router.
