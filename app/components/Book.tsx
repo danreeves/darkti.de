@@ -27,7 +27,7 @@ export function Book({ className }: { className?: string }) {
 					{Array.from({ length: 4 }).map((_, index) => (
 						<img
 							key={index}
-							src="content/ui/textures/icons/pocketables/hud/scripture.png"
+							src="/content/ui/textures/icons/pocketables/hud/scripture.png"
 							style={{
 								filter: "grayscale(100%) sepia(100%) hue-rotate(60deg) saturate(300%) brightness(0.8)",
 								position: "absolute",
