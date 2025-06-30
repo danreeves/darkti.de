@@ -52,8 +52,8 @@ export default function Home({ loaderData }: Route.ComponentProps) {
 						alt={loaderData[0].display_name}
 						className="halftone h-48 w-full border-b border-green-500 object-cover hover:filter-none"
 					/>
-					<div className="font-machine p-4 text-center text-5xl font-bold tracking-widest text-green-500">
-						/Weapons
+					<div className="p-4 text-center text-5xl font-bold text-green-500">
+						/weapons
 					</div>
 				</Link>
 			</div>
