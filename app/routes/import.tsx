@@ -1,4 +1,4 @@
-import { useFetcher } from "react-router"
+import { useFetcher, redirect } from "react-router"
 import type { Route } from "./+types/import"
 import {
 	circumstanceTemplates,
@@ -38,6 +38,13 @@ const tables = [
 ]
 
 export async function action({ request, context }: Route.ActionArgs) {
+	// Check authentication first
+	const sessionCookie = getCookie(request, "admin-session")
+
+	if (sessionCookie !== "authenticated") {
+		throw redirect("/admin")
+	}
+
 	const CIRCUMSTANCE_TEMPLATES = await import(
 		"../../exported/circumstance_templates.json"
 	).then((module) => module.default)
@@ -193,7 +200,24 @@ export async function action({ request, context }: Route.ActionArgs) {
 	return
 }
 
-export async function loader({ context }: Route.LoaderArgs) {
+function getCookie(request: Request, name: string): string | undefined {
+	const cookieHeader = request.headers.get("Cookie")
+	if (!cookieHeader) return undefined
+
+	const cookies = cookieHeader.split(";").map((cookie) => cookie.trim())
+	const targetCookie = cookies.find((cookie) => cookie.startsWith(`${name}=`))
+
+	return targetCookie ? targetCookie.split("=")[1] : undefined
+}
+
+export async function loader({ request, context }: Route.LoaderArgs) {
+	// Check authentication
+	const sessionCookie = getCookie(request, "admin-session")
+
+	if (sessionCookie !== "authenticated") {
+		throw redirect("/admin")
+	}
+
 	const tableNames = [
 		"circumstanceTemplates",
 		"missionTemplates",
@@ -225,139 +249,155 @@ export default function Import({ loaderData }: Route.ComponentProps) {
 
 	const { success, message } = fetcher.data || {}
 	let busy = fetcher.state !== "idle"
+
 	return (
 		<div
-			className={`m-10 mx-auto flex w-xl flex-col items-center justify-center rounded border border-gray-200 p-4 text-white ${busy ? "opacity-50" : ""}`}
+			className={`mx-auto flex max-w-4xl flex-col items-center justify-center border border-green-500 p-6 text-green-500 ${
+				busy ? "opacity-50" : ""
+			}`}
 		>
-			<h1 className="mb-4 text-2xl font-bold">Import</h1>
+			<h1 className="font-machine mb-6 text-4xl font-bold tracking-widest text-green-500">
+				+++ DATA IMPORT +++
+			</h1>
+
 			{success === true ? (
-				<p className="text-green-500">Operation successful!</p>
+				<p className="mb-4 text-green-400">
+					+++ Operation successful! +++
+				</p>
 			) : success === false ? (
-				<p className="text-red-500">Import failed. {message}</p>
+				<p className="mb-4 text-red-500">
+					+++ Import failed. {message} +++
+				</p>
 			) : null}
 
 			{loaderData ? (
-				<p>
-					Total items:{" "}
-					{Object.values(loaderData.tableCounts).reduce(
-						(sum, count) => sum + count,
-						0,
-					)}
-					across {Object.keys(loaderData.tableCounts).length} tables
+				<p className="mb-6 text-center text-green-400">
+					Total items in data banks:{" "}
+					<span className="font-bold text-green-500">
+						{Object.values(loaderData.tableCounts).reduce(
+							(sum, count) => sum + count,
+							0,
+						)}
+					</span>{" "}
+					across{" "}
+					<span className="font-bold text-green-500">
+						{Object.keys(loaderData.tableCounts).length}
+					</span>{" "}
+					data-banks
 				</p>
 			) : null}
 
 			<fetcher.Form
 				method="post"
-				className="m-4 flex w-lg flex-wrap content-center items-center justify-center gap-1"
+				className="flex w-full flex-wrap content-center items-center justify-center gap-2"
 			>
 				<button
-					className="rounded-md bg-blue-400 p-2 text-sm text-white"
+					className="transform border border-green-500 bg-black px-4 py-2 text-sm text-green-500 transition duration-50 hover:scale-105 hover:bg-green-600 hover:text-black disabled:opacity-50"
 					type="submit"
 					disabled={busy}
 					name="action"
 					value="import_circumstance_templates"
 				>
 					{busy
-						? "Loading..."
+						? "Processing..."
 						: `Circumstances (${loaderData?.tableCounts?.circumstanceTemplates || 0})`}
 				</button>
 				<button
-					className="rounded-md bg-blue-400 p-2 text-sm text-white"
+					className="transform border border-green-500 bg-black px-4 py-2 text-sm text-green-500 transition duration-50 hover:scale-105 hover:bg-green-600 hover:text-black disabled:opacity-50"
 					type="submit"
 					disabled={busy}
 					name="action"
 					value="import_mission_templates"
 				>
 					{busy
-						? "Loading..."
+						? "Processing..."
 						: `Mission Templates (${loaderData?.tableCounts?.missionTemplates || 0})`}
 				</button>
 				<button
-					className="rounded-md bg-blue-400 p-2 text-sm text-white"
+					className="transform border border-green-500 bg-black px-4 py-2 text-sm text-green-500 transition duration-50 hover:scale-105 hover:bg-green-600 hover:text-black disabled:opacity-50"
 					type="submit"
 					disabled={busy}
 					name="action"
 					value="import_mission_types"
 				>
 					{busy
-						? "Loading..."
+						? "Processing..."
 						: `Mission Types (${loaderData?.tableCounts?.missionTypes || 0})`}
 				</button>
 				<button
-					className="rounded-md bg-blue-400 p-2 text-sm text-white"
+					className="transform border border-green-500 bg-black px-4 py-2 text-sm text-green-500 transition duration-50 hover:scale-105 hover:bg-green-600 hover:text-black disabled:opacity-50"
 					type="submit"
 					disabled={busy}
 					name="action"
 					value="import_zones"
 				>
 					{busy
-						? "Loading..."
+						? "Processing..."
 						: `Zones (${loaderData?.tableCounts?.zones || 0})`}
 				</button>
 				<button
-					className="rounded-md bg-purple-400 p-2 text-sm text-white"
+					className="transform border border-green-500 bg-black px-4 py-2 text-sm text-green-500 transition duration-50 hover:scale-105 hover:bg-green-600 hover:text-black disabled:opacity-50"
 					type="submit"
 					disabled={busy}
 					name="action"
 					value="import_blessings"
 				>
 					{busy
-						? "Loading..."
+						? "Processing..."
 						: `Blessings (${loaderData?.tableCounts?.traits || 0})`}
 				</button>
 				<button
-					className="rounded-md bg-purple-400 p-2 text-sm text-white"
+					className="transform border border-green-500 bg-black px-4 py-2 text-sm text-green-500 transition duration-50 hover:scale-105 hover:bg-green-600 hover:text-black disabled:opacity-50"
 					type="submit"
 					disabled={busy}
 					name="action"
 					value="import_perks"
 				>
 					{busy
-						? "Loading..."
+						? "Processing..."
 						: `Perks (${loaderData?.tableCounts?.traits || 0})`}
 				</button>
 				<button
-					className="rounded-md bg-purple-400 p-2 text-sm text-white"
+					className="transform border border-green-500 bg-black px-4 py-2 text-sm text-green-500 transition duration-50 hover:scale-105 hover:bg-green-600 hover:text-black disabled:opacity-50"
 					type="submit"
 					disabled={busy}
 					name="action"
 					value="import_skins"
 				>
 					{busy
-						? "Loading..."
+						? "Processing..."
 						: `Skins (${loaderData?.tableCounts?.skins || 0})`}
 				</button>
 				<button
-					className="rounded-md bg-purple-400 p-2 text-sm text-white"
+					className="transform border border-green-500 bg-black px-4 py-2 text-sm text-green-500 transition duration-50 hover:scale-105 hover:bg-green-600 hover:text-black disabled:opacity-50"
 					type="submit"
 					disabled={busy}
 					name="action"
 					value="import_curios"
 				>
 					{busy
-						? "Loading..."
+						? "Processing..."
 						: `Curios (${loaderData?.tableCounts?.curios || 0})`}
 				</button>
 				<button
-					className="rounded-md bg-purple-400 p-2 text-sm text-white"
+					className="transform border border-green-500 bg-black px-4 py-2 text-sm text-green-500 transition duration-50 hover:scale-105 hover:bg-green-600 hover:text-black disabled:opacity-50"
 					type="submit"
 					disabled={busy}
 					name="action"
 					value="import_weapons"
 				>
 					{busy
-						? "Loading..."
+						? "Processing..."
 						: `Weapons (${loaderData?.tableCounts?.weapons || 0})`}
 				</button>
 				<button
-					className="rounded-md bg-red-400 p-2 text-sm text-white"
+					className="transform border border-red-500 bg-black px-4 py-2 text-sm text-red-500 transition duration-50 hover:scale-105 hover:bg-red-600 hover:text-black disabled:opacity-50"
 					type="submit"
 					disabled={busy}
 					name="action"
 					value="delete"
 				>
-					{busy ? "Loading..." : "Delete All"}
+					{busy ? "Purging..." : "Purge All Data"}
 				</button>
 			</fetcher.Form>
 		</div>

@@ -8,3 +8,5 @@
 # Cloudflare
 .mf
 .wrangler
+.dev.vars
+*.tsbuildinfo
