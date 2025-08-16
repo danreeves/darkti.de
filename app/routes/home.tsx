@@ -27,35 +27,80 @@ export async function action({ request, context }: Route.ActionArgs) {
 }
 
 export async function loader({ context }: Route.LoaderArgs) {
-	return await context.db.query.weapons.findMany({
-		limit: 1,
-		orderBy: sql`RANDOM()`,
-	})
+	return {
+		weapons: await context.db.query.weapons.findMany({
+			limit: 1,
+			orderBy: sql`RANDOM()`,
+		}),
+		curios: await context.db.query.curios.findMany({
+			limit: 1,
+			orderBy: sql`RANDOM()`,
+		}),
+		skins: await context.db.query.skins.findMany({
+			limit: 1,
+			orderBy: sql`RANDOM()`,
+		}),
+	}
 }
 
-export default function Home({ loaderData }: Route.ComponentProps) {
+function PageLink({
+	to,
+	label,
+	imageSrc,
+	imageAlt,
+}: {
+	to: string
+	label: string
+	imageSrc: string
+	imageAlt: string
+}) {
+	return (
+		<Link
+			to={to}
+			className="group transform overflow-hidden border border-green-500 transition duration-50 hover:scale-105"
+		>
+			<img
+				src={imageSrc}
+				alt={imageAlt}
+				className="halftone h-48 w-full border-b border-green-500 object-cover group-hover:filter-none"
+			/>
+			<div className="p-4 text-center text-5xl font-bold text-green-500">
+				{label}
+			</div>
+		</Link>
+	)
+}
+
+export default function Home({
+	loaderData: { weapons, curios, skins },
+}: Route.ComponentProps) {
 	return (
 		<div className="font-warhammer container mx-auto min-h-screen p-6">
-			<div className="mb-8 flex flex-row items-center border-b border-green-500 pb-4">
+			<div className="mb-4 flex flex-row items-center border-b border-green-500 pb-4">
 				<Book className="" />
 				<h1 className="font-machine flex-1 text-center text-5xl font-extrabold tracking-widest text-green-500">
 					+++ Darkti.de +++
 				</h1>
 			</div>
-			<div className="flex flex-row gap-4">
-				<Link
+			<div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+				<PageLink
 					to="/weapons"
-					className="transform overflow-hidden border border-green-500 transition duration-50 hover:scale-105"
-				>
-					<img
-						src={`https://cdn.darkti.de/${loaderData[0].preview_image}.png?w=600`}
-						alt={loaderData[0].display_name}
-						className="halftone h-48 w-full border-b border-green-500 object-cover hover:filter-none"
-					/>
-					<div className="p-4 text-center text-5xl font-bold text-green-500">
-						/weapons
-					</div>
-				</Link>
+					label="/weapons"
+					imageSrc={`https://cdn.darkti.de/${weapons[0].preview_image}.png?w=600`}
+					imageAlt={weapons[0].display_name}
+				/>
+				<PageLink
+					to="/curios"
+					label="/curios"
+					imageSrc={`https://cdn.darkti.de/${curios[0].preview_image}.png?w=600`}
+					imageAlt={curios[0].display_name}
+				/>
+				<PageLink
+					to="/skins"
+					label="/skins"
+					imageSrc={`https://cdn.darkti.de/${skins[0].preview_image}.png?w=600`}
+					imageAlt={skins[0].display_name}
+				/>
 			</div>
 		</div>
 	)
