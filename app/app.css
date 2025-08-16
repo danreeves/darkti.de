@@ -24,3 +24,45 @@ body {
 			brightness(0.8);
 	}
 }
+
+@keyframes fade-in {
+	from {
+		opacity: 0;
+	}
+}
+
+@keyframes fade-out {
+	to {
+		opacity: 0;
+	}
+}
+
+@keyframes slide-from-right {
+	from {
+		transform: translateX(100%);
+	}
+}
+
+@keyframes slide-to-left {
+	to {
+		transform: translateX(-100%);
+	}
+}
+
+::view-transition-old(root) {
+	animation: none;
+}
+::view-transition-new(root) {
+	animation: none;
+}
+
+::view-transition-old(tile-*) {
+	animation:
+		1s ease-out both slide-to-left,
+		1s ease-out both fade-out;
+}
+::view-transition-new(tile-*) {
+	animation:
+		1s ease-out both slide-from-right,
+		1s ease-out both fade-in;
+}

@@ -1,8 +1,9 @@
 import { Link } from "react-router"
+import { Fragment } from "react"
 
 export function Book({ className }: { className?: string }) {
 	return (
-		<>
+		<Fragment key="book-logo">
 			<Link
 				to="/"
 				className={className}
@@ -52,6 +53,6 @@ export function Book({ className }: { className?: string }) {
 					100% { transform: rotateY(360deg) rotateX(10deg); }
 					}
 					`}</style>
-		</>
+		</Fragment>
 	)
 }
