@@ -75,7 +75,7 @@ export default function Home({
 	loaderData: { weapons, curios, skins },
 }: Route.ComponentProps) {
 	return (
-		<div className="font-warhammer container mx-auto min-h-screen p-6">
+		<div className="container mx-auto min-h-screen p-6">
 			<div className="mb-4 flex flex-row items-center border-b border-green-500 pb-4">
 				<Book className="" />
 				<h1 className="font-machine flex-1 text-center text-5xl font-extrabold tracking-widest text-green-500">
