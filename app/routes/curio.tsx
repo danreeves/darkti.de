@@ -23,7 +23,7 @@ export default function Curios({ loaderData: curio }: Route.ComponentProps) {
 	}
 
 	return (
-		<div className="font-warhammer container mx-auto min-h-screen p-6">
+		<div className="container mx-auto min-h-screen p-6">
 			<div className="mb-4 flex flex-row items-center border-b border-green-500 pb-4">
 				<Book className="" />
 				<h1 className="font-machine flex-1 text-center text-5xl font-extrabold tracking-widest text-green-500">
@@ -47,7 +47,7 @@ export default function Curios({ loaderData: curio }: Route.ComponentProps) {
 					Back
 				</Link>
 			</div>
-			<footer className="mt-12 text-center text-sm text-green-600 uppercase">
+			<footer className="mt-8 text-center text-sm text-green-600 uppercase">
 				<p>++++ For the Emperor ++++</p>
 			</footer>
 		</div>

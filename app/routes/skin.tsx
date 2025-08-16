@@ -2,6 +2,7 @@ import { Link } from "~/components/Link"
 import type { Route } from "./+types/curio"
 import { Book } from "~/components/Book"
 import { idToSlug, slugToId } from "~/utils/routeUtils"
+import { useLocation } from "react-router"
 
 export async function loader({ context, params }: Route.LoaderArgs) {
 	const id = slugToId(params.id)
@@ -19,6 +20,7 @@ export async function loader({ context, params }: Route.LoaderArgs) {
 }
 
 export default function Curios({ loaderData: skin }: Route.ComponentProps) {
+	const { state } = useLocation()
 	if (!skin) {
 		return <p>No skin found.</p>
 	}
@@ -53,11 +55,11 @@ export default function Curios({ loaderData: skin }: Route.ComponentProps) {
 						</p>
 					</div>
 				</div>
-				<Link to="/skins" viewTransition>
+				<Link to={state?.referrer || "/skins"} viewTransition>
 					Back
 				</Link>
 			</div>
-			<footer className="mt-12 text-center text-sm text-green-600 uppercase">
+			<footer className="mt-8 text-center text-sm text-green-600 uppercase">
 				<p>++++ For the Emperor ++++</p>
 			</footer>
 		</div>

@@ -91,7 +91,7 @@ function getCookie(request: Request, name: string): string | undefined {
 
 function LoginForm({ actionData }: { actionData?: ActionData }) {
 	return (
-		<div className="font-warhammer flex min-h-screen items-center justify-center bg-black px-4">
+		<div className="flex min-h-screen items-center justify-center bg-black px-4">
 			<div className="w-full max-w-md space-y-8">
 				<div className="mb-8 flex flex-row items-center border-b border-green-500 pb-4">
 					<Book className="" />
@@ -139,7 +139,7 @@ function LoginForm({ actionData }: { actionData?: ActionData }) {
 
 function AdminLayout({ children }: { children: React.ReactNode }) {
 	return (
-		<div className="font-warhammer container mx-auto min-h-screen bg-black text-green-500">
+		<div className="container mx-auto min-h-screen bg-black text-green-500">
 			<div className="mb-8 flex flex-row items-center border-b border-green-500 pb-4">
 				<Book className="" />
 				<h1 className="font-machine flex-1 text-center text-5xl font-extrabold tracking-widest text-green-500">
@@ -158,7 +158,7 @@ function AdminLayout({ children }: { children: React.ReactNode }) {
 				</div>
 			</div>
 			<main className="p-6">{children}</main>
-			<footer className="mt-12 text-center text-sm text-green-600 uppercase">
+			<footer className="mt-8 text-center text-sm text-green-600 uppercase">
 				<p>++++ For the Emperor ++++</p>
 			</footer>
 		</div>
