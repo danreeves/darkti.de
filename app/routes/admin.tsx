@@ -28,9 +28,7 @@ type ActionData = {
 
 export async function loader({
 	request,
-	context,
 }: LoaderFunctionArgs): Promise<LoaderData> {
-	const url = new URL(request.url)
 	const sessionCookie = getCookie(request, "admin-session")
 
 	// Check if user is already authenticated
