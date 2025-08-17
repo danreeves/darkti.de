@@ -20,13 +20,7 @@ export async function loader({ context, params }: Route.LoaderArgs) {
 	}
 }
 
-export default function Curios({
-	loaderData: { curio },
-}: Route.ComponentProps) {
-	if (!curio) {
-		return <p>No curio found.</p>
-	}
-
+export default function Curio({ loaderData: { curio } }: Route.ComponentProps) {
 	return (
 		<div className="flex flex-col gap-4">
 			<div
