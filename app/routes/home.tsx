@@ -2,7 +2,6 @@ import * as schema from "~/database/schema"
 
 import type { Route } from "./+types/home"
 import { sql } from "drizzle-orm"
-import { Book } from "~/components/Book"
 import { Link } from "react-router"
 
 export async function action({ request, context }: Route.ActionArgs) {
@@ -28,6 +27,7 @@ export async function action({ request, context }: Route.ActionArgs) {
 
 export async function loader({ context }: Route.LoaderArgs) {
 	return {
+		title: "Darkti.de",
 		weapons: await context.db.query.weapons.findMany({
 			limit: 1,
 			orderBy: sql`RANDOM()`,
@@ -75,33 +75,25 @@ export default function Home({
 	loaderData: { weapons, curios, skins },
 }: Route.ComponentProps) {
 	return (
-		<div className="container mx-auto min-h-screen p-6">
-			<div className="mb-4 flex flex-row items-center border-b border-green-500 pb-4">
-				<Book className="" />
-				<h1 className="font-machine flex-1 text-center text-5xl font-extrabold tracking-widest text-green-500">
-					+++ Darkti.de +++
-				</h1>
-			</div>
-			<div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
-				<PageLink
-					to="/weapons"
-					label="/weapons"
-					imageSrc={`https://cdn.darkti.de/${weapons[0].preview_image}.png?w=600`}
-					imageAlt={weapons[0].display_name}
-				/>
-				<PageLink
-					to="/curios"
-					label="/curios"
-					imageSrc={`https://cdn.darkti.de/${curios[0].preview_image}.png?w=600`}
-					imageAlt={curios[0].display_name}
-				/>
-				<PageLink
-					to="/skins"
-					label="/skins"
-					imageSrc={`https://cdn.darkti.de/${skins[0].preview_image}.png?w=600`}
-					imageAlt={skins[0].display_name}
-				/>
-			</div>
+		<div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+			<PageLink
+				to="/weapons"
+				label="/weapons"
+				imageSrc={`https://cdn.darkti.de/${weapons[0].preview_image}.png?w=600`}
+				imageAlt={weapons[0].display_name}
+			/>
+			<PageLink
+				to="/curios"
+				label="/curios"
+				imageSrc={`https://cdn.darkti.de/${curios[0].preview_image}.png?w=600`}
+				imageAlt={curios[0].display_name}
+			/>
+			<PageLink
+				to="/skins"
+				label="/skins"
+				imageSrc={`https://cdn.darkti.de/${skins[0].preview_image}.png?w=600`}
+				imageAlt={skins[0].display_name}
+			/>
 		</div>
 	)
 }
