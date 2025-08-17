@@ -11,6 +11,7 @@ export default [
 		route("curios", "./routes/curios.tsx"),
 		route("curio/:id", "./routes/curio.tsx"),
 		route("weapons", "./routes/weapons.tsx"),
+		route("weapons/:id", "./routes/weapon.tsx"),
 		route("skins", "./routes/skins.tsx"),
 		route("skins/:id", "./routes/skin.tsx"),
 	]),

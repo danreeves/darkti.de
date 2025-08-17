@@ -1,5 +1,7 @@
 import type { Route } from "./+types/weapons"
 import { idToSlug } from "~/utils/routeUtils"
+import { Link as RouterLink } from "react-router"
+import { VisualLink } from "~/components/Link"
 
 export async function loader({ context }: Route.LoaderArgs) {
 	return {
@@ -29,22 +31,26 @@ export default function Weapons({
 						viewTransitionName: `tile-${idToSlug(weapon.id)}`,
 					}}
 				>
-					<img
-						src={`https://cdn.darkti.de/${weapon.preview_image}.png?w=600`}
-						alt={weapon.display_name}
-						className="h-48 w-full border-b border-green-500 object-cover hover:filter-none"
-					/>
-					<div className="p-4">
-						<h2 className="mb-2 text-2xl font-bold text-green-500">
-							{weapon.display_name}
-						</h2>
-						<p className="mb-4 text-sm text-green-500">
-							{weapon.description}
-						</p>
-						<button className="border border-green-500 px-4 py-2 text-green-500 hover:bg-green-600 hover:text-black">
-							Learn More
-						</button>
-					</div>
+					<RouterLink
+						to={`/weapons/${idToSlug(weapon.id)}`}
+						className="object-cover"
+						viewTransition
+					>
+						<img
+							src={`https://cdn.darkti.de/${weapon.preview_image}.png?w=600`}
+							alt={weapon.display_name}
+							className="h-48 w-full border-b border-green-500 object-cover hover:filter-none"
+						/>
+						<div className="p-4">
+							<h2 className="mb-2 text-2xl font-bold text-green-500">
+								{weapon.display_name}
+							</h2>
+							<p className="mb-4 text-sm text-green-500">
+								{weapon.description}
+							</p>
+							<VisualLink>View</VisualLink>
+						</div>
+					</RouterLink>
 				</li>
 			))}
 		</ul>
