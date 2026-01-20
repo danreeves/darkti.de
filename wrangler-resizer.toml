@@ -1,0 +1,11 @@
+name = "darkti-de-resizer"
+main = "./workers/resizer/resizer.ts"
+assets = { directory = "./workers/resizer" }
+routes = [{ pattern = "cdn.darkti.de", custom_domain = true }]
+workers_dev = false
+
+compatibility_date = "2025-03-11"
+compatibility_flags = ["nodejs_compat"]
+
+[observability.logs]
+enabled = true

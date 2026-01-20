@@ -15,13 +15,3 @@ binding = "DB"
 database_name = "darkti-de"
 database_id = "e5be73b9-28c6-4810-b1b4-aa29a834d29f"
 migrations_dir = "drizzle"
-
-# The worker responsible for resizing images from the darktide-images repo
-[env.resizer]
-name = "darkti-de-resizer"
-main = "./workers/resizer/resizer.ts"
-assets = { directory = "./workers/resizer" }
-routes = [{ pattern = "cdn.darkti.de", custom_domain = true }]
-workers_dev = false
-[env.resizer.observability.logs]
-enabled = true
