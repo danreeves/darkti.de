@@ -4,14 +4,16 @@
 	"private": true,
 	"type": "module",
 	"scripts": {
-		"build": "react-router build",
-		"db:generate": "dotenv -- drizzle-kit generate",
-		"db:migrate": "wrangler -c ./wrangler-main.toml d1 migrations apply --local DB",
-		"db:migrate-production": "dotenv -- drizzle-kit migrate",
 		"dev": "react-router dev",
-		"start": "wrangler dev -c ./wrangler-main.toml",
-		"deploy": "npm run build && wrangler deploy --config ./wrangler-resizer.toml && wrangler deploy --config ./wranger-main.toml",
-		"typecheck": "wrangler types && react-router typegen && tsc -b"
+		"build": "react-router build",
+		"preview": "npm run build && vite preview",
+		"deploy": "npm run build && wrangler deploy",
+		"db:generate": "dotenv -- drizzle-kit generate",
+		"db:migrate": "wrangler d1 migrations apply --local DB",
+		"db:migrate-production": "dotenv -- drizzle-kit migrate",
+		"cf-typegen": "wrangler types",
+		"typecheck": "npm run cf-typegen && react-router typegen && tsc -b",
+		"postinstall": "npm run cf-typegen"
 	},
 	"dependencies": {
 		"@react-router/node": "7.13.0",
@@ -25,6 +27,7 @@
 		"zod": "4.3.6"
 	},
 	"devDependencies": {
+		"@cloudflare/vite-plugin": "^1.21.2",
 		"@cloudflare/workers-types": "4.20260124.0",
 		"@react-router/dev": "7.13.0",
 		"@tailwindcss/vite": "4.1.18",

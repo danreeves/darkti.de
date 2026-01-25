@@ -1,0 +1,26 @@
+{
+	"$schema": "./node_modules/wrangler/config-schema.json",
+	"main": "./workers/app.ts",
+	"compatibility_date": "2025-10-08",
+	"compatibility_flags": ["nodejs_compat"],
+	"observability": {
+		"enabled": true,
+	},
+	"upload_source_maps": true,
+
+	"name": "darkti-de",
+	"routes": [{ "pattern": "darkti.de", "custom_domain": true }],
+
+	"vars": {
+		"VALUE_FROM_CLOUDFLARE": "Hello from Cloudflare",
+	},
+
+	"d1_databases": [
+		{
+			"binding": "DB",
+			"database_name": "darkti-de",
+			"database_id": "e5be73b9-28c6-4810-b1b4-aa29a834d29f",
+			"migrations_dir": "drizzle",
+		},
+	],
+}
