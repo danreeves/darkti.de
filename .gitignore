@@ -10,3 +10,6 @@
 .wrangler
 .dev.vars
 *.tsbuildinfo
+
+# Environment variables
+.env

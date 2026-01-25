@@ -76,7 +76,7 @@ export async function action({ request, context }: Route.ActionArgs) {
 								...template,
 							}),
 						),
-					)
+					).onConflictDoUpdate({ target: circumstanceTemplates.key, set: CircumstanceTemplateInsertSchema.parse(CircumstanceTemplateSchemaJSON.parse({ key, ...template })) });
 				}
 			}
 
@@ -85,6 +85,7 @@ export async function action({ request, context }: Route.ActionArgs) {
 					await context.db
 						.insert(missionTemplates)
 						.values(MissionTemplateInsertSchema.parse(template))
+						.onConflictDoUpdate({ target: missionTemplates.name, set: MissionTemplateInsertSchema.parse(template) });
 				}
 			}
 
@@ -95,7 +96,7 @@ export async function action({ request, context }: Route.ActionArgs) {
 							key,
 							...template,
 						}),
-					)
+					).onConflictDoUpdate({ target: missionTypes.key, set: MissionTypeInsertSchema.parse({ key, ...template }) });
 				}
 			}
 
@@ -106,7 +107,7 @@ export async function action({ request, context }: Route.ActionArgs) {
 							key,
 							...template,
 						}),
-					)
+					).onConflictDoUpdate({ target: zones.key, set: ZoneInsertSchema.parse({ key, ...template }) });
 				}
 			}
 
@@ -118,18 +119,22 @@ export async function action({ request, context }: Route.ActionArgs) {
 						await context.db
 							.insert(traits)
 							.values(TraitInsertSchema.parse(blessing))
+							.onConflictDoUpdate({ target: traits.id, set: TraitInsertSchema.parse(blessing) });
 					}
 				}
 			}
 
 			if (action === "import_perks") {
 				for (const item of ITEM_MASTER_LIST) {
-					const { success: isPerk, data: perk } =
+					const { success: isPerk, data: perk, error: zodError } =
 						PerkSchemaJSON.safeParse(item)
 					if (isPerk) {
 						await context.db
 							.insert(traits)
 							.values(TraitInsertSchema.parse(perk))
+							.onConflictDoUpdate({ target: traits.id, set: TraitInsertSchema.parse(perk) });
+					} else if (item.item_type === "PERK") {
+						console.error("Failed to parse perk:", item, zodError)
 					}
 				}
 			}
@@ -142,6 +147,7 @@ export async function action({ request, context }: Route.ActionArgs) {
 						await context.db
 							.insert(skins)
 							.values(SkinInsertSchema.parse(skin))
+							.onConflictDoUpdate({ target: skins.id, set: SkinInsertSchema.parse(skin) });
 					}
 				}
 			}
@@ -154,6 +160,7 @@ export async function action({ request, context }: Route.ActionArgs) {
 						await context.db
 							.insert(curios)
 							.values(CurioInsertSchema.parse(curio))
+							.onConflictDoUpdate({ target: curios.id, set: CurioInsertSchema.parse(curio) });
 					}
 				}
 			}
@@ -163,10 +170,15 @@ export async function action({ request, context }: Route.ActionArgs) {
 					const { success: isWeapon, data: weapon } =
 						WeaponSchemaJSON.safeParse(item)
 					if (isWeapon) {
+						try {
 						await context.db
-							.insert(weapons)
+							.insert(weapons) 
 							.values(WeaponInsertSchema.parse(weapon))
-					}
+  							.onConflictDoUpdate({ target: weapons.id, set: WeaponInsertSchema.parse(weapon) });
+						} catch (error) {
+								console.error("Error inserting/updating weapon:", error, weapon);
+							} 
+					} 
 				}
 			}
 		} catch (error) {

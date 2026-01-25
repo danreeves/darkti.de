@@ -116,8 +116,8 @@ const TraitSchema = z
 	.object({
 		icon: z.string(),
 		icon_small: z.string(),
-		weapon_type_restriction: z.array(z.string()),
-		weapon_template_restriction: z.array(z.string()),
+		weapon_type_restriction: z.union([z.array(z.string()), z.object({})]),
+		weapon_template_restriction: z.union([z.array(z.string()), z.object({})]),
 		id: z.string(),
 		display_name: z.string(),
 		description: z.string(),
@@ -135,10 +135,9 @@ const TraitSchema = z
 	.transform((data) => ({
 		...data,
 		// Transform the weapon_type_restriction and weapon_template_restriction to arrays
-		weapon_type_restriction: JSON.stringify(data.weapon_type_restriction),
-		weapon_template_restriction: JSON.stringify(
-			data.weapon_template_restriction,
-		),
+		// Exporter sometimes gives an object instead of an array for weapon_type_restriction when its null
+		weapon_type_restriction: Array.isArray(data.weapon_type_restriction) ? JSON.stringify(data.weapon_type_restriction) : JSON.stringify([]),
+		weapon_template_restriction: Array.isArray(data.weapon_template_restriction) ? JSON.stringify(data.weapon_template_restriction) : JSON.stringify([]),
 		description_values: data.description_values
 			? JSON.stringify(data.description_values)
 			: undefined,

@@ -196,7 +196,7 @@ function mod.export_files()
 
 	preprocess(weapon_templates)
 
-	local WeaponUnlockSettings = require("scripts/settings/weapon_unlock_settings")
+	local WeaponUnlockSettings = require("scripts/settings/weapon_unlock/weapon_unlock_settings")
 
 	local item_master_list = {}
 	local cached_items = Managers.backend.interfaces.master_data:items_cache():get_cached()
